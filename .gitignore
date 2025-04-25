@@ -1,14 +1,19 @@
+# Compilation
+raytracer
+*.out
 *.a
 *.o
-.vscode/
-*.log
-vgcore*
+*.d
+
+# Unit tests
+unit_tests
 *.gcda
 *.gcno
 *.gcov
-unit_tests
-*.out
-*.d
+
+# Other
+.vscode/
+build/
 obj/
-build
-raytracer
+vgcore*
+*.log
