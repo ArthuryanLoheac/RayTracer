@@ -1,0 +1,14 @@
+*.a
+*.o
+.vscode/
+*.log
+vgcore*
+*.gcda
+*.gcno
+*.gcov
+unit_tests
+*.out
+*.d
+obj/
+build
+raytracer
