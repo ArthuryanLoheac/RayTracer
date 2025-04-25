@@ -1,4 +1,4 @@
-#include "Sphere.hpp"
+#include "Primitive/Sphere.hpp"
 
 bool RayTracer::Sphere::hits(RayTracer::Ray ray) {
     Vector3D oc = ray.origin - center;

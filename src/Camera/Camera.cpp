@@ -1,5 +1,5 @@
-#include "Camera.hpp"
-#include "const.hpp"
+#include "Camera/Camera.hpp"
+#include "Consts/const.hpp"
 
 namespace RayTracer {
 
@@ -20,5 +20,4 @@ Ray Camera::ray(double u, double v) {
     v2 /= v2.length();
     return Ray(origin, v2);
 }
-
-} // namespace RayTracer
+}  // namespace RayTracer

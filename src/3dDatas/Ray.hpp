@@ -1,9 +1,8 @@
 #pragma once
-#include "Vector3D.hpp"
-#include "Point3D.hpp"
+#include "3dDatas/Vector3D.hpp"
+#include "3dDatas/Point3D.hpp"
 
-namespace RayTracer
-{
+namespace RayTracer {
 class Ray {
  public:
     RayTracer::Point3D origin;
@@ -12,4 +11,4 @@ class Ray {
     Ray(RayTracer::Point3D _origin, RayTracer::Vector3D _direction);
     void normalized();
 };
-} // namespace RayTracer
+}  // namespace RayTracer

@@ -1,9 +1,8 @@
 #pragma once
 #include <ostream>
-#include "Vector3D.hpp"
+#include "3dDatas/Vector3D.hpp"
 
-namespace RayTracer
-{
+namespace RayTracer {
 class Point3D {
  public:
     double x, y, z;
@@ -14,7 +13,6 @@ class Point3D {
     Point3D operator-(const Vector3D& vec);
     Vector3D operator-(const Point3D& vec);
 };
-
-} // namespace RayTracer
+}  // namespace RayTracer
 
 std::ostream& operator<<(std::ostream& os, const RayTracer::Point3D& point);

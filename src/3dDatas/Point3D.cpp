@@ -1,7 +1,7 @@
-#include "Point3D.hpp"
+#include "3dDatas/Point3D.hpp"
 
 RayTracer::Point3D::Point3D()
- : x(0), y(0), z(0) {}
+: x(0), y(0), z(0) {}
 
 RayTracer::Point3D::Point3D(double x, double y, double z)
     : x(x), y(y), z(z) {}

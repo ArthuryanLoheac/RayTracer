@@ -6,11 +6,11 @@
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 
-#include "Vector3D.hpp"
-#include "Camera.hpp"
-#include "Sphere.hpp"
-#include "Point3D.hpp"
-#include "const.hpp"
+#include "3dDatas/Vector3D.hpp"
+#include "Camera/Camera.hpp"
+#include "Primitive/Sphere.hpp"
+#include "3dDatas/Point3D.hpp"
+#include "Consts/const.hpp"
 
 void showImage(sf::RenderWindow &window, sf::Image &image) {
     sf::Sprite sp;
@@ -44,17 +44,18 @@ void generateImage(sf::RenderWindow &window, sf::Image &image) {
             double v = j / HEIGHT;
             RayTracer::Ray r = cam.ray(u, v);
 
-            if (s.hits(r)) {
-                image.setPixel((int)i, (int)j, sf::Color::Red);
-            } else {
-                image.setPixel((int)i, (int)j, sf::Color::Blue);
-            } 
+            if (s.hits(r))
+                image.setPixel(static_cast<int>(i), static_cast<int>(j),
+                    sf::Color::Red);
+            else
+                image.setPixel(static_cast<int>(i), static_cast<int>(j),
+                    sf::Color::Blue);
         }
         showImage(window, image);
     }
 }
 
-int main () {
+int main() {
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Ray Tracer");
     sf::Image image;
     image.create(WIDTH, HEIGHT, sf::Color::Black);
