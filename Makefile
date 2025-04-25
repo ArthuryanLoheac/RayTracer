@@ -27,7 +27,7 @@ EXTENSION = cpp
 
 FLAGS = -I./include -I./src \
 	$(shell find include src -type d -exec echo -I{} \;) \
-	-MMD -MP $(FLAGS_LIB) \
+	-MMD -MP $(FLAGS_LIB) -lsfml-graphics -lsfml-window -lsfml-system \
 
 FLAGS_TEST = $(FLAGS) -lcriterion --coverage \
 
@@ -37,7 +37,7 @@ FLAGS_LINTER =	\
 	--repository=. \
 	--quiet \
 	--output=vs7	\
-	--filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references	\
+	--filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references\
 	--recursive
 
 # ============= NAMES ============= #
