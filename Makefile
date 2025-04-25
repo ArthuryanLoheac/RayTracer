@@ -5,14 +5,6 @@
 ## makefile
 ##
 
-# ============= COLORS =============
-
-GREEN=\033[0;32m
-RED=\033[0;31m
-YEL=\033[01;33m
-BLUE=\e[1;34m
-NC=\033[0m
-
 # ============= OBJECT ============= #
 
 OBJ_DIR = obj
@@ -41,6 +33,13 @@ FLAGS_TEST = $(FLAGS) -lcriterion --coverage \
 
 FLAGS_LIB = -std=c++20 -Wall -Wextra -Werror
 
+FLAGS_LINTER =	\
+	--repository=. \
+	--quiet \
+	--output=vs7	\
+	--filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references	\
+	--recursive
+
 # ============= NAMES ============= #
 
 NAME_LIB	= \
@@ -55,7 +54,7 @@ SRC_MAIN	=	main.cpp \
 
 SRC	= 	$(shell find src -type f -name "*.cpp" ! -name "main.cpp") \
 
-SRC_TESTS	= 	tests/test_1.cpp \
+SRC_TESTS	= 	\
 
 # ============= RULES ============= #
 
@@ -108,3 +107,7 @@ tests_clean_run: fclean tests_run
 
 tests_clean_run_coverage: tests_clean_run
 	gcovr -r . -e tests/
+
+style_check:
+	@cpplint $(FLAGS_LINTER) \
+		$(shell find . -type f \( -name '*.cpp' -o -name '*.hpp' \))
