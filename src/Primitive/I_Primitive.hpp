@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <vector>
 
 #include "3dDatas/Point3D.hpp"
 #include "Material/I_Material.hpp"
@@ -14,7 +15,7 @@ class I_Primitive {
     virtual void setParent(std::unique_ptr<I_Primitive> parent) = 0;
     virtual std::vector<std::unique_ptr<I_Primitive>> getChildrens() = 0;
     virtual void AddChildren(std::unique_ptr<I_Primitive> child) = 0;
-    
+
     virtual I_Material getMaterial() = 0;
     virtual Point3D getPosition() = 0;
     virtual Point3D getRotation() = 0;

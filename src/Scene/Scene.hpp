@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <memory>
 
 #include "Lights/I_Lights.hpp"
 #include "Primitive/I_Primitive.hpp"
@@ -10,4 +11,4 @@ class Scene {
     std::vector<I_Lights> lights;
     std::unique_ptr<I_Primitive> ObjectHead;
 };
-} // namespace RayTracer
+}  // namespace RayTracer

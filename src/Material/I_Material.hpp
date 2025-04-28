@@ -8,6 +8,6 @@ class I_Material {
     virtual void Init() = 0;
     virtual sf::Color getColorAt(int x, int y) = 0;
 };
-} // namespace RayTracer
+}  // namespace RayTracer
 
 // extern "C" std::unique_ptr<RayTracer::I_Material> getMaterial();
