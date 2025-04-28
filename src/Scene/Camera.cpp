@@ -1,4 +1,4 @@
-#include "Camera/Camera.hpp"
+#include "Scene/Camera.hpp"
 #include "Consts/const.hpp"
 
 namespace RayTracer {

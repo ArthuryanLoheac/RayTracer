@@ -7,7 +7,7 @@
 #include <SFML/System.hpp>
 
 #include "3dDatas/Vector3D.hpp"
-#include "Camera/Camera.hpp"
+#include "Scene/Camera.hpp"
 #include "Primitive/Sphere.hpp"
 #include "3dDatas/Point3D.hpp"
 #include "Consts/const.hpp"

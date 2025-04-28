@@ -9,8 +9,12 @@ class I_Primitive {
  public:
     virtual ~I_Primitive() = default;
     virtual void Init() = 0;
+
     virtual std::unique_ptr<I_Primitive> getParent() = 0;
     virtual void setParent(std::unique_ptr<I_Primitive> parent) = 0;
+    virtual std::vector<std::unique_ptr<I_Primitive>> getChildrens() = 0;
+    virtual void AddChildren(std::unique_ptr<I_Primitive> child) = 0;
+    
     virtual I_Material getMaterial() = 0;
     virtual Point3D getPosition() = 0;
     virtual Point3D getRotation() = 0;
