@@ -1,4 +1,7 @@
 #pragma once
+#include <memory>
+#include <vector>
+
 #include "Primitive/I_Primitive.hpp"
 
 namespace RayTracer {
@@ -14,13 +17,13 @@ class A_Primitive : public I_Primitive {
  public:
     virtual ~A_Primitive() = default;
     virtual void Init() = 0;
-    virtual std::shared_ptr<I_Primitive> getParent() override;
-    virtual void setParent(std::shared_ptr<I_Primitive> parent) override;
-    virtual std::vector<std::shared_ptr<I_Primitive>> &getChildrens() override;
-    virtual void AddChildren(std::shared_ptr<I_Primitive> child) override;
-    virtual std::shared_ptr<I_Material> getMaterial() override;
-    virtual Point3D getPosition() override;
-    virtual Point3D getRotation() override;
-    virtual Point3D getScale() override;
+    std::shared_ptr<I_Primitive> getParent() override;
+    void setParent(std::shared_ptr<I_Primitive> parent) override;
+    std::vector<std::shared_ptr<I_Primitive>> &getChildrens() override;
+    void AddChildren(std::shared_ptr<I_Primitive> child) override;
+    std::shared_ptr<I_Material> getMaterial() override;
+    Point3D getPosition() override;
+    Point3D getRotation() override;
+    Point3D getScale() override;
 };
 }  // namespace RayTracer

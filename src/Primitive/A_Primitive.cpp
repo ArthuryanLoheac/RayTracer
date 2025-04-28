@@ -1,4 +1,7 @@
-#include "A_Primitive.hpp"
+#include <memory>
+#include <vector>
+
+#include "Primitive/A_Primitive.hpp"
 
 namespace RayTracer {
 
@@ -10,7 +13,8 @@ void RayTracer::A_Primitive::setParent(std::shared_ptr<I_Primitive> parent) {
     this->parent = parent;
 }
 
-std::vector<std::shared_ptr<I_Primitive>> &RayTracer::A_Primitive::getChildrens() {
+std::vector<std::shared_ptr<I_Primitive>>
+&RayTracer::A_Primitive::getChildrens() {
     return childrens;
 }
 
