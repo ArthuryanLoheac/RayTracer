@@ -61,14 +61,13 @@ int main() {
     image.create(WIDTH, HEIGHT, sf::Color::Black);
 
     std::string PrimLibPath = "./libs/primitive_sphere.so";
-    printf("Loading game library %s...\n", PrimLibPath.c_str());
-    if (!verifyPrimLib(PrimLibPath)) {
-        std::cerr << "Invalid game library." << std::endl;
+    printf("Loading Primitive library %s...\n", PrimLibPath.c_str());
+    if (!verifyPrimLib(PrimLibPath))
         return 84;
-    } else {
-        printf("Game library loaded successfully.\n");
-    }
 
-    generateImage(window, image);
+    std::unique_ptr<RayTracer::I_Primitive> sphere = getPrim(PrimLibPath);
+    sphere->Init();
+
+    generateImage(window, image, sphere);
     displayImage(window, image);
 }
