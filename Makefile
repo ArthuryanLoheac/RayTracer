@@ -28,6 +28,7 @@ EXTENSION = cpp
 FLAGS = -I./include -I./src \
 	$(shell find include src -type d -exec echo -I{} \;) \
 	-MMD -MP $(FLAGS_LIB) -lsfml-graphics -lsfml-window -lsfml-system \
+	-lconfig++ \
 
 FLAGS_TEST = $(FLAGS) -lcriterion --coverage \
 
