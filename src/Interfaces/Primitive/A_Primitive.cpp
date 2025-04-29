@@ -1,7 +1,7 @@
 #include <memory>
 #include <vector>
 
-#include "Primitive/A_Primitive.hpp"
+#include "Interfaces/Primitive/A_Primitive.hpp"
 
 namespace RayTracer {
 

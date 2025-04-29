@@ -25,9 +25,11 @@ EXTENSION = cpp
 
 # ============= FLAGS ============= #
 
-FLAGS = -I./include -I./src \
+FLAGS = $(FLAGS_INCLUDE) \
 	$(shell find include src -type d -exec echo -I{} \;) \
-	-MMD -MP $(FLAGS_LIB) -lsfml-graphics -lsfml-window -lsfml-system \
+	-MMD -MP $(FLAGS_LIB) -lsfml-graphics -lsfml-window -lsfml-system -ldl \
+
+FLAGS_INCLUDE = -I./include -I./src \
 
 FLAGS_TEST = $(FLAGS) -lcriterion --coverage \
 
@@ -40,11 +42,18 @@ FLAGS_LINTER =	\
 	--filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references\
 	--recursive
 
+FLAGS_PRIMITIVE = $(FLAGS_LIB) -lsfml-graphics -lsfml-window -lsfml-system \
+            $(FLAGS_INCLUDE)
+
+FLAGS_LIB = -std=c++20 -Wall -Wextra -Werror
+
 # ============= NAMES ============= #
 
 NAME_LIB	= \
 
 NAME	=	raytracer
+
+NAME_SPHERE = libs/primitive_sphere.so
 
 # ============= SOURCES ============= #
 
@@ -52,19 +61,35 @@ SRC_LIB	=	\
 
 SRC_MAIN	=	main.cpp \
 
-SRC	= 	$(shell find src -type f -name "*.cpp" ! -name "main.cpp") \
+SRC	= 	$(shell find src -type f -name "*.cpp" ! -name "main.cpp" \
+		! -path "src/Primitive/**") \
 
 SRC_TESTS	= 	\
 
+COMMON_SRC = src/3dDatas/Point3D.cpp \
+			src/3dDatas/Vector3D.cpp \
+			src/3dDatas/Ray.cpp \
+
+SRC_PRIMITIVE = $(COMMON_SRC) \
+				src/Interfaces/Primitive/A_Primitive.cpp \
+
 # ============= RULES ============= #
 
-all: $(NAME) $(NAME_LIB)
+all: core primitive
 
 $(NAME): $(OBJ_SRC) $(OBJ_MAIN)
 	$(COMPILER) -o $(NAME) $(OBJ_SRC) $(OBJ_MAIN) $(FLAGS)
 
 $(NAME_LIB): $(OBJ)
 	ar rc $(NAME_LIB) $(OBJ)
+
+primitive:
+	@mkdir -p libs
+	$(COMPILER) -o $(NAME_SPHERE) -shared -fPIC $(SRC_PRIMITIVE) \
+		src/Primitive/PrimSphere.cpp $(FLAGS_PRIMITIVE)
+
+core: $(NAME) $(NAME_LIB)
+
 
 # ============= CLEANS ============= #
 
@@ -73,6 +98,7 @@ clean:
 	rm -f *.gcda *.gcno
 
 fclean: clean
+	rm -rf libs
 	rm -f $(NAME) $(NAME_LIB) unit_tests
 
 # ============= COMPILATION ============= #
