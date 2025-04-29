@@ -38,7 +38,7 @@ jobs:
         run: |
           check.sh "$(pwd)" "$(pwd)"
           tmpfile=$(mktemp)
-          
+
           echo "0" > "$tmpfile"
           cat coding-style-reports.log | while read -r line; do
             file=$(echo "$line" | cut -d':' -f1 | cut -d'/' -f 2-)
@@ -48,7 +48,7 @@ jobs:
             echo "::error title=$title,file=$file,line=$nbline,col=0::$code"
             echo "1" > "$tmpfile"
           done
-          
+
           if [ "$(cat "$tmpfile")" = "1" ]; then
             rm "$tmpfile"
             exit 1
@@ -80,7 +80,7 @@ jobs:
       - name: "Launch tests"
         timeout-minutes: 2
         run: make tests_run
-  push_to_mirror: 
+  push_to_mirror:
     needs: run_tests
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' }}
