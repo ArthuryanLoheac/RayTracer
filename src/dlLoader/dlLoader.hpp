@@ -6,6 +6,13 @@
 template <typename T>
 class dlLoader {
  public:
+    class dlError : public std::exception {
+     public:
+        const char *what() const noexcept override {
+            return "dlLoader: Error loading library.";
+        }
+    };
+
     static bool verifyLib(const std::string &path, std::string getter);
     static std::unique_ptr<T> getLib(const std::string &path,
         std::string getter);
@@ -40,17 +47,16 @@ inline bool dlLoader<T>::verifyLib(const std::string &path,
 template <typename T>
 inline std::unique_ptr<T> dlLoader<T>::getLib(const std::string &path,
     std::string getter) {
+    if (!verifyLib(path, getter))
+        throw dlError();
     void *handle = dlopen(path.c_str(), RTLD_LAZY);
-    if (!handle) {
-        std::cerr << "Error loading library: " << dlerror() << std::endl;
-        exit(84);
-    }
+    if (!handle)
+        throw dlError();
     auto createModule = reinterpret_cast<std::unique_ptr<T> (*)()>
         (dlsym(handle, getter.c_str()));
     if (!createModule) {
-        std::cerr << "Error loading symbol: " << dlerror() << std::endl;
         dlclose(handle);
-        exit(84);
+        throw dlError();
     }
     auto module = createModule();
     return module;
