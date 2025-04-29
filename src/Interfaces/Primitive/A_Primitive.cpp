@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "Interfaces/Primitive/A_Primitive.hpp"
+#include "A_Primitive.hpp"
 
 namespace RayTracer {
 
@@ -23,10 +24,17 @@ void RayTracer::A_Primitive::AddChildren(std::shared_ptr<I_Primitive> child) {
 }
 
 std::shared_ptr<I_Material> RayTracer::A_Primitive::getMaterial() {
+    if (!material)
+        throw PrimitiveError("A_Primitive: Material not set");
     return material;
 }
 
-Point3D RayTracer::A_Primitive::getPosition() {
+void A_Primitive::setMaterial(std::shared_ptr<I_Material> material) {
+    this->material = material;
+}
+
+Point3D RayTracer::A_Primitive::getPosition()
+{
     return position;
 }
 
