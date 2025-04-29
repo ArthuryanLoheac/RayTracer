@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "Primitive/PrimSphere.hpp"
 
 extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
@@ -16,4 +18,9 @@ bool PrimSphere::hits(RayTracer::Ray ray) {
     double discriminant = b * b - 4 * a * c;
 
     return discriminant >= 0;
+}
+
+void PrimSphere::Init() {
+    center = RayTracer::Point3D(0.02f, 0.17f, -1);
+    radius = 0.1f;
 }

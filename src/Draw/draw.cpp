@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cmath>
 #include <iostream>
+#include <memory>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>

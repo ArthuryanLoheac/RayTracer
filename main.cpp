@@ -6,6 +6,7 @@
 #include <chrono>
 #include <iostream>
 #include <string>
+#include <cstdio>
 
 #include "Generation/tools.hpp"
 #include "Consts/const.hpp"
@@ -28,7 +29,8 @@ static bool verifyPrimLib(const std::string &path) {
         return false;
     }
     try {
-        auto test = reinterpret_cast<std::unique_ptr<RayTracer::I_Primitive> *>(symbolPtr);
+        auto test = reinterpret_cast<std::unique_ptr<RayTracer::I_Primitive> *>
+            (symbolPtr);
         (void)test;
     } catch(const std::exception& e) {
         std::cerr << path << ": Bad format for entry point." << std::endl;
@@ -38,13 +40,15 @@ static bool verifyPrimLib(const std::string &path) {
     return true;
 }
 
-std::unique_ptr<RayTracer::I_Primitive> getPrim(const std::string &PrimLibPath) {
+std::unique_ptr<RayTracer::I_Primitive>
+    getPrim(const std::string &PrimLibPath) {
     void *handle = dlopen(PrimLibPath.c_str(), RTLD_LAZY);
     if (!handle) {
         std::cerr << "Error loading library: " << dlerror() << std::endl;
         exit(84);
     }
-    auto createModule = reinterpret_cast<std::unique_ptr<RayTracer::I_Primitive> (*)()>
+    auto createModule = reinterpret_cast
+        <std::unique_ptr<RayTracer::I_Primitive> (*)()>
         (dlsym(handle, "getPrimitive"));
     if (!createModule) {
         std::cerr << "Error loading symbol: " << dlerror() << std::endl;
