@@ -1,4 +1,6 @@
 #pragma once
+#include <dlfcn.h>
+
 #include <string>
 #include <memory>
 #include <iostream>

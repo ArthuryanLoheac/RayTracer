@@ -29,7 +29,7 @@ FLAGS = $(FLAGS_INCLUDE) \
 	$(shell find include src -type d -exec echo -I{} \;) \
 	-MMD -MP $(FLAGS_LIB) -lsfml-graphics -lsfml-window -lsfml-system -ldl \
 
-FLAGS_INCLUDE = -I./include -I./src \
+FLAGS_INCLUDE = -I./include -I./src -I./src/dlLoader \
 
 FLAGS_TEST = $(FLAGS) -lcriterion --coverage \
 
@@ -43,7 +43,7 @@ FLAGS_LINTER =	\
 	--recursive
 
 FLAGS_SO = $(FLAGS_LIB) -lsfml-graphics -lsfml-window -lsfml-system \
-            $(FLAGS_INCLUDE)
+            $(FLAGS_INCLUDE) -ldl \
 
 FLAGS_LIB = -std=c++20 -Wall -Wextra -Werror
 

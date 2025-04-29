@@ -1,6 +1,8 @@
 #include <memory>
 
 #include "Primitive/PrimSphere.hpp"
+#include "dlLoader/dlLoader.hpp"
+#include "Consts/const.hpp"
 
 extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
     return std::make_unique<PrimSphere>();
@@ -23,4 +25,10 @@ bool PrimSphere::hits(RayTracer::Ray ray) {
 void PrimSphere::Init() {
     center = RayTracer::Point3D(0.02f, 0.17f, -1);
     radius = 0.1f;
+
+    try {
+        material = dlLoader<Mat>::getLib("libs/mat_flat.so", "getMaterial");
+    } catch (std::exception &e) {
+        material = nullptr;
+    }
 }
