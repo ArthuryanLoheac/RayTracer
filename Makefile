@@ -71,7 +71,6 @@ SRC	= 	src/3dDatas/Point3D.cpp \
 		src/Draw/draw.cpp \
 		src/Scene/Camera.cpp \
 		src/Primitive/A_Primitive.cpp \
-		src/Primitive/Sphere.cpp \
 
 SRC_TESTS	= 	\
 
