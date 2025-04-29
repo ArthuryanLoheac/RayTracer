@@ -9,7 +9,7 @@ class dlLoader {
     static bool verifyLib(const std::string &path, std::string getter);
     static std::unique_ptr<T> getLib(const std::string &path,
         std::string getter);
-};;
+};
 
 template <typename T>
 inline bool dlLoader<T>::verifyLib(const std::string &path,
