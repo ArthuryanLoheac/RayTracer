@@ -9,9 +9,14 @@ template <typename T>
 class dlLoader {
  public:
     class dlError : public std::exception {
+     private:
+        std::string message;
+
      public:
+        explicit dlError(const std::string& errorMsg)
+            : message("dlLoader: " + errorMsg) {}
         const char *what() const noexcept override {
-            return "dlLoader: Error loading library.";
+            return message.c_str();
         }
     };
 
@@ -50,15 +55,15 @@ template <typename T>
 inline std::unique_ptr<T> dlLoader<T>::getLib(const std::string &path,
     std::string getter) {
     if (!verifyLib(path, getter))
-        throw dlError();
+        throw dlError("Invalid lib");
     void *handle = dlopen(path.c_str(), RTLD_LAZY);
     if (!handle)
-        throw dlError();
+        throw dlError("Can't open lib");
     auto createModule = reinterpret_cast<std::unique_ptr<T> (*)()>
         (dlsym(handle, getter.c_str()));
     if (!createModule) {
         dlclose(handle);
-        throw dlError();
+        throw dlError("Can't find symbol");
     }
     auto module = createModule();
     return module;

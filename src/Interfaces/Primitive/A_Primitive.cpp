@@ -25,7 +25,7 @@ void RayTracer::A_Primitive::AddChildren(std::shared_ptr<I_Primitive> child) {
 
 std::shared_ptr<I_Material> RayTracer::A_Primitive::getMaterial() {
     if (!material)
-        throw PrimitiveError("A_Primitive: Material not set");
+        throw PrimitiveError("Material not set");
     return material;
 }
 
@@ -46,5 +46,5 @@ Point3D RayTracer::A_Primitive::getScale() {
 }
 
 A_Primitive::PrimitiveError::PrimitiveError(const std::string &message)
-: message(message) {}
+: message("PrimitiveError: " + message) {}
 }  // namespace RayTracer
