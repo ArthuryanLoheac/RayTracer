@@ -81,7 +81,6 @@ COMMON_SRC = src/3dDatas/Point3D.cpp \
 
 SRC_PRIMITIVE = $(COMMON_SRC) \
 				src/Primitive/A_Primitive.cpp \
-			
 
 # ============= RULES ============= #
 
