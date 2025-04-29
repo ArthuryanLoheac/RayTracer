@@ -42,7 +42,7 @@ FLAGS_LINTER =	\
 	--filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references\
 	--recursive
 
-FLAGS_PRIMITIVE = $(FLAGS_LIB) -lsfml-graphics -lsfml-window -lsfml-system \
+FLAGS_SO = $(FLAGS_LIB) -lsfml-graphics -lsfml-window -lsfml-system \
             $(FLAGS_INCLUDE)
 
 FLAGS_LIB = -std=c++20 -Wall -Wextra -Werror
@@ -55,6 +55,8 @@ NAME	=	raytracer
 
 NAME_SPHERE = libs/primitive_sphere.so
 
+NAME_FLAT = libs/mat_flat.so
+
 # ============= SOURCES ============= #
 
 SRC_LIB	=	\
@@ -62,7 +64,7 @@ SRC_LIB	=	\
 SRC_MAIN	=	main.cpp \
 
 SRC	= 	$(shell find src -type f -name "*.cpp" ! -name "main.cpp" \
-		! -path "src/Primitive/**") \
+		! -path "src/Primitive/**" ! -path "src/Material/**") \
 
 SRC_TESTS	= 	\
 
@@ -73,9 +75,11 @@ COMMON_SRC = src/3dDatas/Point3D.cpp \
 SRC_PRIMITIVE = $(COMMON_SRC) \
 				src/Interfaces/Primitive/A_Primitive.cpp \
 
+SRC_MATERIAL = $(COMMON_SRC)
+
 # ============= RULES ============= #
 
-all: core primitive
+all: core primitive material
 
 $(NAME): $(OBJ_SRC) $(OBJ_MAIN)
 	$(COMPILER) -o $(NAME) $(OBJ_SRC) $(OBJ_MAIN) $(FLAGS)
@@ -86,7 +90,12 @@ $(NAME_LIB): $(OBJ)
 primitive:
 	@mkdir -p libs
 	$(COMPILER) -o $(NAME_SPHERE) -shared -fPIC $(SRC_PRIMITIVE) \
-		src/Primitive/PrimSphere.cpp $(FLAGS_PRIMITIVE)
+		src/Primitive/PrimSphere.cpp $(FLAGS_SO)
+
+material:
+	@mkdir -p libs
+	$(COMPILER) -o $(NAME_FLAT) -shared -fPIC $(SRC_MATERIAL) \
+		src/Material/FlatMat.cpp $(FLAGS_SO)
 
 core: $(NAME) $(NAME_LIB)
 
