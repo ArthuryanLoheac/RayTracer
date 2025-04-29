@@ -12,4 +12,8 @@ class PrimSphere : public RayTracer::A_Primitive {
         PrimSphere() = default;
         PrimSphere(RayTracer::Point3D p, double r) : center(p), radius(r) {}
         bool hits(RayTracer::Ray ray);
+        void Init() override {
+            center = RayTracer::Point3D(0, 0, 0);
+            radius = 1.0;
+        }
 };

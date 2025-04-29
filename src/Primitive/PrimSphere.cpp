@@ -1,6 +1,5 @@
 #include "Primitive/PrimSphere.hpp"
 
-
 extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
     return std::make_unique<PrimSphere>();
 }

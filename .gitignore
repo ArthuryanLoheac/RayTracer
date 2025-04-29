@@ -4,6 +4,7 @@ raytracer
 *.a
 *.o
 *.d
+*.so
 
 # Unit tests
 unit_tests
@@ -17,3 +18,4 @@ build/
 obj/
 vgcore*
 *.log
+libs/
