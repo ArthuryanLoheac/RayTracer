@@ -8,6 +8,10 @@ extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
     return std::make_unique<PrimSphere>();
 }
 
+PrimSphere::PrimSphere() {
+    Init();
+}
+
 bool PrimSphere::hits(RayTracer::Ray ray) {
     RayTracer::Vector3D oc = ray.origin - center;
 

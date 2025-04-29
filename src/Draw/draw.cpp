@@ -42,7 +42,7 @@ static void hit(sf::Image &image, int i, int j,
             s->getMaterial()->getColorAt(i, j));
     } catch (std::exception &e) {
         image.setPixel(i, j,
-            sf::Color(234,58,247));  // error pink
+            sf::Color(234, 58, 247));  // error pink
         return;
     }
 }

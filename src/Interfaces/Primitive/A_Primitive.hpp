@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <string>
 
 #include "Interfaces/Primitive/I_Primitive.hpp"
 
@@ -30,9 +31,9 @@ class A_Primitive : public I_Primitive {
     class PrimitiveError : public std::exception {
      private:
         std::string message;
-     
+
      public:
-        PrimitiveError(const std::string &message) : message(message) {}
+        explicit PrimitiveError(const std::string &message);
         const char *what() const noexcept override {
             return message.c_str();
         }
