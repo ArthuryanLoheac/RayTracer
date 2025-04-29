@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Primitive/A_Primitive.hpp"
+#include "Interfaces/Primitive/A_Primitive.hpp"
 #include "3dDatas/Point3D.hpp"
 #include "3dDatas/Vector3D.hpp"
 #include "3dDatas/Ray.hpp"

@@ -4,7 +4,7 @@
 
 #include "3dDatas/Point3D.hpp"
 #include "3dDatas/Ray.hpp"
-#include "Material/I_Material.hpp"
+#include "Interfaces/Material/I_Material.hpp"
 
 namespace RayTracer {
 class I_Primitive {

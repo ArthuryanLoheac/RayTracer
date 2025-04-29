@@ -25,14 +25,11 @@ EXTENSION = cpp
 
 # ============= FLAGS ============= #
 
-FLAGS = -I./include -I./src \
+FLAGS = $(FLAGS_INCLUDE) \
 	$(shell find include src -type d -exec echo -I{} \;) \
 	-MMD -MP $(FLAGS_LIB) -lsfml-graphics -lsfml-window -lsfml-system -ldl \
 
-FLAGS_INCLUDE = -I./include \
-			-I./src \
-			-I./src/3dDatas \
-			-I./src/Primitive \
+FLAGS_INCLUDE = -I./include -I./src \
 
 FLAGS_TEST = $(FLAGS) -lcriterion --coverage \
 
@@ -64,13 +61,8 @@ SRC_LIB	=	\
 
 SRC_MAIN	=	main.cpp \
 
-SRC	= 	src/3dDatas/Point3D.cpp \
-		src/3dDatas/Vector3D.cpp \
-		src/3dDatas/Ray.cpp \
-		src/3dDatas/Rectangle3D.cpp \
-		src/Draw/draw.cpp \
-		src/Scene/Camera.cpp \
-		src/Primitive/A_Primitive.cpp \
+SRC	= 	$(shell find src -type f -name "*.cpp" ! -name "main.cpp" \
+		! -path "src/Primitive/**") \
 
 SRC_TESTS	= 	\
 
@@ -79,7 +71,7 @@ COMMON_SRC = src/3dDatas/Point3D.cpp \
 			src/3dDatas/Ray.cpp \
 
 SRC_PRIMITIVE = $(COMMON_SRC) \
-				src/Primitive/A_Primitive.cpp \
+				src/Interfaces/Primitive/A_Primitive.cpp \
 
 # ============= RULES ============= #
 

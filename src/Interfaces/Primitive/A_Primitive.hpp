@@ -2,7 +2,7 @@
 #include <memory>
 #include <vector>
 
-#include "Primitive/I_Primitive.hpp"
+#include "Interfaces/Primitive/I_Primitive.hpp"
 
 namespace RayTracer {
 class A_Primitive : public I_Primitive {
