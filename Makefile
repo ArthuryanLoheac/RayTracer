@@ -53,11 +53,6 @@ NAME_LIB	= \
 
 NAME	=	raytracer
 
-NAME_SPHERE = libs/primitive_sphere.so
-
-NAME_FLAT = libs/mat_flat.so
-
-NAME_AMBIENT = libs/light_ambient.so
 
 # ============= SOURCES ============= #
 
@@ -66,7 +61,8 @@ SRC_LIB	=	\
 SRC_MAIN	=	main.cpp \
 
 SRC	= 	$(shell find src -type f -name "*.cpp" ! -name "main.cpp" \
-		! -path "src/Primitive/**" ! -path "src/Material/**") \
+		! -path "src/Primitive/**" ! -path "src/Material/**" \
+		! -path "src/Lights/**") \
 
 SRC_TESTS	= 	\
 
@@ -94,18 +90,20 @@ $(NAME_LIB): $(OBJ)
 
 primitive:
 	@mkdir -p libs
-	$(COMPILER) -o $(NAME_SPHERE) -shared -fPIC $(SRC_PRIMITIVE) \
+	$(COMPILER) -olibs/primitive_sphere.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimSphere.cpp $(FLAGS_SO)
 
 material:
 	@mkdir -p libs
-	$(COMPILER) -o $(NAME_FLAT) -shared -fPIC $(SRC_MATERIAL) \
+	$(COMPILER) -o libs/mat_flat.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/FlatMat.cpp $(FLAGS_SO)
 
 light:
 	@mkdir -p libs
-	$(COMPILER) -o $(NAME_AMBIENT) -shared -fPIC $(SRC_LIGHT) \
+	$(COMPILER) -o libs/light_ambient.so -shared -fPIC $(SRC_LIGHT) \
 		src/Lights/Ambient.cpp $(FLAGS_SO)
+	$(COMPILER) -o libs/light_spot.so -shared -fPIC $(SRC_LIGHT) \
+		src/Lights/Spot.cpp $(FLAGS_SO)
 
 core: $(NAME) $(NAME_LIB)
 

@@ -32,8 +32,8 @@ bool PrimSphere::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
 }
 
 void PrimSphere::Init() {
-    position = RayTracer::Point3D(0.45f, 0.45f, -3.f);
-    radius = 0.1f;
+    position = RayTracer::Point3D(1.5f, 1.5f, -30.f);
+    radius = 0.8f;
 
     try {
         material = dlLoader<Mat>::getLib("libs/mat_flat.so", "getMaterial");

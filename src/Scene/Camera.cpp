@@ -5,7 +5,7 @@ namespace RayTracer {
 
 Camera::Camera() {
     double aspect_ratio = static_cast<double>(WIDTH) / HEIGHT;
-    screen = Rectangle3D(Point3D(0, 0, -5),
+    screen = Rectangle3D(Point3D(0, 0, -10),
         Vector3D(aspect_ratio, 0, 0),
         Vector3D(0, 1, 0));
 }

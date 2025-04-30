@@ -43,17 +43,12 @@ static void hit(sf::Image &image, int i, int j,
         double distance = intersection.distance(Light->getPosition());
         double angle = 0;
         double luminescence = Light->getLuminescence(distance, angle);
-        std::cout << "Distance: " << luminescence << std::endl;
-        int r = static_cast<int>(c.r * luminescence);
-        int g = static_cast<int>(c.g * luminescence);
-        int b = static_cast<int>(c.b * luminescence);
-        if (r > 255)
-            r = 255;
-        if (g > 255)
-            g = 255;
-        if (b > 255)
-            b = 255;
-        std::cout << "Color: " << r << " " << g << " " << b << std::endl;
+        int r = std::min(255, static_cast<int>(c.r * luminescence));
+        int g = std::min(255, static_cast<int>(c.g * luminescence));
+        int b = std::min(255, static_cast<int>(c.b * luminescence));
+        std::cout << i << "/" << j << " -> (" << r << "," << g << "," << b
+                  << ") dist: " << distance
+                  << " lum: " << luminescence << std::endl;
         c = sf::Color(r, g, b);
         image.setPixel(i, j, c);
     } catch (std::exception &e) {
