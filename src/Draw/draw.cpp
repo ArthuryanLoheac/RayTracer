@@ -3,6 +3,8 @@
 #include <iostream>
 #include <memory>
 #include <algorithm>
+#include <fstream>
+#include <string>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -13,9 +15,6 @@
 #include "Primitive/I_Primitive.hpp"
 #include "3dDatas/Point3D.hpp"
 #include "Consts/const.hpp"
-
-#include <fstream>
-#include <iostream>
 
 static void showImage(sf::RenderWindow &window, sf::Image &image) {
     sf::Sprite sp;
@@ -55,7 +54,7 @@ std::string randomString(const int len) {
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         "abcdefghijklmnopqrstuvwxyz";
     std::string tmp_s;
-    
+
     tmp_s.reserve(len);
     for (int i = 0; i < len; ++i)
         tmp_s += alphanum[rand() % (sizeof(alphanum) - 1)];
@@ -69,14 +68,14 @@ void displayImage(sf::RenderWindow &window, sf::Image &image) {
         sf::Image screenshot;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed
-                || event.key.code == sf::Keyboard::Escape){
+                || event.key.code == sf::Keyboard::Escape) {
                 texture.create(window.getSize().x, window.getSize().y);
                 texture.update(window);
                 screenshot  = texture.copyToImage();
                 createPPMFile(screenshot, "renders/render.ppm");
                 window.close();
             }
-            if (event.key.code == sf::Keyboard::Space){
+            if (event.key.code == sf::Keyboard::Space) {
                 texture.create(window.getSize().x, window.getSize().y);
                 texture.update(window);
                 screenshot  = texture.copyToImage();
