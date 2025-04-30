@@ -8,6 +8,7 @@ class Parsing {
 
  public:
      void parseArgs(int argc, char **argv);
+     Scene parseSceneFile();
 
      class ParsingError : public std::exception {
       private:
