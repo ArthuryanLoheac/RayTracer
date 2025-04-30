@@ -53,7 +53,6 @@ NAME_LIB	= \
 
 NAME	=	raytracer
 
-
 # ============= SOURCES ============= #
 
 SRC_LIB	=	\

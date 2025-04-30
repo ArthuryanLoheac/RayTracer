@@ -24,6 +24,5 @@ float Ambient::getLuminescence(float distance, float angle) {
 
 bool Ambient::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     (void) ray;
-    (void) intersection;
     return false;
 }
