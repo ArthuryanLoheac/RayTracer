@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+
 #include "Scene/Scene.hpp"
 
 namespace RayTracer {
@@ -17,6 +19,6 @@ class Parsing {
       public:
           explicit ParsingError(const std::string &message);
           const char *what() const noexcept override;
-    };
+     };
 };
 }  // namespace RayTracer

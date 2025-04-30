@@ -1,8 +1,10 @@
-#include <libconfig.h++>
-#include <iostream>
 
-#include "Parsing.hpp"
-#include "../Scene/Scene.hpp"
+#include <iostream>
+#include <string>
+#include <libconfig.h++>
+
+#include "Parsing/Parsing.hpp"
+#include "Scene/Scene.hpp"
 
 namespace RayTracer {
 
@@ -34,10 +36,10 @@ Scene Parsing::parseSceneFile() {
 }
 
 Parsing::ParsingError::ParsingError(const std::string &message)
-    : message("ParsingError: " + message) {}
+: message("ParsingError: " + message) {}
 
 const char *Parsing::ParsingError::what() const noexcept {
     return message.c_str();
 }
 
-} // namespace RayTracer
+}  // namespace RayTracer
