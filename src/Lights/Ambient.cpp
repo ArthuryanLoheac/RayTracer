@@ -12,16 +12,18 @@ Ambient::Ambient() {
 
 void Ambient::Init() {
     angle = 360;
-    intensity = 10.3f;
-    position = RayTracer::Point3D(0, 0, 0);
+    intensity = 0.2f;
+    position = RayTracer::Point3D(-0.15f, 0.45f, -2.f);
 }
 
 float Ambient::getLuminescence(float distance, float angle) {
     (void) angle;
-    return intensity / (distance * distance);
+    (void) distance;
+    return intensity;
 }
 
-bool Ambient::hits(RayTracer::Ray ray) {
+bool Ambient::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     (void) ray;
+    (void) intersection;
     return false;
 }

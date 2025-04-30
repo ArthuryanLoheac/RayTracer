@@ -12,5 +12,5 @@ void FlatMat::Init() {
 sf::Color FlatMat::getColorAt(int x, int y) {
     (void) x;
     (void) y;
-    return sf::Color(255, 0, 0);
+    return sf::Color(255, 1, 1);
 }
