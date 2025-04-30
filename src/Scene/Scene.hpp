@@ -2,7 +2,7 @@
 #include <vector>
 #include <memory>
 
-#include "Lights/I_Light.hpp"
+#include "Interfaces/Light/I_Light.hpp"
 #include "Primitive/I_Primitive.hpp"
 
 namespace RayTracer {

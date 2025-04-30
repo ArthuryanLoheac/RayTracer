@@ -12,7 +12,7 @@ PrimSphere::PrimSphere() {
     Init();
 }
 
-bool PrimSphere::hits(RayTracer::Ray ray) {
+bool PrimSphere::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     RayTracer::Vector3D oc = ray.origin - position;
 
     // Quadratic coefficients
@@ -20,15 +20,20 @@ bool PrimSphere::hits(RayTracer::Ray ray) {
     double b = 2.0 * oc.dot(ray.direction);
     double c = oc.dot(oc) - radius * radius;
 
-    // Discriminant
     double discriminant = b * b - 4 * a * c;
+    if (discriminant < 0)
+        return false;
 
-    return discriminant >= 0;
+    double t1 = (-b - std::sqrt(discriminant)) / (2.0 * a);
+    double t2 = (-b + std::sqrt(discriminant)) / (2.0 * a);
+    double t = (t1 < t2) ? t1 : t2;
+    intersection = ray.origin + ray.direction * t;
+    return true;
 }
 
 void PrimSphere::Init() {
-    position = RayTracer::Point3D(0.45f, 0.45f, -3.f);
-    radius = 0.1f;
+    position = RayTracer::Point3D(1.5f, 1.5f, -30.f);
+    radius = 0.8f;
 
     try {
         material = dlLoader<Mat>::getLib("libs/mat_flat.so", "getMaterial");

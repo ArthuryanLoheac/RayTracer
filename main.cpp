@@ -24,10 +24,9 @@ static void setupAndRun(sf::RenderWindow &window, sf::Image &image) {
     std::unique_ptr<Prim> sphere = dlLoader<Prim>::getLib(
         "./libs/primitive_sphere.so", "getPrimitive");
     std::unique_ptr<Light> light = dlLoader<Light>::getLib(
-        "./libs/light_ambient.so", "getLight");
+        "./libs/light_spot.so", "getLight");
 
-    (void) light;
-    generateImage(window, image, sphere);
+    generateImage(window, image, sphere, light);
     displayImage(window, image);
 }
 

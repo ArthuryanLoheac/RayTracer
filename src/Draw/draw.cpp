@@ -2,6 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include <memory>
+#include <algorithm>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -36,9 +37,17 @@ void displayImage(sf::RenderWindow &window, sf::Image &image) {
 }
 
 static void hit(sf::Image &image, int i, int j,
-    std::unique_ptr<Prim> &s) {
+    std::unique_ptr<Prim> &s, RayTracer::Point3D &intersection,
+    std::unique_ptr<Light> &Light) {
     try {
         sf::Color c = s->getMaterial()->getColorAt(i, j);
+        double distance = intersection.distance(Light->getPosition());
+        double angle = 0;
+        double luminescence = Light->getLuminescence(distance, angle);
+        int r = std::min(255, static_cast<int>(c.r * luminescence));
+        int g = std::min(255, static_cast<int>(c.g * luminescence));
+        int b = std::min(255, static_cast<int>(c.b * luminescence));
+        c = sf::Color(r, g, b);
         image.setPixel(i, j, c);
     } catch (std::exception &e) {
         image.setPixel(i, j,
@@ -48,7 +57,7 @@ static void hit(sf::Image &image, int i, int j,
 }
 
 void generateImage(sf::RenderWindow &window, sf::Image &image,
-    std::unique_ptr<Prim> &s) {
+    std::unique_ptr<Prim> &s, std::unique_ptr<Light> &Light) {
     RayTracer::Camera cam;
 
     for (float i = 0; i < WIDTH; i++) {
@@ -56,9 +65,11 @@ void generateImage(sf::RenderWindow &window, sf::Image &image,
             double u = i / WIDTH;
             double v = j / HEIGHT;
             RayTracer::Ray r = cam.ray(u, v);
+            RayTracer::Point3D intersection;
 
-            if (s->hits(r))
-                hit(image, static_cast<int>(i), static_cast<int>(j), s);
+            if (s->hits(r, intersection))
+                hit(image, static_cast<int>(i), static_cast<int>(j), s,
+                    intersection, Light);
         }
         showImage(window, image);
     }

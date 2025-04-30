@@ -23,7 +23,7 @@ class I_Primitive {
     virtual Point3D getRotation() = 0;
     virtual Point3D getScale() = 0;
 
-    virtual bool hits(RayTracer::Ray ray) = 0;
+    virtual bool hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) = 0;
 };
 }  // namespace RayTracer
 

@@ -3,10 +3,9 @@
 #include "3dDatas/Point3D.hpp"
 #include "3dDatas/Ray.hpp"
 
-
-class Ambient : public RayTracer::A_Lights {
+class Spot : public RayTracer::A_Lights {
  public:
-    Ambient();
+    Spot();
     void Init() override;
     float getLuminescence(float distance, float angle) override;
     bool hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) override;
