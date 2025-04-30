@@ -1,58 +1,28 @@
-#include <cstdio>
-#include <cmath>
+#include <dlfcn.h>
+#include <dirent.h>
+
+#include <memory>
+#include <vector>
+#include <chrono>
 #include <iostream>
+#include <string>
+#include <cstdio>
+
+#include "Generation/tools.hpp"
+#include "Consts/const.hpp"
+#include "Primitive/I_Primitive.hpp"
+#include "dlLoader/dlLoader.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 
-#include "3dDatas/Vector3D.hpp"
-#include "Scene/Camera.hpp"
-#include "Primitive/Sphere.hpp"
-#include "3dDatas/Point3D.hpp"
-#include "Consts/const.hpp"
+static void setupAndRun(sf::RenderWindow &window, sf::Image &image) {
+    std::unique_ptr<Prim> sphere = dlLoader<Prim>::getLib(
+        "./libs/primitive_sphere.so", "getPrimitive");
 
-void showImage(sf::RenderWindow &window, sf::Image &image) {
-    sf::Sprite sp;
-    sf::Texture txt;
-
-    txt.loadFromImage(image);
-    sp.setTexture(txt);
-    window.clear();
-    window.draw(sp);
-    window.display();
-}
-
-void displayImage(sf::RenderWindow &window, sf::Image &image) {
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-        showImage(window, image);
-    }
-}
-
-void generateImage(sf::RenderWindow &window, sf::Image &image) {
-    RayTracer::Camera cam;
-    RayTracer::Sphere s(RayTracer::Point3D(0.02f, 0.17f, -1), 0.1);
-
-    for (float i = 0; i < WIDTH; i++) {
-        for (float j = 0; j < HEIGHT; j++) {
-            double u = i / WIDTH;
-            double v = j / HEIGHT;
-            RayTracer::Ray r = cam.ray(u, v);
-
-            if (s.hits(r))
-                image.setPixel(static_cast<int>(i), static_cast<int>(j),
-                    sf::Color::Red);
-            else
-                image.setPixel(static_cast<int>(i), static_cast<int>(j),
-                    sf::Color::Blue);
-        }
-        showImage(window, image);
-    }
+    generateImage(window, image, sphere);
+    displayImage(window, image);
 }
 
 int main() {
@@ -60,6 +30,11 @@ int main() {
     sf::Image image;
     image.create(WIDTH, HEIGHT, sf::Color::Black);
 
-    generateImage(window, image);
-    displayImage(window, image);
+    try {
+        setupAndRun(window, image);
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    }
+    return 0;
 }

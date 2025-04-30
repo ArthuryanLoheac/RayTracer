@@ -1,8 +1,9 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <string>
 
-#include "Primitive/I_Primitive.hpp"
+#include "Interfaces/Primitive/I_Primitive.hpp"
 
 namespace RayTracer {
 class A_Primitive : public I_Primitive {
@@ -22,8 +23,20 @@ class A_Primitive : public I_Primitive {
     std::vector<std::shared_ptr<I_Primitive>> &getChildrens() override;
     void AddChildren(std::shared_ptr<I_Primitive> child) override;
     std::shared_ptr<I_Material> getMaterial() override;
+    void setMaterial(std::shared_ptr<I_Material> material) override;
     Point3D getPosition() override;
     Point3D getRotation() override;
     Point3D getScale() override;
+
+    class PrimitiveError : public std::exception {
+     private:
+        std::string message;
+
+     public:
+        explicit PrimitiveError(const std::string &message);
+        const char *what() const noexcept override {
+            return message.c_str();
+        }
+    };
 };
 }  // namespace RayTracer
