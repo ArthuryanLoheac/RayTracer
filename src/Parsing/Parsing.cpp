@@ -19,6 +19,20 @@ void Parsing::parseArgs(int argc, char **argv) {
     sceneFile = argv[1];
 }
 
+Scene Parsing::parseSceneFile() {
+    RayTracer::Scene scene;
+    libconfig::Config cfg;
+
+    try {
+        cfg.readFile(sceneFile.c_str());
+    } catch (const libconfig::FileIOException &fioex) {
+        throw ParsingError("I/O error while reading file.");
+    } catch (const libconfig::ConfigException &ex) {
+        throw ParsingError("Error in configuration file.");
+    }
+    return scene;
+}
+
 Parsing::ParsingError::ParsingError(const std::string &message)
     : message("ParsingError: " + message) {}
 
