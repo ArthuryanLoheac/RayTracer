@@ -15,7 +15,8 @@ unit_tests
 # Other
 .vscode/
 build/
+libs/
 obj/
 vgcore*
 *.log
-libs/
+*cfg
