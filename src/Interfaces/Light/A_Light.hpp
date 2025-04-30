@@ -3,10 +3,10 @@
 #include <vector>
 #include <string>
 
-#include "Interfaces/Light/I_Lights.hpp"
+#include "Interfaces/Light/I_Light.hpp"
 
 namespace RayTracer {
-class A_Lights : public I_Lights {
+class A_Lights : public I_Light {
  protected:
     std::shared_ptr<I_Primitive> parent;
     std::vector<std::shared_ptr<I_Primitive>> childrens;

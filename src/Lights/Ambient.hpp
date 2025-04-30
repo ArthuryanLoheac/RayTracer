@@ -1,5 +1,5 @@
 #pragma once
-#include "Interfaces/Light/A_Lights.hpp"
+#include "Interfaces/Light/A_Light.hpp"
 
 class Ambient : public RayTracer::A_Lights {
  public:

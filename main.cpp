@@ -11,6 +11,7 @@
 #include "Generation/tools.hpp"
 #include "Consts/const.hpp"
 #include "Primitive/I_Primitive.hpp"
+#include "Light/I_Light.hpp"
 #include "dlLoader/dlLoader.hpp"
 
 #include <SFML/Graphics.hpp>
