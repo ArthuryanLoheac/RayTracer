@@ -28,6 +28,7 @@ EXTENSION = cpp
 FLAGS = $(FLAGS_INCLUDE) \
 	$(shell find include src -type d -exec echo -I{} \;) \
 	-MMD -MP $(FLAGS_LIB) -lsfml-graphics -lsfml-window -lsfml-system -ldl \
+	-lconfig++ \
 
 FLAGS_INCLUDE = -I./include -I./src -I./src/dlLoader \
 
