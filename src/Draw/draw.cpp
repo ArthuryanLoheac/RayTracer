@@ -46,9 +46,6 @@ static void hit(sf::Image &image, int i, int j,
         int r = std::min(255, static_cast<int>(c.r * luminescence));
         int g = std::min(255, static_cast<int>(c.g * luminescence));
         int b = std::min(255, static_cast<int>(c.b * luminescence));
-        std::cout << i << "/" << j << " -> (" << r << "," << g << "," << b
-                  << ") dist: " << distance
-                  << " lum: " << luminescence << std::endl;
         c = sf::Color(r, g, b);
         image.setPixel(i, j, c);
     } catch (std::exception &e) {
