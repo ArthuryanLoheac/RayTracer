@@ -10,8 +10,8 @@
 
 #include "Generation/tools.hpp"
 #include "Consts/const.hpp"
-#include "Primitive/I_Primitive.hpp"
-#include "Light/I_Light.hpp"
+#include "Interfaces/Primitive/I_Primitive.hpp"
+#include "Interfaces/Light/I_Light.hpp"
 #include "dlLoader/dlLoader.hpp"
 
 #include <SFML/Graphics.hpp>
@@ -21,6 +21,8 @@
 static void setupAndRun(sf::RenderWindow &window, sf::Image &image) {
     std::unique_ptr<Prim> sphere = dlLoader<Prim>::getLib(
         "./libs/primitive_sphere.so", "getPrimitive");
+    std::unique_ptr<Light> light = dlLoader<Light>::getLib(
+        "./libs/light_ambient.so", "getLight");
 
     generateImage(window, image, sphere);
     displayImage(window, image);

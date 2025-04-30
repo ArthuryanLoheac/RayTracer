@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 
-#include "Primitive/I_Primitive.hpp"
+#include "Interfaces/Primitive/I_Primitive.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>

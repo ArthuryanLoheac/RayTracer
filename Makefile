@@ -78,13 +78,13 @@ SRC_PRIMITIVE = $(COMMON_SRC) \
 				src/Interfaces/Primitive/A_Primitive.cpp \
 
 SRC_LIGHT = $(COMMON_SRC) \
-			src/Interfaces/Light/A_Lights.cpp \
+			src/Interfaces/Light/A_Light.cpp \
 
 SRC_MATERIAL = $(COMMON_SRC)
 
 # ============= RULES ============= #
 
-all: core primitive material
+all: core primitive material light
 
 $(NAME): $(OBJ_SRC) $(OBJ_MAIN)
 	$(COMPILER) -o $(NAME) $(OBJ_SRC) $(OBJ_MAIN) $(FLAGS)
