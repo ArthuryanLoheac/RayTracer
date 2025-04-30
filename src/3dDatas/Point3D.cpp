@@ -1,5 +1,4 @@
 #include "3dDatas/Point3D.hpp"
-#include "Point3D.hpp"
 
 RayTracer::Point3D::Point3D()
 : x(0), y(0), z(0) {}
@@ -25,8 +24,7 @@ float RayTracer::Point3D::distance(Point3D other) {
                     std::pow(z - other.z, 2));
 }
 
-std::ostream &operator<<(std::ostream &os, const RayTracer::Point3D &point)
-{
+std::ostream &operator<<(std::ostream &os, const RayTracer::Point3D &point) {
     os << "P(" << point.x << ", " << point.y << ", " << point.z << ")";
     return os;
 }

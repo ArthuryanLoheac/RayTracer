@@ -1,3 +1,7 @@
+#include <string>
+#include <memory>
+#include <vector>
+
 #include "Interfaces/Light/A_Light.hpp"
 
 std::shared_ptr<RayTracer::I_Primitive> RayTracer::A_Lights::getParent() {

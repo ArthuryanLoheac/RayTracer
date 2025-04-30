@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "Lights/Ambient.hpp"
 
 extern "C" std::unique_ptr<RayTracer::I_Light> getLight() {
