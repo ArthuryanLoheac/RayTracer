@@ -2,6 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include <memory>
+#include <algorithm>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -67,7 +68,8 @@ void generateImage(sf::RenderWindow &window, sf::Image &image,
             RayTracer::Point3D intersection;
 
             if (s->hits(r, intersection))
-                hit(image, static_cast<int>(i), static_cast<int>(j), s, intersection, Light);
+                hit(image, static_cast<int>(i), static_cast<int>(j), s,
+                    intersection, Light);
         }
         showImage(window, image);
     }
