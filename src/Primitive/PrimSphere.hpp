@@ -7,10 +7,8 @@
 
 class PrimSphere : public RayTracer::A_Primitive {
  public:
-    RayTracer::Point3D center;
     double radius;
     PrimSphere();
-    PrimSphere(RayTracer::Point3D p, double r) : center(p), radius(r) {}
     bool hits(RayTracer::Ray ray) override;
     void Init() override;
 };

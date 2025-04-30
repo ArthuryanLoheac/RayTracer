@@ -24,6 +24,7 @@ static void setupAndRun(sf::RenderWindow &window, sf::Image &image) {
     std::unique_ptr<Light> light = dlLoader<Light>::getLib(
         "./libs/light_ambient.so", "getLight");
 
+    (void) light;
     generateImage(window, image, sphere);
     displayImage(window, image);
 }
