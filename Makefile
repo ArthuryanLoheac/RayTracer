@@ -57,6 +57,8 @@ NAME_SPHERE = libs/primitive_sphere.so
 
 NAME_FLAT = libs/mat_flat.so
 
+NAME_AMBIENT = libs/light_ambient.so
+
 # ============= SOURCES ============= #
 
 SRC_LIB	=	\
@@ -75,11 +77,14 @@ COMMON_SRC = src/3dDatas/Point3D.cpp \
 SRC_PRIMITIVE = $(COMMON_SRC) \
 				src/Interfaces/Primitive/A_Primitive.cpp \
 
+SRC_LIGHT = $(COMMON_SRC) \
+			src/Interfaces/Light/A_Light.cpp \
+
 SRC_MATERIAL = $(COMMON_SRC)
 
 # ============= RULES ============= #
 
-all: core primitive material
+all: core primitive material light
 
 $(NAME): $(OBJ_SRC) $(OBJ_MAIN)
 	$(COMPILER) -o $(NAME) $(OBJ_SRC) $(OBJ_MAIN) $(FLAGS)
@@ -96,6 +101,11 @@ material:
 	@mkdir -p libs
 	$(COMPILER) -o $(NAME_FLAT) -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/FlatMat.cpp $(FLAGS_SO)
+
+light:
+	@mkdir -p libs
+	$(COMPILER) -o $(NAME_AMBIENT) -shared -fPIC $(SRC_LIGHT) \
+		src/Lights/Ambient.cpp $(FLAGS_SO)
 
 core: $(NAME) $(NAME_LIB)
 

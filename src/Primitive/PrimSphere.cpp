@@ -13,7 +13,7 @@ PrimSphere::PrimSphere() {
 }
 
 bool PrimSphere::hits(RayTracer::Ray ray) {
-    RayTracer::Vector3D oc = ray.origin - center;
+    RayTracer::Vector3D oc = ray.origin - position;
 
     // Quadratic coefficients
     double a = ray.direction.dot(ray.direction);
@@ -27,7 +27,7 @@ bool PrimSphere::hits(RayTracer::Ray ray) {
 }
 
 void PrimSphere::Init() {
-    center = RayTracer::Point3D(0.02f, 0.17f, -1);
+    position = RayTracer::Point3D(0.45f, 0.45f, -3.f);
     radius = 0.1f;
 
     try {

@@ -12,6 +12,8 @@ class Point3D {
     Point3D operator+(const Vector3D& vec);
     Point3D operator-(const Vector3D& vec);
     Vector3D operator-(const Point3D& vec);
+
+    float distance(Point3D other);
 };
 }  // namespace RayTracer
 

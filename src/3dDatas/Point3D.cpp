@@ -18,6 +18,12 @@ RayTracer::Vector3D RayTracer::Point3D::operator-(const Point3D &vec) {
     return Vector3D(x - vec.x, y - vec.y, z - vec.z);
 }
 
+float RayTracer::Point3D::distance(Point3D other) {
+    return std::sqrt(std::pow(x - other.x, 2) +
+                    std::pow(y - other.y, 2) +
+                    std::pow(z - other.z, 2));
+}
+
 std::ostream &operator<<(std::ostream &os, const RayTracer::Point3D &point) {
     os << "P(" << point.x << ", " << point.y << ", " << point.z << ")";
     return os;
