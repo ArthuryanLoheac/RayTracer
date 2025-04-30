@@ -35,6 +35,18 @@ void displayImage(sf::RenderWindow &window, sf::Image &image) {
     }
 }
 
+static void hit(sf::Image &image, int i, int j,
+    std::unique_ptr<RayTracer::I_Primitive> &s) {
+    try {
+        image.setPixel(i, j,
+            s->getMaterial()->getColorAt(i, j));
+    } catch (std::exception &e) {
+        image.setPixel(i, j,
+            sf::Color(234, 58, 247));  // error pink
+        return;
+    }
+}
+
 void generateImage(sf::RenderWindow &window, sf::Image &image,
     std::unique_ptr<RayTracer::I_Primitive> &s) {
     RayTracer::Camera cam;
@@ -46,11 +58,7 @@ void generateImage(sf::RenderWindow &window, sf::Image &image,
             RayTracer::Ray r = cam.ray(u, v);
 
             if (s->hits(r))
-                image.setPixel(static_cast<int>(i), static_cast<int>(j),
-                    sf::Color::Red);
-            else
-                image.setPixel(static_cast<int>(i), static_cast<int>(j),
-                    sf::Color::Blue);
+                hit(image, static_cast<int>(i), static_cast<int>(j), s);
         }
         showImage(window, image);
     }

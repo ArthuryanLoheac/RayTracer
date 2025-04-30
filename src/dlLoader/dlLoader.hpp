@@ -1,4 +1,6 @@
 #pragma once
+#include <dlfcn.h>
+
 #include <string>
 #include <memory>
 #include <iostream>
@@ -6,6 +8,18 @@
 template <typename T>
 class dlLoader {
  public:
+    class dlError : public std::exception {
+     private:
+        std::string message;
+
+     public:
+        explicit dlError(const std::string& errorMsg)
+            : message("dlLoader: " + errorMsg) {}
+        const char *what() const noexcept override {
+            return message.c_str();
+        }
+    };
+
     static bool verifyLib(const std::string &path, std::string getter);
     static std::unique_ptr<T> getLib(const std::string &path,
         std::string getter);
@@ -40,17 +54,16 @@ inline bool dlLoader<T>::verifyLib(const std::string &path,
 template <typename T>
 inline std::unique_ptr<T> dlLoader<T>::getLib(const std::string &path,
     std::string getter) {
+    if (!verifyLib(path, getter))
+        throw dlError("Invalid lib");
     void *handle = dlopen(path.c_str(), RTLD_LAZY);
-    if (!handle) {
-        std::cerr << "Error loading library: " << dlerror() << std::endl;
-        exit(84);
-    }
+    if (!handle)
+        throw dlError("Can't open lib");
     auto createModule = reinterpret_cast<std::unique_ptr<T> (*)()>
         (dlsym(handle, getter.c_str()));
     if (!createModule) {
-        std::cerr << "Error loading symbol: " << dlerror() << std::endl;
         dlclose(handle);
-        exit(84);
+        throw dlError("Can't find symbol");
     }
     auto module = createModule();
     return module;
