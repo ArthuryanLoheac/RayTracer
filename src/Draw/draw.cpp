@@ -49,6 +49,19 @@ void createPPMFile(const sf::Image& image,
     out.close();
 }
 
+std::string randomString(const int len) {
+    static const char alphanum[] =
+        "0123456789"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "abcdefghijklmnopqrstuvwxyz";
+    std::string tmp_s;
+    
+    tmp_s.reserve(len);
+    for (int i = 0; i < len; ++i)
+        tmp_s += alphanum[rand() % (sizeof(alphanum) - 1)];
+    return ("renders/" + tmp_s + ".ppm");
+}
+
 void displayImage(sf::RenderWindow &window, sf::Image &image) {
     while (window.isOpen()) {
         sf::Event event;
@@ -62,6 +75,12 @@ void displayImage(sf::RenderWindow &window, sf::Image &image) {
                 screenshot  = texture.copyToImage();
                 createPPMFile(screenshot, "renders/render.ppm");
                 window.close();
+            }
+            if (event.key.code == sf::Keyboard::Space){
+                texture.create(window.getSize().x, window.getSize().y);
+                texture.update(window);
+                screenshot  = texture.copyToImage();
+                createPPMFile(screenshot, randomString(8));
             }
         }
         showImage(window, image);
