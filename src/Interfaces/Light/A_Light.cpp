@@ -4,14 +4,6 @@
 
 #include "Interfaces/Light/A_Light.hpp"
 
-std::shared_ptr<RayTracer::I_Primitive> RayTracer::A_Lights::getParent() {
-    return parent;
-}
-
-void RayTracer::A_Lights::setParent(std::shared_ptr<I_Primitive> parent) {
-    this->parent = parent;
-}
-
 std::vector<std::shared_ptr<RayTracer::I_Primitive>>
 &RayTracer::A_Lights::getChildrens() {
     return childrens;
@@ -35,12 +27,24 @@ RayTracer::Point3D RayTracer::A_Lights::getPosition() {
     return position;
 }
 
+void RayTracer::A_Lights::setPosition(Point3D pos) {
+    position = pos;
+}
+
 RayTracer::Point3D RayTracer::A_Lights::getRotation() {
     return rotation;
 }
 
+void RayTracer::A_Lights::setRotation(Point3D rot) {
+    rotation = rot;
+}
+
 RayTracer::Point3D RayTracer::A_Lights::getScale() {
     return scale;
+}
+
+void RayTracer::A_Lights::setScale(Point3D scale) {
+    this->scale = scale;
 }
 
 float RayTracer::A_Lights::getLuminescence(float distance, float angle) {

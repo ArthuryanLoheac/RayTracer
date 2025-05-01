@@ -8,7 +8,6 @@
 namespace RayTracer {
 class A_Lights : public I_Light {
  protected:
-    std::shared_ptr<I_Primitive> parent;
     std::vector<std::shared_ptr<I_Primitive>> childrens;
     std::shared_ptr<I_Material> material;
     Point3D position;
@@ -20,16 +19,17 @@ class A_Lights : public I_Light {
 
  public:
     virtual ~A_Lights() = default;
-    std::shared_ptr<I_Primitive> getParent() override;
-    void setParent(std::shared_ptr<I_Primitive> parent) override;
     std::vector<std::shared_ptr<I_Primitive>> &getChildrens() override;
     std::shared_ptr<I_Primitive> &AddChildren(
        std::shared_ptr<I_Primitive> child) override;
     std::shared_ptr<I_Material> getMaterial() override;
     void setMaterial(std::shared_ptr<I_Material> material) override;
     Point3D getPosition() override;
+    void setPosition(Point3D pos) override;
     Point3D getRotation() override;
+    void setRotation(Point3D rot) override;
     Point3D getScale() override;
+    void setScale(Point3D scale) override;
 
     float getLuminescence(float distance, float angle) = 0;
     float getIntensity() override;

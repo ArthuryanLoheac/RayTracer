@@ -3,11 +3,10 @@
 #include "3dDatas/Point3D.hpp"
 #include "Consts/const.hpp"
 
-void computeTreeValues(std::shared_ptr<Prim> head) {
-    if (head->getParent() != nullptr) {
-        head->getPosition() = head->getPosition() +
-            head->getParent()->getPosition();
-    }
+void computeTreeValues(std::shared_ptr<Prim> head,
+    std::shared_ptr<Prim> parent) {
+    if (parent != nullptr)
+        head->setPosition(head->getPosition() + parent->getPosition());
     for (std::shared_ptr<Prim> &o : head->getChildrens())
-        computeTreeValues(o);
+        computeTreeValues(o, head);
 }

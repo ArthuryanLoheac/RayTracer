@@ -6,14 +6,6 @@
 
 namespace RayTracer {
 
-std::shared_ptr<I_Primitive> RayTracer::A_Primitive::getParent() {
-    return parent;
-}
-
-void RayTracer::A_Primitive::setParent(std::shared_ptr<I_Primitive> parent) {
-    this->parent = parent;
-}
-
 std::vector<std::shared_ptr<I_Primitive>>
 &RayTracer::A_Primitive::getChildrens() {
     return childrens;
@@ -39,12 +31,24 @@ Point3D RayTracer::A_Primitive::getPosition() {
     return position;
 }
 
+void RayTracer::A_Primitive::setPosition(Point3D pos) {
+    position = pos;
+}
+
 Point3D RayTracer::A_Primitive::getRotation() {
     return rotation;
 }
 
+void RayTracer::A_Primitive::setRotation(Point3D rot) {
+    rotation = rot;
+}
+
 Point3D RayTracer::A_Primitive::getScale() {
     return scale;
+}
+
+void RayTracer::A_Primitive::setScale(Point3D scale) {
+    this->scale = scale;
 }
 
 A_Primitive::PrimitiveError::PrimitiveError(const std::string &message)
