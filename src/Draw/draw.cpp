@@ -58,28 +58,41 @@ std::string randomString(const int len) {
     tmp_s.reserve(len);
     for (int i = 0; i < len; ++i)
         tmp_s += alphanum[rand() % (sizeof(alphanum) - 1)];
-    return ("renders/" + tmp_s + ".ppm");
+    return ("renders/screenshot" + tmp_s + ".ppm");
+}
+
+void renderAtClosing(sf::RenderWindow &window) {
+    sf::Texture texture;
+    sf::Image screenshot;
+
+    texture.create(window.getSize().x, window.getSize().y);
+    texture.update(window);
+    screenshot  = texture.copyToImage();
+    createPPMFile(screenshot, "renders/render.ppm");
+}
+
+void screenshot(sf::RenderWindow &window) {
+    sf::Texture texture;
+    sf::Image screenshot;
+
+    texture.create(window.getSize().x, window.getSize().y);
+    texture.update(window);
+    screenshot  = texture.copyToImage();
+    createPPMFile(screenshot, randomString(5));
 }
 
 void displayImage(sf::RenderWindow &window, sf::Image &image) {
     while (window.isOpen()) {
         sf::Event event;
-        sf::Texture texture;
-        sf::Image screenshot;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed
                 || event.key.code == sf::Keyboard::Escape) {
-                texture.create(window.getSize().x, window.getSize().y);
-                texture.update(window);
-                screenshot  = texture.copyToImage();
-                createPPMFile(screenshot, "renders/render.ppm");
+                renderAtClosing(window);
                 window.close();
             }
-            if (event.key.code == sf::Keyboard::Space) {
-                texture.create(window.getSize().x, window.getSize().y);
-                texture.update(window);
-                screenshot  = texture.copyToImage();
-                createPPMFile(screenshot, randomString(8));
+            if (event.type == sf::Event::KeyPressed 
+                && event.key.code == sf::Keyboard::Space) {
+                screenshot(window);
             }
         }
         showImage(window, image);
