@@ -17,8 +17,10 @@ std::vector<std::shared_ptr<RayTracer::I_Primitive>>
     return childrens;
 }
 
-void RayTracer::A_Lights::AddChildren(std::shared_ptr<I_Primitive> child) {
+std::shared_ptr<RayTracer::I_Primitive> &RayTracer::A_Lights::AddChildren(
+    std::shared_ptr<I_Primitive> child) {
     childrens.push_back(child);
+    return childrens.back();
 }
 
 std::shared_ptr<RayTracer::I_Material> RayTracer::A_Lights::getMaterial() {

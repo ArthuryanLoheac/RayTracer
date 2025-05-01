@@ -26,6 +26,9 @@ static void setupAndRun(sf::RenderWindow &window, sf::Image &image) {
     std::unique_ptr<Light> light = dlLoader<Light>::getLib(
         "./libs/light_spot.so", "getLight");
 
+    RayTracer::Scene::i->ObjectHead->AddChildren(
+        dlLoader<Prim>::getLib("./libs/primitive_sphere.so", "getPrimitive"));
+
     generateImage(window, image, light);
     displayImage(window, image);
 }

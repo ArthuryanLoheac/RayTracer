@@ -25,7 +25,7 @@ static double getLuminescence(RayTracer::Point3D &intersection,
 }
 
 static void hit(sf::Image &image, int i, int j,
-    std::unique_ptr<Prim> &s, RayTracer::Point3D &intersection,
+    std::shared_ptr<Prim> &s, RayTracer::Point3D &intersection,
     std::unique_ptr<Light> &Light) {
     try {
         // Get base colors
@@ -52,13 +52,16 @@ static void hit(sf::Image &image, int i, int j,
     }
 }
 
-void checkHitsAtPixel(double i, double j, RayTracer::Ray r, sf::Image &image,
-    std::unique_ptr<Light> &Light) {
+static void checkHitsAtPixel(double i, double j, RayTracer::Ray r,
+sf::Image &image, std::unique_ptr<Light> &Light, std::shared_ptr<Prim> &obj) {
     RayTracer::Point3D intersection;
 
-    if (RayTracer::Scene::i->ObjectHead->hits(r, intersection)) {
+    if (obj->hits(r, intersection)) {
         hit(image, static_cast<int>(i), static_cast<int>(j),
-            RayTracer::Scene::i->ObjectHead, intersection, Light);
+            obj, intersection, Light);
+    }
+    for (std::shared_ptr<Prim> &o : obj->getChildrens()) {
+        checkHitsAtPixel(i, j, r, image, Light, o);
     }
 }
 
@@ -69,7 +72,8 @@ void generateImage(sf::RenderWindow &window, sf::Image &image,
     for (float i = 0; i < WIDTH; i++) {
         for (float j = 0; j < HEIGHT; j++) {
             RayTracer::Ray r = cam.ray(i / WIDTH, j / HEIGHT);
-            checkHitsAtPixel(i, j, r, image, Light);
+            checkHitsAtPixel(i, j, r, image, Light,
+                RayTracer::Scene::i->ObjectHead);
         }
         showImage(window, image);
     }

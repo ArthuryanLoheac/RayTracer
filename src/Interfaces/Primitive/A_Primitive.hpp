@@ -20,7 +20,8 @@ class A_Primitive : public I_Primitive {
     std::shared_ptr<I_Primitive> getParent() override;
     void setParent(std::shared_ptr<I_Primitive> parent) override;
     std::vector<std::shared_ptr<I_Primitive>> &getChildrens() override;
-    void AddChildren(std::shared_ptr<I_Primitive> child) override;
+    std::shared_ptr<I_Primitive> &AddChildren(
+        std::shared_ptr<I_Primitive> child) override;
     std::shared_ptr<I_Material> getMaterial() override;
     void setMaterial(std::shared_ptr<I_Material> material) override;
     Point3D getPosition() override;

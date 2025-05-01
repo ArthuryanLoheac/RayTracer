@@ -10,7 +10,7 @@ class Scene {
  public:
     static Scene *i;
 
-    std::unique_ptr<I_Primitive> ObjectHead;
+    std::shared_ptr<I_Primitive> ObjectHead;
 
     Scene();
 };

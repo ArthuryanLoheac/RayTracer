@@ -32,7 +32,10 @@ bool PrimSphere::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
 }
 
 void PrimSphere::Init() {
-    position = RayTracer::Point3D(1.5f, 1.5f, -30.f);
+    static int i = -1;
+    i++;
+
+    position = RayTracer::Point3D(.5f + i, 1.5f, -30.f - i*2);
     radius = 0.8f;
 
     try {
