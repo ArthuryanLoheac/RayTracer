@@ -24,9 +24,9 @@ static double getLuminescence(RayTracer::Point3D &intersection,
     return Light->getLuminescence(distance, angle);
 }
 
-static void hit(sf::Image &image, int i, int j,
+static void hit(sf::Image &image, int i, int j, RayTracer::Ray &ray,
     std::shared_ptr<Prim> &s, RayTracer::Point3D &intersection,
-    std::unique_ptr<Light> &Light, float &z) {
+    std::unique_ptr<Light> &Light, float &minRayLen) {
     try {
         // Get base colors
         sf::Color origin = image.getPixel(i, j);
@@ -41,10 +41,11 @@ static void hit(sf::Image &image, int i, int j,
 
         // Edit color with transparency values
         float percentA = 255 / c.a;
-        if (intersection.z < z) //  object is behind other object
+        float len = intersection.distance(ray.origin);
+        if (len > minRayLen) //  object is behind other object
             percentA = 1 - percentA;
         else
-            z = intersection.z;
+            minRayLen = len;
         c = sf::Color(  (r * percentA) + (origin.r * (1 - percentA)),
                         (g * percentA) + (origin.g * (1 - percentA)),
                         (b * percentA) + (origin.b * (1 - percentA)));
@@ -58,15 +59,15 @@ static void hit(sf::Image &image, int i, int j,
 
 static void checkHitsAtPixel(double i, double j, RayTracer::Ray r,
 sf::Image &image, std::unique_ptr<Light> &Light, std::shared_ptr<Prim> &obj,
-float &z) {
+float &minRayLength) {
     RayTracer::Point3D intersection;
 
     if (obj->hits(r, intersection)) {
-        hit(image, static_cast<int>(i), static_cast<int>(j),
-            obj, intersection, Light, z);
+        hit(image, static_cast<int>(i), static_cast<int>(j), r,
+            obj, intersection, Light, minRayLength);
     }
     for (std::shared_ptr<Prim> &o : obj->getChildrens())
-        checkHitsAtPixel(i, j, r, image, Light, o, z);
+        checkHitsAtPixel(i, j, r, image, Light, o, minRayLength);
 }
 
 void generateImage(sf::RenderWindow &window, sf::Image &image,
@@ -75,11 +76,11 @@ void generateImage(sf::RenderWindow &window, sf::Image &image,
 
     for (float i = 0; i < WIDTH; i++) {
         for (float j = 0; j < HEIGHT; j++) {
-            float z = -10000000.f;
+            float minRayLength = 10000000.f;
 
             RayTracer::Ray r = cam.ray(i / WIDTH, j / HEIGHT);
             checkHitsAtPixel(i, j, r, image, Light,
-                RayTracer::Scene::i->ObjectHead, z);
+                RayTracer::Scene::i->ObjectHead, minRayLength);
         }
         showImage(window, image);
     }
