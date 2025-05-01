@@ -35,7 +35,7 @@ void PrimSphere::Init() {
     static int i = -1;
     i++;
 
-    position = RayTracer::Point3D(.5f + i, 1.5f, -30.f - i*2);
+    position = RayTracer::Point3D(.5f + i, 1.5f, -30.f + i*2);
     radius = 0.8f;
 
     try {
