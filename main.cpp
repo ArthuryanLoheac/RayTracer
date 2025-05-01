@@ -29,6 +29,7 @@ static void setupAndRun(sf::RenderWindow &window, sf::Image &image) {
     RayTracer::Scene::i->ObjectHead->AddChildren(
         dlLoader<Prim>::getLib("./libs/primitive_sphere.so", "getPrimitive"));
 
+    //computeTreeValues(RayTracer::Scene::i->ObjectHead);
     generateImage(window, image, light);
     displayImage(window, image);
 }
