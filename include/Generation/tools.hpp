@@ -10,3 +10,4 @@
 void generateImage(sf::RenderWindow &window, sf::Image &image,
     std::unique_ptr<Light> &Light);
 void displayImage(sf::RenderWindow &window, sf::Image &image);
+void showImage(sf::RenderWindow &window, sf::Image &image);
