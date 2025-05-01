@@ -12,7 +12,7 @@ std::vector<std::shared_ptr<I_Primitive>>
 }
 
 std::shared_ptr<I_Primitive> &RayTracer::A_Primitive::AddChildren(
-    std::shared_ptr<I_Primitive> child) {
+std::shared_ptr<I_Primitive> child) {
     childrens.push_back(child);
     return childrens.back();
 }

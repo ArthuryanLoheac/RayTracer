@@ -1,5 +1,4 @@
 #include "3dDatas/Point3D.hpp"
-#include "Point3D.hpp"
 
 RayTracer::Point3D::Point3D()
 : x(0), y(0), z(0) {}
@@ -14,8 +13,8 @@ RayTracer::Point3D RayTracer::Point3D::operator+(const Vector3D &vec) {
 RayTracer::Point3D RayTracer::Point3D::operator+(const Point3D &other) {
     return Point3D(x + other.x, y + other.y, z + other.z);
 }
-RayTracer::Point3D RayTracer::Point3D::operator-(const Vector3D &vec)
-{
+
+RayTracer::Point3D RayTracer::Point3D::operator-(const Vector3D &vec) {
     return Point3D(x - vec.x, y - vec.y, z - vec.z);
 }
 

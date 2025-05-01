@@ -42,13 +42,13 @@ static void hit(sf::Image &image, int i, int j, RayTracer::Ray &ray,
         // Edit color with transparency values
         float percentA = 255 / c.a;
         float len = intersection.distance(ray.origin);
-        if (len > minRayLen) //  object is behind other object
+        if (len > minRayLen)  // object is behind other object
             percentA = 1 - percentA;
         else
             minRayLen = len;
-        c = sf::Color(  (r * percentA) + (origin.r * (1 - percentA)),
-                        (g * percentA) + (origin.g * (1 - percentA)),
-                        (b * percentA) + (origin.b * (1 - percentA)));
+        c = sf::Color((r * percentA) + (origin.r * (1 - percentA)),
+                      (g * percentA) + (origin.g * (1 - percentA)),
+                      (b * percentA) + (origin.b * (1 - percentA)));
         image.setPixel(i, j, c);
     } catch (std::exception &e) {
         image.setPixel(i, j,

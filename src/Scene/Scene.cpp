@@ -1,4 +1,4 @@
-#include "Scene.hpp"
+#include "Scene/Scene.hpp"
 namespace RayTracer {
 Scene *Scene::i = nullptr;
 }  // namespace RayTracer
