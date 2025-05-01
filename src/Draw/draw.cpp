@@ -90,7 +90,7 @@ void displayImage(sf::RenderWindow &window, sf::Image &image) {
                 renderAtClosing(window);
                 window.close();
             }
-            if (event.type == sf::Event::KeyPressed 
+            if (event.type == sf::Event::KeyPressed
                 && event.key.code == sf::Keyboard::Space) {
                 screenshot(window);
             }
