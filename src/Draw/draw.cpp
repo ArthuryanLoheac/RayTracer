@@ -40,7 +40,7 @@ static void hit(sf::Image &image, int i, int j, RayTracer::Ray &ray,
         int b = std::min(255, static_cast<int>(c.b * luminescence));
 
         // Edit color with transparency values
-        float percentA = 255 / c.a;
+        float percentA = (c.a != 0) ? (255 / c.a) : 1.0f;
         float len = intersection.distance(ray.origin);
         if (len > minRayLen)  // object is behind other object
             percentA = 1 - percentA;
