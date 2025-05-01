@@ -10,6 +10,7 @@
 
 #include "3dDatas/Vector3D.hpp"
 #include "Scene/Camera.hpp"
+#include "Scene/Scene.hpp"
 #include "Primitive/I_Primitive.hpp"
 #include "3dDatas/Point3D.hpp"
 #include "Consts/const.hpp"
@@ -57,7 +58,7 @@ static void hit(sf::Image &image, int i, int j,
 }
 
 void generateImage(sf::RenderWindow &window, sf::Image &image,
-    std::unique_ptr<Prim> &s, std::unique_ptr<Light> &Light) {
+    std::unique_ptr<Light> &Light) {
     RayTracer::Camera cam;
 
     for (float i = 0; i < WIDTH; i++) {
@@ -67,9 +68,9 @@ void generateImage(sf::RenderWindow &window, sf::Image &image,
             RayTracer::Ray r = cam.ray(u, v);
             RayTracer::Point3D intersection;
 
-            if (s->hits(r, intersection))
-                hit(image, static_cast<int>(i), static_cast<int>(j), s,
-                    intersection, Light);
+            if (RayTracer::Scene::i->ObjectHead->hits(r, intersection))
+                hit(image, static_cast<int>(i), static_cast<int>(j),
+                    RayTracer::Scene::i->ObjectHead, intersection, Light);
         }
         showImage(window, image);
     }
