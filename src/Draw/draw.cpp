@@ -49,7 +49,10 @@ static void hit(sf::Image &image, int i, int j,
         int r = std::min(255, static_cast<int>(c.r * luminescence));
         int g = std::min(255, static_cast<int>(c.g * luminescence));
         int b = std::min(255, static_cast<int>(c.b * luminescence));
-        c = sf::Color(r + origin.r, g + origin.g, b + origin.b);
+        float percentA = 255 / c.a;
+        c = sf::Color(  (r * percentA) + (origin.r * (1 - percentA)),
+                        (g * percentA) + (origin.g * (1 - percentA)),
+                        (b * percentA) + (origin.b * (1 - percentA)));
         image.setPixel(i, j, c);
     } catch (std::exception &e) {
         image.setPixel(i, j,
