@@ -20,8 +20,18 @@
 
 static double getLuminescence(RayTracer::Point3D &intersection,
     std::unique_ptr<Light> &Light) {
+    RayTracer::Vector3D lightRotation = Light->getRotation();
+    RayTracer::Vector3D vect = Light->getPosition() - intersection;
+
+    lightRotation.normalize();
+    vect.normalize();
+
+    double dotProduct = lightRotation.dot(vect);
+//    dotProduct = std::min(1.0, std::max(-1.0, dotProduct));
+
+    double angle = std::acos(dotProduct) * 180.0 / M_PI;
+
     double distance = intersection.distance(Light->getPosition());
-    double angle = 0;
     return Light->getLuminescence(distance, angle);
 }
 

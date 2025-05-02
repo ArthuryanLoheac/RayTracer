@@ -1,4 +1,5 @@
 #include "3dDatas/Vector3D.hpp"
+#include "Vector3D.hpp"
 
 #pragma region CONSTRUCTORS
 
@@ -6,6 +7,12 @@ RayTracer::Vector3D::Vector3D() {
     x = 0;
     y = 0;
     z = 0;
+}
+
+RayTracer::Vector3D::Vector3D(Point3D other) {
+    x = other.x;
+    y = other.y;
+    z = other.z;
 }
 
 RayTracer::Vector3D::Vector3D(double x, double y, double z) {
@@ -23,6 +30,15 @@ double RayTracer::Vector3D::length() {
 
 double RayTracer::Vector3D::dot(const Vector3D &other) {
     return x * other.x + y * other.y + z * other.z;
+}
+
+void RayTracer::Vector3D::normalize() {
+    double len = length();
+    if (len != 0) {
+        x /= len;
+        y /= len;
+        z /= len;
+    }
 }
 
 #pragma endregion TOOLS
@@ -105,7 +121,15 @@ RayTracer::Vector3D &RayTracer::Vector3D::operator/=(double other) {
     return *this;
 }
 
-std::ostream &operator<<(std::ostream &os, const RayTracer::Vector3D &vec) {
+RayTracer::Vector3D &RayTracer::Vector3D::operator=(Point3D other) {
+    x = other.x;
+    y = other.y;
+    z = other.z;
+    return *this;
+}
+
+std::ostream &operator<<(std::ostream &os, const RayTracer::Vector3D &vec)
+{
     os << "V(" << vec.x << ", " << vec.y << ", " << vec.z << ")";
     return os;
 }
