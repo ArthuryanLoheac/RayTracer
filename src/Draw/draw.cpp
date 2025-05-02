@@ -28,7 +28,7 @@ static double getLuminescence(RayTracer::Point3D &intersection,
     vect.normalize();
 
     double dotProduct = lightRotation.dot(vect);
-//    dotProduct = std::min(1.0, std::max(-1.0, dotProduct));
+    dotProduct = std::clamp(dotProduct, -1.0, 1.0);
 
     double angle = std::acos(dotProduct) * 180.0 / M_PI;
 
