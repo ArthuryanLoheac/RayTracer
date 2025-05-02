@@ -3,6 +3,7 @@
 #include "3dDatas/Vector3D.hpp"
 
 namespace RayTracer {
+class Vector3D;
 class Point3D {
  public:
     double x, y, z;

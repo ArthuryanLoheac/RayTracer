@@ -2,7 +2,11 @@
 #include <cmath>
 #include <ostream>
 
+#include "3dDatas/Point3D.hpp"
+
 namespace RayTracer {
+
+class Point3D;
 class Vector3D {
  public:
     double x, y, z;
@@ -11,6 +15,7 @@ class Vector3D {
 
     double length();
     double dot(const Vector3D& other);
+    void normalize();
 
     // Vector3D
     Vector3D operator+(const Vector3D& other);
@@ -26,6 +31,8 @@ class Vector3D {
     Vector3D &operator*=(double other);
     Vector3D operator/(double other);
     Vector3D &operator/=(double other);
+
+    Vector3D &operator=(Point3D other);
 };
 }  // namespace RayTracer
 
