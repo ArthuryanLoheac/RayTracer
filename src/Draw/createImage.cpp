@@ -1,9 +1,10 @@
+#include <fstream>
+#include <string>
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 
-#include <fstream>
-#include <string>
 
 static void createPPMFile(const sf::Image& image,
     const std::string& filename) {
