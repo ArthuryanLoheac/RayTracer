@@ -12,19 +12,17 @@
 
 #include "3dDatas/Vector3D.hpp"
 #include "Scene/Camera.hpp"
+#include "Scene/Scene.hpp"
 #include "Primitive/I_Primitive.hpp"
 #include "3dDatas/Point3D.hpp"
 #include "Consts/const.hpp"
+#include "Generation/tools.hpp"
 
-static void showImage(sf::RenderWindow &window, sf::Image &image) {
-    sf::Sprite sp;
-    sf::Texture txt;
-
-    txt.loadFromImage(image);
-    sp.setTexture(txt);
-    window.clear();
-    window.draw(sp);
-    window.display();
+static double getLuminescence(RayTracer::Point3D &intersection,
+    std::unique_ptr<Light> &Light) {
+    double distance = intersection.distance(Light->getPosition());
+    double angle = 0;
+    return Light->getLuminescence(distance, angle);
 }
 
 void createPPMFile(const sf::Image& image,
@@ -99,18 +97,31 @@ void displayImage(sf::RenderWindow &window, sf::Image &image) {
     }
 }
 
-static void hit(sf::Image &image, int i, int j,
-    std::unique_ptr<Prim> &s, RayTracer::Point3D &intersection,
-    std::unique_ptr<Light> &Light) {
+static void hit(sf::Image &image, int i, int j, RayTracer::Ray &ray,
+    std::shared_ptr<Prim> &s, RayTracer::Point3D &intersection,
+    std::unique_ptr<Light> &Light, float &minRayLen) {
     try {
+        // Get base colors
+        sf::Color origin = image.getPixel(i, j);
         sf::Color c = s->getMaterial()->getColorAt(i, j);
-        double distance = intersection.distance(Light->getPosition());
-        double angle = 0;
-        double luminescence = Light->getLuminescence(distance, angle);
+
+        double luminescence = getLuminescence(intersection, Light);
+
+        // Edit color with luminescence values
         int r = std::min(255, static_cast<int>(c.r * luminescence));
         int g = std::min(255, static_cast<int>(c.g * luminescence));
         int b = std::min(255, static_cast<int>(c.b * luminescence));
-        c = sf::Color(r, g, b);
+
+        // Edit color with transparency values
+        float percentA = (c.a != 0) ? (255 / c.a) : 1.0f;
+        float len = intersection.distance(ray.origin);
+        if (len > minRayLen)  // object is behind other object
+            percentA = 1 - percentA;
+        else
+            minRayLen = len;
+        c = sf::Color((r * percentA) + (origin.r * (1 - percentA)),
+                      (g * percentA) + (origin.g * (1 - percentA)),
+                      (b * percentA) + (origin.b * (1 - percentA)));
         image.setPixel(i, j, c);
     } catch (std::exception &e) {
         image.setPixel(i, j,
@@ -119,20 +130,30 @@ static void hit(sf::Image &image, int i, int j,
     }
 }
 
+static void checkHitsAtPixel(double i, double j, RayTracer::Ray r,
+sf::Image &image, std::unique_ptr<Light> &Light, std::shared_ptr<Prim> &obj,
+float &minRayLength) {
+    RayTracer::Point3D intersection;
+
+    if (obj->hits(r, intersection)) {
+        hit(image, static_cast<int>(i), static_cast<int>(j), r,
+            obj, intersection, Light, minRayLength);
+    }
+    for (std::shared_ptr<Prim> &o : obj->getChildrens())
+        checkHitsAtPixel(i, j, r, image, Light, o, minRayLength);
+}
+
 void generateImage(sf::RenderWindow &window, sf::Image &image,
-    std::unique_ptr<Prim> &s, std::unique_ptr<Light> &Light) {
+    std::unique_ptr<Light> &Light) {
     RayTracer::Camera cam;
 
     for (float i = 0; i < WIDTH; i++) {
         for (float j = 0; j < HEIGHT; j++) {
-            double u = i / WIDTH;
-            double v = j / HEIGHT;
-            RayTracer::Ray r = cam.ray(u, v);
-            RayTracer::Point3D intersection;
+            float minRayLength = 10000000.f;
 
-            if (s->hits(r, intersection))
-                hit(image, static_cast<int>(i), static_cast<int>(j), s,
-                    intersection, Light);
+            RayTracer::Ray r = cam.ray(i / WIDTH, j / HEIGHT);
+            checkHitsAtPixel(i, j, r, image, Light,
+                RayTracer::Scene::i->ObjectHead, minRayLength);
         }
         showImage(window, image);
     }

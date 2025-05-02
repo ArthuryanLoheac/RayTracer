@@ -8,7 +8,10 @@
 namespace RayTracer {
 class Scene {
  public:
-    std::vector<std::unique_ptr<I_Light>> lights;
-    std::unique_ptr<I_Primitive> ObjectHead;
+    static Scene *i;
+
+    std::shared_ptr<I_Primitive> ObjectHead;
+
+    Scene();
 };
 }  // namespace RayTracer
