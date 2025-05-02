@@ -65,6 +65,10 @@ SRC	= 	$(shell find src -type f -name "*.cpp" ! -name "main.cpp" \
 		! -path "src/Lights/**") \
 
 SRC_TESTS	= 	\
+	tests/test_Vector3D.cpp \
+	tests/test_Rectangle3D.cpp \
+	tests/test_Ray.cpp \
+	tests/test_Point3D.cpp \
 
 COMMON_SRC = src/3dDatas/Point3D.cpp \
 			src/3dDatas/Vector3D.cpp \
@@ -138,7 +142,7 @@ run: all
 
 # ============= TESTS ============= #
 
-unit_tests:
+unit_tests: fclean
 	@mkdir -p $(OBJ_DIR)
 	$(COMPILER) -o $(OBJ_DIR)/unit_tests $(SRC_TESTS) $(SRC) $(FLAGS_TEST)
 	cp $(OBJ_DIR)/unit_tests unit_tests
