@@ -3,6 +3,8 @@
 #include <iostream>
 #include <memory>
 #include <algorithm>
+#include <fstream>
+#include <string>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -20,7 +22,6 @@ static double getLuminescence(RayTracer::Point3D &intersection,
     std::unique_ptr<Light> &Light) {
     double distance = intersection.distance(Light->getPosition());
     double angle = 0;
-
     return Light->getLuminescence(distance, angle);
 }
 

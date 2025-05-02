@@ -118,6 +118,9 @@ fclean: clean
 	rm -rf libs
 	rm -f $(NAME) $(NAME_LIB) unit_tests
 
+screenshot:
+	rm -rf renders/*.ppm
+
 # ============= COMPILATION ============= #
 
 $(OBJ_DIR)/%.o: %.cpp
