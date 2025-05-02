@@ -11,7 +11,6 @@ class Vector3D {
  public:
     double x, y, z;
     Vector3D();
-    explicit Vector3D(Point3D other);
     Vector3D(double x, double y, double z);
 
     double length();

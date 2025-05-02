@@ -8,12 +8,6 @@ RayTracer::Vector3D::Vector3D() {
     z = 0;
 }
 
-RayTracer::Vector3D::Vector3D(Point3D other) {
-    x = other.x;
-    y = other.y;
-    z = other.z;
-}
-
 RayTracer::Vector3D::Vector3D(double x, double y, double z) {
     this->x = x;
     this->y = y;
