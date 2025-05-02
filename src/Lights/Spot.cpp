@@ -11,10 +11,10 @@ Spot::Spot() {
 }
 
 void Spot::Init() {
-    angle = 75;
-    intensity = 1000.f;
-    position = RayTracer::Point3D(15.5f, 30.5f, -730.f);
-    rotation = RayTracer::Point3D(0,1.5f,0.5f);
+    angle = 70;
+    intensity = 50.f;
+    position = RayTracer::Point3D(10, 2, 20);
+    rotation = RayTracer::Point3D(1, 0, 0);
 }
 
 float Spot::getLuminescence(float distance, float angle) {
