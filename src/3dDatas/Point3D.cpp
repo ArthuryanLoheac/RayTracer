@@ -10,6 +10,10 @@ RayTracer::Point3D RayTracer::Point3D::operator+(const Vector3D &vec) {
     return Point3D(x + vec.x, y + vec.y, z + vec.z);
 }
 
+RayTracer::Point3D RayTracer::Point3D::operator+(const Point3D &other) {
+    return Point3D(x + other.x, y + other.y, z + other.z);
+}
+
 RayTracer::Point3D RayTracer::Point3D::operator-(const Vector3D &vec) {
     return Point3D(x - vec.x, y - vec.y, z - vec.z);
 }

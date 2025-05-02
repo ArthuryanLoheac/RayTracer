@@ -21,12 +21,16 @@
 #include <SFML/System.hpp>
 
 static void setupAndRun(sf::RenderWindow &window, sf::Image &image) {
-    std::unique_ptr<Prim> sphere = dlLoader<Prim>::getLib(
+    RayTracer::Scene::i->ObjectHead = dlLoader<Prim>::getLib(
         "./libs/primitive_sphere.so", "getPrimitive");
     std::unique_ptr<Light> light = dlLoader<Light>::getLib(
         "./libs/light_spot.so", "getLight");
 
-    generateImage(window, image, sphere, light);
+    RayTracer::Scene::i->ObjectHead->AddChildren(
+        dlLoader<Prim>::getLib("./libs/primitive_sphere.so", "getPrimitive"));
+
+    computeTreeValues(RayTracer::Scene::i->ObjectHead);
+    generateImage(window, image, light);
     displayImage(window, image);
 }
 
@@ -44,15 +48,14 @@ void testMain() {
 
 int main(int argc, char **argv) {
     RayTracer::Parsing parser;
-    RayTracer::Scene scene;
 
     try {
         parser.parseArgs(argc, argv);
-        scene = parser.parseSceneFile();
+        RayTracer::Scene scene = parser.parseSceneFile();
+        testMain();
     } catch (const RayTracer::Parsing::ParsingError &e) {
         std::cerr << e.what() << std::endl;
         return 84;
     }
-    testMain();
     return 0;
 }
