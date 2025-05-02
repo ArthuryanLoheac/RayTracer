@@ -2,6 +2,8 @@
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 
+#include "Generation/tools.hpp"
+
 void showImage(sf::RenderWindow &window, sf::Image &image) {
     sf::Sprite sp;
     sf::Texture txt;
@@ -17,8 +19,15 @@ void displayImage(sf::RenderWindow &window, sf::Image &image) {
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed
+                || event.key.code == sf::Keyboard::Escape) {
+                renderAtClosing(window);
                 window.close();
+            }
+            if (event.type == sf::Event::KeyPressed
+                && event.key.code == sf::Keyboard::Space) {
+                screenshot(window);
+            }
         }
         showImage(window, image);
     }
