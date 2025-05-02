@@ -1,5 +1,4 @@
 #include "3dDatas/Vector3D.hpp"
-#include "Vector3D.hpp"
 
 #pragma region CONSTRUCTORS
 
@@ -128,8 +127,7 @@ RayTracer::Vector3D &RayTracer::Vector3D::operator=(Point3D other) {
     return *this;
 }
 
-std::ostream &operator<<(std::ostream &os, const RayTracer::Vector3D &vec)
-{
+std::ostream &operator<<(std::ostream &os, const RayTracer::Vector3D &vec) {
     os << "V(" << vec.x << ", " << vec.y << ", " << vec.z << ")";
     return os;
 }

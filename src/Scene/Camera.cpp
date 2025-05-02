@@ -12,8 +12,7 @@ Camera::Camera() {
     screen = Rectangle3D(
         Point3D(-viewport_width / 2, -viewport_height / 2, focal_length),
         Vector3D(viewport_width, 0, 0),
-        Vector3D(0, viewport_height, 0)
-    );
+        Vector3D(0, viewport_height, 0));
 }
 
 Ray Camera::ray(double u, double v) {
