@@ -36,6 +36,47 @@ static double getLuminescence(RayTracer::Point3D &intersection,
     return Light->getLuminescence(distance, angle);
 }
 
+bool isBlocked(std::shared_ptr<Prim> &s,
+RayTracer::Point3D &intersection, std::unique_ptr<Light> &Light) {
+    RayTracer::Ray r(intersection, (Light->getPosition() - intersection));
+    RayTracer::Point3D tempIntersection;
+
+    return s->hits(r, tempIntersection);
+}
+
+static bool checkBlocked(std::shared_ptr<Prim> &self,
+std::shared_ptr<Prim> &head, RayTracer::Point3D &intersection,
+std::unique_ptr<Light> &Light) {
+    if (self != head && isBlocked(head, intersection, Light))
+        return true;
+    for (std::shared_ptr<Prim> &o : head->getChildrens()) {
+        if (checkBlocked(self, o, intersection, Light)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+static void editColor(double luminescence, sf::Color &c,
+    sf::Color &origin, float &minRayLen, RayTracer::Point3D &intersection,
+    RayTracer::Ray &ray) {
+    // Edit color with luminescence values
+    int r = std::min(255, static_cast<int>(c.r * luminescence));
+    int g = std::min(255, static_cast<int>(c.g * luminescence));
+    int b = std::min(255, static_cast<int>(c.b * luminescence));
+
+    // Edit color with transparency values
+    float percentA = (c.a != 0) ? (255 / c.a) : 1.0f;
+    float len = intersection.distance(ray.origin);
+    if (len > minRayLen)  // object is behind other object
+        percentA = 1 - percentA;
+    else
+        minRayLen = len;
+    c = sf::Color((r * percentA) + (origin.r * (1 - percentA)),
+                    (g * percentA) + (origin.g * (1 - percentA)),
+                    (b * percentA) + (origin.b * (1 - percentA)));
+}
+
 static void hit(sf::Image &image, int i, int j, RayTracer::Ray &ray,
     std::shared_ptr<Prim> &s, RayTracer::Point3D &intersection,
     std::unique_ptr<Light> &Light, float &minRayLen) {
@@ -46,21 +87,11 @@ static void hit(sf::Image &image, int i, int j, RayTracer::Ray &ray,
 
         double luminescence = getLuminescence(intersection, Light);
 
-        // Edit color with luminescence values
-        int r = std::min(255, static_cast<int>(c.r * luminescence));
-        int g = std::min(255, static_cast<int>(c.g * luminescence));
-        int b = std::min(255, static_cast<int>(c.b * luminescence));
+        if (checkBlocked(s, RayTracer::Scene::i->ObjectHead,
+            intersection, Light))
+            luminescence = 0;
 
-        // Edit color with transparency values
-        float percentA = (c.a != 0) ? (255 / c.a) : 1.0f;
-        float len = intersection.distance(ray.origin);
-        if (len > minRayLen)  // object is behind other object
-            percentA = 1 - percentA;
-        else
-            minRayLen = len;
-        c = sf::Color((r * percentA) + (origin.r * (1 - percentA)),
-                      (g * percentA) + (origin.g * (1 - percentA)),
-                      (b * percentA) + (origin.b * (1 - percentA)));
+        editColor(luminescence, c, origin, minRayLen, intersection, ray);
         image.setPixel(i, j, c);
     } catch (std::exception &e) {
         image.setPixel(i, j,
