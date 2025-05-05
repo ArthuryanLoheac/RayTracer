@@ -31,7 +31,7 @@ class A_Lights : public I_Light {
     Point3D getScale() override;
     void setScale(Point3D scale) override;
 
-    float getLuminescence(float distance, float angle) = 0;
+    float getLuminescence(float angle) = 0;
     float getIntensity() override;
     float getAngle() override;
 

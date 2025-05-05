@@ -18,45 +18,6 @@
 #include "Consts/const.hpp"
 #include "Generation/tools.hpp"
 
-static double getLuminescence(RayTracer::Point3D &intersection,
-    std::unique_ptr<Light> &Light) {
-    RayTracer::Vector3D lightRotation;
-    lightRotation = Light->getRotation();
-    RayTracer::Vector3D vect = Light->getPosition() - intersection;
-
-    lightRotation.normalize();
-    vect.normalize();
-
-    double dotProduct = lightRotation.dot(vect);
-    dotProduct = std::clamp(dotProduct, -1.0, 1.0);
-
-    double angle = std::acos(dotProduct) * 180.0 / M_PI;
-
-    double distance = intersection.distance(Light->getPosition());
-    return Light->getLuminescence(distance, angle);
-}
-
-bool isBlocked(std::shared_ptr<Prim> &s,
-RayTracer::Point3D &intersection, std::unique_ptr<Light> &Light) {
-    RayTracer::Ray r(intersection, (Light->getPosition() - intersection));
-    RayTracer::Point3D tempIntersection;
-
-    return s->hits(r, tempIntersection);
-}
-
-static bool checkBlocked(std::shared_ptr<Prim> &self,
-std::shared_ptr<Prim> &head, RayTracer::Point3D &intersection,
-std::unique_ptr<Light> &Light) {
-    if (self != head && isBlocked(head, intersection, Light))
-        return true;
-    for (std::shared_ptr<Prim> &o : head->getChildrens()) {
-        if (checkBlocked(self, o, intersection, Light)) {
-            return true;
-        }
-    }
-    return false;
-}
-
 static void editColor(double luminescence, sf::Color &c,
     sf::Color &origin, float &minRayLen, RayTracer::Point3D &intersection,
     RayTracer::Ray &ray) {
@@ -77,6 +38,20 @@ static void editColor(double luminescence, sf::Color &c,
                     (b * percentA) + (origin.b * (1 - percentA)));
 }
 
+static void editLuminescenceFromAngle(RayTracer::Point3D &intersection,
+std::shared_ptr<Prim> &s, std::unique_ptr<Light> &Light, double &luminescence) {
+    RayTracer::Vector3D lightDir = (Light->getPosition() - intersection).normalize();
+    RayTracer::Vector3D localNormal = (intersection - s->getPosition()).normalize();
+
+    double angle = std::acos(localNormal.dot(lightDir));
+
+    if (angle > M_PI / 2)
+        luminescence = 0;
+    else {
+        luminescence *= (1 - (angle / (M_PI / 2)));
+    }
+}
+
 static void hit(sf::Image &image, int i, int j, RayTracer::Ray &ray,
     std::shared_ptr<Prim> &s, RayTracer::Point3D &intersection,
     std::unique_ptr<Light> &Light, float &minRayLen) {
@@ -84,12 +59,9 @@ static void hit(sf::Image &image, int i, int j, RayTracer::Ray &ray,
         // Get base colors
         sf::Color origin = image.getPixel(i, j);
         sf::Color c = s->getMaterial()->getColorAt(i, j);
+        double luminescence = 1;
 
-        double luminescence = getLuminescence(intersection, Light);
-
-        if (checkBlocked(s, RayTracer::Scene::i->ObjectHead,
-            intersection, Light))
-            luminescence = 0;
+        editLuminescenceFromAngle(intersection, s, Light, luminescence);
 
         editColor(luminescence, c, origin, minRayLen, intersection, ray);
         image.setPixel(i, j, c);

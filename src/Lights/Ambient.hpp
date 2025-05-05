@@ -8,6 +8,6 @@ class Ambient : public RayTracer::A_Lights {
  public:
     Ambient();
     void Init() override;
-    float getLuminescence(float distance, float angle) override;
+    float getLuminescence(float angle) override;
     bool hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) override;
 };

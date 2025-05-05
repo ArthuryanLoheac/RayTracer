@@ -27,10 +27,7 @@ bool PrimSphere::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     double t1 = (-b - std::sqrt(discriminant)) / (2.0 * a);
     double t2 = (-b + std::sqrt(discriminant)) / (2.0 * a);
 
-    // Vérifiez que t est positif (intersection devant l'origine)
-    double t = (t1 > 0) ? t1 : ((t2 > 0) ? t2 : -1);
-    if (t < 0)
-        return false;
+    double t = t1 < t2 ? t1 : t2;
 
     intersection = ray.origin + ray.direction * t;
     return true;
