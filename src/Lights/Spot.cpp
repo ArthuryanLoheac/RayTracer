@@ -13,7 +13,7 @@ Spot::Spot() {
 void Spot::Init() {
     angle = 360;
     intensity = 2.f;
-    position = RayTracer::Point3D(0, 0, 21);
+    position = RayTracer::Point3D(0, 0, 15);
     rotation = RayTracer::Point3D(1, 0, 0);
 }
 
