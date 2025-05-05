@@ -48,9 +48,7 @@ std::shared_ptr<Prim> &s, std::unique_ptr<Light> &Light, double &luminescence) {
     luminescence = Light->getLuminescence(angle,
         (Light->getPosition() - intersection).length());
 
-    if (angle > M_PI / 2) {
-        luminescence = 0;
-    } else {
+    if (angle < M_PI / 2) {
         luminescence *= (1 - (angle / (M_PI / 2)));
     }
 }
