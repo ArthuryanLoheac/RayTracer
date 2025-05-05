@@ -52,6 +52,12 @@ float RayTracer::A_Lights::getLuminescence(float angle, float distance) {
     return intensity / (distance * distance);
 }
 
+RayTracer::Vector3D RayTracer::A_Lights::getNormalAt(RayTracer::Point3D point) {
+    (void) point;
+    return RayTracer::Vector3D(0, 0, 0);
+}
+
+
 float RayTracer::A_Lights::getIntensity() {
     return intensity;
 }

@@ -10,5 +10,6 @@ class PrimSphere : public RayTracer::A_Primitive {
     double radius;
     PrimSphere();
     bool hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) override;
+    RayTracer::Vector3D getNormalAt(RayTracer::Point3D point) override;
     void Init() override;
 };

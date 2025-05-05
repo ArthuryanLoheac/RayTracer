@@ -34,6 +34,7 @@ class A_Lights : public I_Light {
     float getLuminescence(float angle, float distance) = 0;
     float getIntensity() override;
     float getAngle() override;
+    Vector3D getNormalAt(Point3D point) override;
 
     class LightError : public std::exception {
      private:
