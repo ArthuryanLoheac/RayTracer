@@ -44,16 +44,12 @@ std::shared_ptr<Prim> &s, std::unique_ptr<Light> &Light, double &luminescence) {
     RayTracer::Vector3D localNormal = (intersection - s->getPosition()).normalize();
 
     double angle = std::acos(localNormal.dot(lightDir));
-    luminescence = Light->getLuminescence(angle);
+    luminescence = Light->getLuminescence(angle, (Light->getPosition() - intersection).length());
 
     if (angle > M_PI / 2) {
         luminescence = 0;
     } else {
         luminescence *= (1 - (angle / (M_PI / 2)));
-        // Apply inverse square law for distance attenuation
-        double distance = (Light->getPosition() - intersection).length();
-        double attenuationFactor = 1.0 / (1.0 + 0.1 * distance + 0.01 * distance * distance);
-        luminescence *= attenuationFactor;
     }
 }
 

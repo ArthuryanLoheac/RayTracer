@@ -12,14 +12,15 @@ Spot::Spot() {
 
 void Spot::Init() {
     angle = 360;
-    intensity = 2.f;
-    position = RayTracer::Point3D(0, 0, 15);
+    intensity = 40.f;
+    position = RayTracer::Point3D(0, 0, 10);
     rotation = RayTracer::Point3D(1, 0, 0);
 }
 
-float Spot::getLuminescence(float angle) {
-    (void) angle;
-    return intensity;
+float Spot::getLuminescence(float angle, float distance) {
+    if (angle > this->angle)
+        return 0;
+    return intensity / std::pow(distance, 2);
 }
 
 bool Spot::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {

@@ -16,8 +16,9 @@ void Ambient::Init() {
     position = RayTracer::Point3D(-0.15f, 0.45f, -2.f);
 }
 
-float Ambient::getLuminescence(float angle) {
+float Ambient::getLuminescence(float angle, float distance) {
     (void) angle;
+    (void) distance;
     return intensity;
 }
 

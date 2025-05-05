@@ -47,9 +47,9 @@ void RayTracer::A_Lights::setScale(Point3D scale) {
     this->scale = scale;
 }
 
-float RayTracer::A_Lights::getLuminescence(float angle) {
+float RayTracer::A_Lights::getLuminescence(float angle, float distance) {
     (void) angle;
-    return intensity;
+    return intensity / (distance * distance);
 }
 
 float RayTracer::A_Lights::getIntensity() {

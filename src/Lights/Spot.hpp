@@ -7,6 +7,6 @@ class Spot : public RayTracer::A_Lights {
  public:
     Spot();
     void Init() override;
-    float getLuminescence(float angle) override;
+    float getLuminescence(float angle, float distance) override;
     bool hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) override;
 };
