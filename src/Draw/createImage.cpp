@@ -31,14 +31,9 @@ static void createPPMFile(const sf::Image& image,
 std::string getTimestampAsString() {
     std::time_t now = std::time(nullptr);
     std::tm *tm = std::localtime(&now);
-    std::string ret =
-        std::to_string(tm->tm_mday) + "-" +
-        std::to_string(tm->tm_mon + 1) + "-" +
-        std::to_string(tm->tm_year + 1900) + "_" +
-        std::to_string(tm->tm_hour) + "-" +
-        std::to_string(tm->tm_min) + "-" +
-        std::to_string(tm->tm_sec);
-    return ret;
+    std::ostringstream oss;
+    oss << std::put_time(tm, "%Y-%m-%d_%H-%M-%S");
+    return oss.str();
 }
 
 void renderAtClosing(sf::RenderWindow &window) {
