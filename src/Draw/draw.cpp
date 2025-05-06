@@ -45,11 +45,12 @@ std::shared_ptr<Prim> &s, std::unique_ptr<Light> &Light, double &luminescence) {
     RayTracer::Vector3D localNormal = s->getNormalAt(intersection);
 
     double angle = std::acos(localNormal.dot(lightDir));
-    luminescence = Light->getLuminescence(angle,
+    double luminescencetmp = Light->getLuminescence(angle,
         (Light->getPosition() - intersection).length());
 
     if (angle < M_PI / 2) {
-        luminescence *= (1 - (angle / (M_PI / 2)));
+        luminescencetmp *= (1 - (angle / (M_PI / 2)));
+        luminescence += luminescencetmp;
     }
 }
 
