@@ -1,5 +1,7 @@
 #include <fstream>
 #include <string>
+#include <sstream>
+#include <iomanip>
 #include <random>
 
 #include <SFML/Graphics.hpp>
