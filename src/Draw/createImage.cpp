@@ -28,18 +28,17 @@ static void createPPMFile(const sf::Image& image,
     out.close();
 }
 
-std::string randomString(int max_length) {
-    std::string characters =
-        "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    std::random_device rd;
-    std::mt19937 engine(rd());
-    std::uniform_int_distribution<> dist(0, characters.size()-1);
-    std::string ret = "";
-    for (int i = 0; i < max_length; i++) {
-        int random_index = dist(engine);
-        ret += characters[random_index];
-    }
-    return ("renders/screenshot" + ret + ".ppm");
+std::string getTimestampAsString() {
+    std::time_t now = std::time(nullptr);
+    std::tm *tm = std::localtime(&now);
+    std::string ret =
+        std::to_string(tm->tm_mday) + "-" +
+        std::to_string(tm->tm_mon + 1) + "-" +
+        std::to_string(tm->tm_year + 1900) + "_" +
+        std::to_string(tm->tm_hour) + "-" +
+        std::to_string(tm->tm_min) + "-" +
+        std::to_string(tm->tm_sec);
+    return ret;
 }
 
 void renderAtClosing(sf::RenderWindow &window) {
@@ -49,7 +48,8 @@ void renderAtClosing(sf::RenderWindow &window) {
     texture.create(window.getSize().x, window.getSize().y);
     texture.update(window);
     screenshot  = texture.copyToImage();
-    createPPMFile(screenshot, "renders/render.ppm");
+    createPPMFile(screenshot, "renders/render-" +
+        getTimestampAsString() + ".ppm");
 }
 
 void screenshot(sf::RenderWindow &window) {
@@ -59,5 +59,6 @@ void screenshot(sf::RenderWindow &window) {
     texture.create(window.getSize().x, window.getSize().y);
     texture.update(window);
     screenshot  = texture.copyToImage();
-    createPPMFile(screenshot, randomString(5));
+    createPPMFile(screenshot, "renders/screenshot-" +
+        getTimestampAsString() + ".ppm");
 }
