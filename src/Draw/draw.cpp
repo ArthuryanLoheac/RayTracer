@@ -40,11 +40,14 @@ static void editColor(double luminescence, sf::Color &c,
 
 static void editLuminescenceFromAngle(RayTracer::Point3D &intersection,
 std::shared_ptr<Prim> &s, std::shared_ptr<Light> &Light, double &luminescence) {
-    RayTracer::Vector3D lightDir = (Light->getPosition() - intersection).normalize();
-    RayTracer::Vector3D localNormal = (intersection - s->getPosition()).normalize();
+    RayTracer::Vector3D lightDir =
+        (Light->getPosition() - intersection).normalize();
+    RayTracer::Vector3D localNormal =
+        (intersection - s->getPosition()).normalize();
 
     double angle = std::acos(localNormal.dot(lightDir));
-    double luminescencetmp = Light->getLuminescence(angle, (Light->getPosition() - intersection).length());
+    double luminescencetmp = Light->getLuminescence(angle,
+        (Light->getPosition() - intersection).length());
 
     if (angle < M_PI / 2) {
         luminescencetmp *= (1 - (angle / (M_PI / 2)));

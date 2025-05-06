@@ -1,4 +1,5 @@
 #include <memory>
+#include <algorithm>
 
 #include "Primitive/PrimSphere.hpp"
 #include "dlLoader/dlLoader.hpp"
