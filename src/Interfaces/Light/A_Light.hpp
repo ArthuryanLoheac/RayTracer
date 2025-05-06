@@ -31,7 +31,8 @@ class A_Lights : public I_Light {
     Point3D getScale() override;
     void setScale(Point3D scale) override;
 
-    float getLuminescence(float angle, float distance) = 0;
+    float getLuminescence(RayTracer::Point3D intersection,
+        std::shared_ptr<I_Light> Light, std::shared_ptr<I_Primitive> obj) = 0;
     float getIntensity() override;
     float getAngle() override;
     Vector3D getNormalAt(Point3D point) override;
