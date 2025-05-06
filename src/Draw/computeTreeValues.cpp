@@ -12,7 +12,7 @@ std::shared_ptr<Prim> parent) {
         head->setPosition(head->getPosition() + parent->getPosition());
     if (dynamic_cast<Light *>(head.get()) != nullptr) {
         RayTracer::Scene::i->Lights.push_back(
-            std::shared_ptr<Light>(dynamic_cast<Light *>(head.get())));
+            std::static_pointer_cast<Light>(head));
     }
     for (std::shared_ptr<Prim> &o : head->getChildrens())
         computeTreeValues(o, head);
