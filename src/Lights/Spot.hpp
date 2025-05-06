@@ -1,4 +1,6 @@
 #pragma once
+#include <memory>
+
 #include "Interfaces/Light/A_Light.hpp"
 #include "3dDatas/Point3D.hpp"
 #include "3dDatas/Ray.hpp"
