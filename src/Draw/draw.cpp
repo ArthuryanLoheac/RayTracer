@@ -38,15 +38,34 @@ static void editColor(double luminescence, sf::Color &c,
                     (b * percentA) + (origin.b * (1 - percentA)));
 }
 
+
+
+bool checkBlockingObjects(RayTracer::Ray ray,
+std::unique_ptr<Light> &Light, std::shared_ptr<Prim> &self,
+std::shared_ptr<Prim> &head) {
+    RayTracer::Point3D interserctionTMP;
+    if (head != self && head->hits(ray, interserctionTMP))
+        return true;
+    for (std::shared_ptr<Prim> &o : head->getChildrens()) {
+        if (checkBlockingObjects(ray, Light, self, o))
+            return true;
+    }
+    return false;
+}
+
 static void editLuminescenceFromAngle(RayTracer::Point3D &intersection,
 std::shared_ptr<Prim> &s, std::unique_ptr<Light> &Light, double &luminescence) {
     RayTracer::Vector3D lightDir =
         (Light->getPosition() - intersection).normalize();
     RayTracer::Vector3D localNormal = s->getNormalAt(intersection);
+    RayTracer::Ray ray(intersection, Light->getPosition() - intersection);
 
     double angle = std::acos(localNormal.dot(lightDir));
     double luminescencetmp = Light->getLuminescence(angle,
         (Light->getPosition() - intersection).length());
+
+    if (checkBlockingObjects(ray, Light, s, RayTracer::Scene::i->ObjectHead))
+        return;
 
     if (angle < M_PI / 2) {
         luminescencetmp *= (1 - (angle / (M_PI / 2)));
