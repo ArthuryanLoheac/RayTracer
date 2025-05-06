@@ -12,7 +12,7 @@ Ambient::Ambient() {
 
 void Ambient::Init() {
     angle = 360;
-    intensity = 0.2f;
+    intensity = 0.3f;
     position = RayTracer::Point3D(-0.15f, 0.45f, -2.f);
 }
 

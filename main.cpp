@@ -25,13 +25,15 @@ static void setupAndRun(sf::RenderWindow &window, sf::Image &image) {
         "./libs/primitive_sphere.so", "getPrimitive");
 
     RayTracer::Scene::i->Lights.push_back(dlLoader<Light>::getLib(
-        "./libs/light_spot.so", "getLight"));  // Add light to Lights vector
+        "./libs/light_spot.so", "getLight"));
+    RayTracer::Scene::i->Lights.push_back(dlLoader<Light>::getLib(
+        "./libs/light_ambient.so", "getLight"));
 
     RayTracer::Scene::i->ObjectHead->AddChildren(
         dlLoader<Prim>::getLib("./libs/primitive_sphere.so", "getPrimitive"));
 
     computeTreeValues(RayTracer::Scene::i->ObjectHead);
-    generateImage(window, image, RayTracer::Scene::i->Lights[0]);
+    generateImage(window, image);
     displayImage(window, image);
 }
 
