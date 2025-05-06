@@ -9,7 +9,7 @@
 
 // Create Image
 void generateImage(sf::RenderWindow &window, sf::Image &image,
-    std::unique_ptr<Light> &Light);
+    std::shared_ptr<Light> &Light);
 
 // Render image
 void displayImage(sf::RenderWindow &window, sf::Image &image);

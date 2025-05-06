@@ -35,6 +35,7 @@ class A_Lights : public I_Light {
     float getIntensity() override;
     float getAngle() override;
     Vector3D getNormalAt(Point3D point) override;
+    bool hits(RayTracer::Ray ray, Point3D &intersection) override;
 
     class LightError : public std::exception {
      private:

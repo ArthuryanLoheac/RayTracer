@@ -57,6 +57,12 @@ RayTracer::Vector3D RayTracer::A_Lights::getNormalAt(RayTracer::Point3D point) {
     return RayTracer::Vector3D(0, 0, 0);
 }
 
+bool RayTracer::A_Lights::hits(RayTracer::Ray ray,
+    RayTracer::Point3D &intersection) {
+    (void) ray;
+    (void) intersection;
+    return false;
+}
 
 float RayTracer::A_Lights::getIntensity() {
     return intensity;
