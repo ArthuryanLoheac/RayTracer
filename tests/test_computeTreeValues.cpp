@@ -7,6 +7,9 @@
 #include "Generation/tools.hpp"
 #include "dlLoader/dlLoader.hpp"
 
+int WIDTH = 0;
+int HEIGHT = 0;
+
 static std::shared_ptr<RayTracer::I_Primitive> getPrimitive
 (std::string libName) {
     return dlLoader<RayTracer::I_Primitive>::getLib("./libs/"
