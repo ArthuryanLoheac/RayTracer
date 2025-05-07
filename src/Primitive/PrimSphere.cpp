@@ -42,14 +42,16 @@ RayTracer::Vector3D PrimSphere::getNormalAt(RayTracer::Point3D point) {
 }
 
 void PrimSphere::Init() {
-    static int i = -1;
-    i++;
+    static int i = 0;
 
-    if (i == 0)
-        position = RayTracer::Point3D(-11, 0, 30.f);
-    else
-        position = RayTracer::Point3D(22, 0, 0);
-    radius = 10.f;
+    if (i == 0) {
+        position = RayTracer::Point3D(0, -1, 5);
+        radius = 1.f;
+    } else {
+        position = RayTracer::Point3D(0, .1f, 5);
+        radius = 0.2f;
+    }
+    i++;
 
     try {
         material = dlLoader<Mat>::getLib("libs/mat_flat.so", "getMaterial");

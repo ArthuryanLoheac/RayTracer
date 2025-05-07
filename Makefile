@@ -94,24 +94,41 @@ $(NAME): $(OBJ_SRC) $(OBJ_MAIN)
 $(NAME_LIB): $(OBJ)
 	ar rc $(NAME_LIB) $(OBJ)
 
-primitive:
+sphere:
 	@mkdir -p libs
 	$(COMPILER) -olibs/primitive_sphere.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimSphere.cpp $(FLAGS_SO)
+
+plane:
+	@mkdir -p libs
+	$(COMPILER) -olibs/primitive_plane.so -shared -fPIC $(SRC_PRIMITIVE) \
+		src/Primitive/PrimPlane.cpp $(FLAGS_SO)
+
+none:
+	@mkdir -p libs
 	$(COMPILER) -olibs/primitive_none.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimNone.cpp $(FLAGS_SO)
 
-material:
+primitive: sphere plane none
+
+flat_mat:
 	@mkdir -p libs
 	$(COMPILER) -o libs/mat_flat.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/FlatMat.cpp $(FLAGS_SO)
 
-light:
+material: flat_mat
+
+ambient_light:
 	@mkdir -p libs
 	$(COMPILER) -o libs/light_ambient.so -shared -fPIC $(SRC_LIGHT) \
 		src/Lights/Ambient.cpp $(FLAGS_SO)
+
+spot_light:
+	@mkdir -p libs
 	$(COMPILER) -o libs/light_spot.so -shared -fPIC $(SRC_LIGHT) \
 		src/Lights/Spot.cpp $(FLAGS_SO)
+
+light: ambient_light spot_light
 
 core: $(NAME) $(NAME_LIB)
 

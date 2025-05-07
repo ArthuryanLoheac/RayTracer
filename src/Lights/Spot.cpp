@@ -1,6 +1,7 @@
 #include <memory>
 
 #include "Lights/Spot.hpp"
+#include "Scene/Scene.hpp"
 
 extern "C" std::unique_ptr<RayTracer::I_Light> getLight() {
     return std::make_unique<Spot>();
@@ -12,13 +13,26 @@ Spot::Spot() {
 
 void Spot::Init() {
     angle = 360;
-    intensity = 200.f;
-    position = RayTracer::Point3D(0, -14, 14);
+    intensity = 5.f;
+    position = RayTracer::Point3D(0, -2.5f, 4);
     rotation = RayTracer::Point3D(1, 0, 0);
 }
 
+bool Spot::checkBlockingLight(std::shared_ptr<I_Primitive> &obj,
+    std::shared_ptr<I_Primitive> &head, RayTracer::Ray &r) {
+    RayTracer::Point3D inter;
+    if (head != obj && head->hits(r, inter))
+        return true;
+    for (std::shared_ptr<I_Primitive> &c : head->getChildrens())
+        if (checkBlockingLight(obj, c, r))
+            return true;
+    return false;
+}
+
 float Spot::getLuminescence(RayTracer::Point3D intersection,
-std::shared_ptr<I_Light> Light, std::shared_ptr<I_Primitive> obj) {
+std::shared_ptr<I_Light> Light, std::shared_ptr<I_Primitive> obj,
+std::shared_ptr<I_Primitive> head) {
+    (void) head;
     RayTracer::Vector3D lightDir =
         (Light->getPosition() - intersection).normalize();
     RayTracer::Vector3D localNormal = obj->getNormalAt(intersection);
@@ -31,6 +45,10 @@ std::shared_ptr<I_Light> Light, std::shared_ptr<I_Primitive> obj) {
         luminescencetmp *= (1 - (angle / (M_PI / 2)));
     else
         luminescencetmp = 0;
+
+    RayTracer::Ray ray(intersection, lightDir);
+    if (checkBlockingLight(obj, head, ray))
+        return 0;
 
     return luminescencetmp / std::pow(distance, 2);
 }
