@@ -5,6 +5,9 @@
 #include <algorithm>
 #include <fstream>
 #include <string>
+#include <thread>
+#include <mutex>
+#include <vector>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -17,6 +20,8 @@
 #include "3dDatas/Point3D.hpp"
 #include "Consts/const.hpp"
 #include "Generation/tools.hpp"
+
+std::mutex imageMutex;
 
 static double getLuminescence(RayTracer::Point3D &intersection,
     std::unique_ptr<Light> &Light) {
@@ -61,8 +66,10 @@ static void hit(sf::Image &image, int i, int j, RayTracer::Ray &ray,
         c = sf::Color((r * percentA) + (origin.r * (1 - percentA)),
                       (g * percentA) + (origin.g * (1 - percentA)),
                       (b * percentA) + (origin.b * (1 - percentA)));
+        std::lock_guard<std::mutex> lock(imageMutex);
         image.setPixel(i, j, c);
     } catch (std::exception &e) {
+        std::lock_guard<std::mutex> lock(imageMutex);
         image.setPixel(i, j,
             sf::Color(234, 58, 247));  // error pink
         return;
@@ -82,18 +89,29 @@ float &minRayLength) {
         checkHitsAtPixel(i, j, r, image, Light, o, minRayLength);
 }
 
+void generatePixelColumn(float i, RayTracer::Camera cam, sf::Image &image,
+    std::unique_ptr<Light> &Light) {
+    for (float j = 0; j < HEIGHT; j++) {
+        float minRayLength = 10000000.f;
+
+        RayTracer::Ray r = cam.ray(i / WIDTH, j / HEIGHT);
+        checkHitsAtPixel(i, j, r, image, Light,
+        RayTracer::Scene::i->ObjectHead, minRayLength);
+    }
+}
+
 void generateImage(sf::RenderWindow &window, sf::Image &image,
     std::unique_ptr<Light> &Light) {
     RayTracer::Camera cam;
+    std::vector<std::thread> threadVector;
 
     for (float i = 0; i < WIDTH; i++) {
-        for (float j = 0; j < HEIGHT; j++) {
-            float minRayLength = 10000000.f;
-
-            RayTracer::Ray r = cam.ray(i / WIDTH, j / HEIGHT);
-            checkHitsAtPixel(i, j, r, image, Light,
-                RayTracer::Scene::i->ObjectHead, minRayLength);
-        }
+        threadVector.emplace_back(generatePixelColumn, i,
+            std::ref(cam), std::ref(image), std::ref(Light));
+    }
+    for (auto &t : threadVector) {
+        if (t.joinable())
+            t.join();
         showImage(window, image);
     }
 }
