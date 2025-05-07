@@ -27,7 +27,7 @@ std::shared_ptr<I_Light> Light, std::shared_ptr<I_Primitive> obj) {
     double distance = (Light->getPosition() - intersection).length();
     double luminescencetmp = intensity;
 
-    if (angle < M_PI / 2 && angle < this->angle)
+    if (angle < M_PI / 2 && angle < this->angle * (M_PI / 180.0))
         luminescencetmp *= (1 - (angle / (M_PI / 2)));
     else
         luminescencetmp = 0;
