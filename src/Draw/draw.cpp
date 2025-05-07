@@ -5,6 +5,9 @@
 #include <algorithm>
 #include <fstream>
 #include <string>
+#include <thread>
+#include <mutex>
+#include <vector>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -17,6 +20,8 @@
 #include "3dDatas/Point3D.hpp"
 #include "Consts/const.hpp"
 #include "Generation/tools.hpp"
+
+std::mutex imageMutex;
 
 static void editColor(double luminescence, sf::Color &c,
     sf::Color &origin, float &minRayLen, RayTracer::Point3D &intersection,
@@ -60,6 +65,7 @@ float &minRayLen) {
         editColor(luminescence, c, origin, minRayLen, intersection, ray);
         image.setPixel(i, j, c);
     } catch (std::exception &e) {
+        std::lock_guard<std::mutex> lock(imageMutex);
         image.setPixel(i, j,
             sf::Color(234, 58, 247));  // error pink
         return;
@@ -81,6 +87,7 @@ float &minRayLength) {
 
 void generateImage(sf::RenderWindow &window, sf::Image &image) {
     RayTracer::Camera cam;
+    std::vector<std::thread> threadVector;
 
     for (float i = 0; i < WIDTH; i++) {
         for (float j = 0; j < HEIGHT; j++) {
@@ -90,6 +97,12 @@ void generateImage(sf::RenderWindow &window, sf::Image &image) {
             checkHitsAtPixel(i, j, r, image,
                 RayTracer::Scene::i->ObjectHead, minRayLength);
         }
+        threadVector.emplace_back(generatePixelColumn, i,
+            std::ref(cam), std::ref(image), std::ref(Light));
+    }
+    for (auto &t : threadVector) {
+        if (t.joinable())
+            t.join();
         showImage(window, image);
     }
 }
