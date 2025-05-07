@@ -85,20 +85,23 @@ float &minRayLength) {
         checkHitsAtPixel(i, j, r, image, o, minRayLength);
 }
 
+void generatePixelColumn(float i, RayTracer::Camera cam, sf::Image &image) {
+    for (float j = 0; j < HEIGHT; j++) {
+        float minRayLength = 10000000.f;
+
+        RayTracer::Ray r = cam.ray(i / WIDTH, j / HEIGHT);
+        checkHitsAtPixel(i, j, r, image,
+            RayTracer::Scene::i->ObjectHead, minRayLength);
+    }
+}
+
 void generateImage(sf::RenderWindow &window, sf::Image &image) {
     RayTracer::Camera cam;
     std::vector<std::thread> threadVector;
 
     for (float i = 0; i < WIDTH; i++) {
-        for (float j = 0; j < HEIGHT; j++) {
-            float minRayLength = 10000000.f;
-
-            RayTracer::Ray r = cam.ray(i / WIDTH, j / HEIGHT);
-            checkHitsAtPixel(i, j, r, image,
-                RayTracer::Scene::i->ObjectHead, minRayLength);
-        }
         threadVector.emplace_back(generatePixelColumn, i,
-            std::ref(cam), std::ref(image), std::ref(Light));
+            std::ref(cam), std::ref(image));
     }
     for (auto &t : threadVector) {
         if (t.joinable())
