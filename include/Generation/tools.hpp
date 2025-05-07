@@ -21,3 +21,4 @@ void computeTreeValues(std::shared_ptr<Prim> head,
 // Create Image
 void screenshot(sf::RenderWindow &window);
 void renderAtClosing(sf::RenderWindow &window);
+std::string getTimestampAsString();

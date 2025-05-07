@@ -70,6 +70,7 @@ SRC_TESTS	= 	\
 	tests/test_Ray.cpp \
 	tests/test_Point3D.cpp \
 	tests/test_PrimNone.cpp \
+	tests/test_render.cpp \
 
 COMMON_SRC = src/3dDatas/Point3D.cpp \
 			src/3dDatas/Vector3D.cpp \
