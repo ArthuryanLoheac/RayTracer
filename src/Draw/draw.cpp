@@ -21,6 +21,8 @@
 #include "Consts/const.hpp"
 #include "Generation/tools.hpp"
 
+extern int WIDTH;
+extern int HEIGHT;
 std::mutex imageMutex;
 
 static void editColor(double luminescence, sf::Color &c,

@@ -20,6 +20,9 @@
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 
+int WIDTH = 0;
+int HEIGHT = 0;
+
 static void setupAndRun(sf::RenderWindow &window, sf::Image &image) {
     RayTracer::Scene::i->ObjectHead = dlLoader<Prim>::getLib(
         "./libs/primitive_none.so", "getPrimitive");

@@ -6,6 +6,9 @@
 #include "Parsing/Parsing.hpp"
 #include "Scene/Scene.hpp"
 
+extern int WIDTH;
+extern int HEIGHT;
+
 namespace RayTracer {
 
 void Parsing::parseArgs(int argc, char **argv) {
@@ -48,8 +51,8 @@ void Parsing::parseCamera(Scene &scene, libconfig::Config &cfg) {
             libconfig::Setting &resolution = camera["resolution"];
             int width = resolution["width"];
             int height = resolution["height"];
-            std::cout << "Camera resolution: " << width << "x" << height
-                    << std::endl;
+            WIDTH = width;
+            HEIGHT = height;
         } catch (std::exception &e) {
             throw ParsingError("Invalid camera resolution format.");
         }

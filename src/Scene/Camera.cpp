@@ -1,6 +1,9 @@
 #include "Scene/Camera.hpp"
 #include "Consts/const.hpp"
 
+extern int WIDTH;
+extern int HEIGHT;
+
 namespace RayTracer {
 
 Camera::Camera() {
