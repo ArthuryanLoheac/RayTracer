@@ -1,11 +1,15 @@
 #include <criterion/criterion.h>
+#include <memory>
+#include <string>
 #include "3dDatas/Point3D.hpp"
 #include "3dDatas/Vector3D.hpp"
 #include "dlLoader/dlLoader.hpp"
 #include "Interfaces/Primitive/I_Primitive.hpp"
 
-static std::shared_ptr<RayTracer::I_Primitive> getPrimitive(std::string libName) {
-    return dlLoader<RayTracer::I_Primitive>::getLib("./libs/" + libName, "getPrimitive");
+static std::shared_ptr<RayTracer::I_Primitive> getPrimitive
+(std::string libName) {
+    return dlLoader<RayTracer::I_Primitive>::getLib("./libs/"
+    + libName, "getPrimitive");
 }
 
 Test(I_Primitive, PrimNone) {

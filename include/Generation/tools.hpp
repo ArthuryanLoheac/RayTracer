@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <string>
 
 #include "Interfaces/Primitive/I_Primitive.hpp"
 #include "Consts/const.hpp"

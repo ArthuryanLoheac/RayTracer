@@ -1,8 +1,11 @@
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
+
 #include <memory>
 #include <fstream>
 #include <filesystem>
+#include <string>
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
@@ -20,16 +23,19 @@ Test(Render, render_at_closing, .init = redirect_all_stdout) {
 
     renderAtClosing(window);
 
-    cr_assert(std::filesystem::exists(filename), "Render file was not created.");
+    cr_assert(std::filesystem::exists(filename),
+        "Render file was not created.");
     std::filesystem::remove(filename);  // Clean up
 }
 
 Test(Render, screenshot, .init = redirect_all_stdout) {
     sf::RenderWindow window(sf::VideoMode(10, 10), "Test Screenshot");
-    std::string filename = "renders/screenshot-" + getTimestampAsString() + ".ppm";
+    std::string filename = "renders/screenshot-" + getTimestampAsString()
+        + ".ppm";
 
     screenshot(window);
 
-    cr_assert(std::filesystem::exists(filename), "Screenshot file was not created.");
+    cr_assert(std::filesystem::exists(filename),
+        "Screenshot file was not created.");
     std::filesystem::remove(filename);  // Clean up
 }

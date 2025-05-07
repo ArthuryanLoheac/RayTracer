@@ -21,7 +21,7 @@ bool PrimNone::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
 
 RayTracer::Vector3D PrimNone::getNormalAt(RayTracer::Point3D point) {
     (void)point;
-    return RayTracer::Vector3D(0,0,0);
+    return RayTracer::Vector3D(0, 0, 0);
 }
 
 void PrimNone::Init() {
