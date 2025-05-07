@@ -21,6 +21,78 @@ void Parsing::parseArgs(int argc, char **argv) {
     sceneFile = argv[1];
 }
 
+double Parsing::getDouble(libconfig::Setting &setting) {
+    switch (setting.getType()) {
+        case libconfig::Setting::TypeFloat:
+            return static_cast<double>(setting.operator float());
+        case libconfig::Setting::TypeInt:
+            return static_cast<double>(setting.operator int());
+        default:
+            throw ParsingError("Invalid type for double value.");
+    }
+}
+
+
+void Parsing::parseCamera(Scene &scene, libconfig::Config &cfg) {
+    // Check if the camera section exists
+
+    (void)scene;
+
+    if (!cfg.exists("camera"))
+        throw ParsingError("Camera section not found in configuration file.");
+
+    libconfig::Setting &camera = cfg.lookup("camera");
+
+    if (camera.exists("resolution")) {
+        try {
+            libconfig::Setting &resolution = camera["resolution"];
+            int width = resolution["width"];
+            int height = resolution["height"];
+            std::cout << "Camera resolution: " << width << "x" << height
+                    << std::endl;
+        } catch (std::exception &e) {
+            throw ParsingError("Invalid camera resolution format.");
+        }
+    }
+
+    if (camera.exists("position")) {
+        try {
+            libconfig::Setting &position = camera["position"];
+            double x = getDouble(position["x"]);
+            double y = getDouble(position["y"]);
+            double z = getDouble(position["z"]);
+            std::cout << "Camera position: (" << x << ", " << y << ", " << z
+                        << ")" << std::endl;
+        } catch (std::exception &e) {
+            throw ParsingError("Invalid camera position format.");
+        }
+    }
+
+    if (camera.exists("rotation")) {
+        try {
+            libconfig::Setting &rotation = camera["rotation"];
+            double x = getDouble(rotation["x"]);
+            double y = getDouble(rotation["y"]);
+            double z = getDouble(rotation["z"]);
+            std::cout << "Camera rotation: (" << x << ", " << y << ", " << z
+                        << ")" << std::endl;
+        } catch (std::exception &e) {
+            throw ParsingError("Invalid camera rotation format.");
+        }
+    }
+
+    if (camera.exists("fieldOfView")) {
+        try {
+            libconfig::Setting &fov = camera["fieldOfView"];
+            double fovValue = getDouble(fov);
+            std::cout << "Camera field of view: " << fovValue << " degrees"
+                      << std::endl;
+        } catch (libconfig::SettingTypeException &e) {
+            throw ParsingError("Invalid field of view format.");
+        }
+    }
+}
+
 Scene Parsing::parseSceneFile() {
     RayTracer::Scene scene;
     libconfig::Config cfg;
@@ -32,11 +104,17 @@ Scene Parsing::parseSceneFile() {
     } catch (const libconfig::ConfigException &ex) {
         throw ParsingError("Error in configuration file.");
     }
+    try {
+        parseCamera(scene, cfg);
+    } catch (const ParsingError &e) {
+        throw ParsingError("Error parsing camera section: " +
+            std::string(e.what()));
+    }
     return scene;
 }
 
 Parsing::ParsingError::ParsingError(const std::string &message)
-: message("ParsingError: " + message) {}
+: message(message) {}
 
 const char *Parsing::ParsingError::what() const noexcept {
     return message.c_str();
