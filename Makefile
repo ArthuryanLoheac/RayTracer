@@ -69,6 +69,8 @@ SRC_TESTS	= 	\
 	tests/test_Rectangle3D.cpp \
 	tests/test_Ray.cpp \
 	tests/test_Point3D.cpp \
+	tests/test_PrimNone.cpp \
+	tests/test_computeTreeValues.cpp \
 
 COMMON_SRC = src/3dDatas/Point3D.cpp \
 			src/3dDatas/Vector3D.cpp \
@@ -98,6 +100,8 @@ primitive:
 		src/Primitive/PrimSphere.cpp $(FLAGS_SO)
 	$(COMPILER) -olibs/primitive_plane.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimPlane.cpp $(FLAGS_SO)
+	$(COMPILER) -olibs/primitive_none.so -shared -fPIC $(SRC_PRIMITIVE) \
+		src/Primitive/PrimNone.cpp $(FLAGS_SO)
 
 material:
 	@mkdir -p libs
@@ -144,7 +148,7 @@ run: all
 
 # ============= TESTS ============= #
 
-unit_tests: fclean
+unit_tests: fclean primitive light material
 	@mkdir -p $(OBJ_DIR)
 	$(COMPILER) -o $(OBJ_DIR)/unit_tests $(SRC_TESTS) $(SRC) $(FLAGS_TEST)
 	cp $(OBJ_DIR)/unit_tests unit_tests

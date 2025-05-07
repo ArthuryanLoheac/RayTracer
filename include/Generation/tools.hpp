@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <string>
 
 #include "Interfaces/Primitive/I_Primitive.hpp"
 #include "Consts/const.hpp"
@@ -21,3 +22,4 @@ void computeTreeValues(std::shared_ptr<Prim> head,
 // Create Image
 void screenshot(sf::RenderWindow &window);
 void renderAtClosing(sf::RenderWindow &window);
+std::string getTimestampAsString();

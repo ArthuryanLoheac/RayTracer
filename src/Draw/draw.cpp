@@ -30,7 +30,6 @@ static void editColor(double luminescence, sf::Color &c,
     int r = std::min(255, static_cast<int>(c.r * luminescence));
     int g = std::min(255, static_cast<int>(c.g * luminescence));
     int b = std::min(255, static_cast<int>(c.b * luminescence));
-
     // Edit color with transparency values
     float percentA = (c.a != 0) ? (255 / c.a) : 1.0f;
     float len = intersection.distance(ray.origin);
@@ -59,9 +58,7 @@ float &minRayLen) {
         // Get base colors
         sf::Color origin = image.getPixel(i, j);
         sf::Color c = s->getMaterial()->getColorAt(i, j);
-
         double luminescence = computeLuminescence(intersection, s);
-
         editColor(luminescence, c, origin, minRayLen, intersection, ray);
         image.setPixel(i, j, c);
     } catch (std::exception &e) {
@@ -76,7 +73,6 @@ static void checkHitsAtPixel(double i, double j, RayTracer::Ray r,
 sf::Image &image, std::shared_ptr<Prim> &obj,
 float &minRayLength) {
     RayTracer::Point3D intersection;
-
     if (obj->hits(r, intersection)) {
         hit(image, static_cast<int>(i), static_cast<int>(j), r,
             obj, intersection, minRayLength);
