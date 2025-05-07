@@ -1,4 +1,5 @@
 #include <memory>
+#include <algorithm>
 
 #include "Primitive/PrimSphere.hpp"
 #include "dlLoader/dlLoader.hpp"
@@ -26,9 +27,18 @@ bool PrimSphere::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
 
     double t1 = (-b - std::sqrt(discriminant)) / (2.0 * a);
     double t2 = (-b + std::sqrt(discriminant)) / (2.0 * a);
-    double t = (t1 < t2) ? t1 : t2;
+    double t = (t1 < 0) ?
+        (t2 < 0 ? -1 : t2) :
+        (t2 < 0 ? t1 : std::min(t1, t2));
+
     intersection = ray.origin + ray.direction * t;
+    if (t < 0)
+        return false;
     return true;
+}
+
+RayTracer::Vector3D PrimSphere::getNormalAt(RayTracer::Point3D point) {
+    return (point - position).normalize();
 }
 
 void PrimSphere::Init() {
@@ -36,9 +46,9 @@ void PrimSphere::Init() {
     i++;
 
     if (i == 0)
-        position = RayTracer::Point3D(0, 0, 30.f);
+        position = RayTracer::Point3D(-11, 0, 30.f);
     else
-        position = RayTracer::Point3D(5, 5, 5);
+        position = RayTracer::Point3D(22, 0, 0);
     radius = 10.f;
 
     try {

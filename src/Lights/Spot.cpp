@@ -11,20 +11,26 @@ Spot::Spot() {
 }
 
 void Spot::Init() {
-    angle = 70;
-    intensity = 50.f;
-    position = RayTracer::Point3D(10, 2, 20);
+    angle = 360;
+    intensity = 20.f;
+    position = RayTracer::Point3D(0, 0, -14);
     rotation = RayTracer::Point3D(1, 0, 0);
 }
 
-float Spot::getLuminescence(float distance, float angle) {
-    if (angle > this->angle)
-        return 0;
-    return intensity / std::pow(distance, 2);
-}
+float Spot::getLuminescence(RayTracer::Point3D intersection,
+std::shared_ptr<I_Light> Light, std::shared_ptr<I_Primitive> obj) {
+    RayTracer::Vector3D lightDir =
+        (Light->getPosition() - intersection).normalize();
+    RayTracer::Vector3D localNormal = obj->getNormalAt(intersection);
 
-bool Spot::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
-    (void) ray;
-    (void) intersection;
-    return false;
+    double angle = std::acos(localNormal.dot(lightDir));
+    double distance = (Light->getPosition() - intersection).length();
+    double luminescencetmp = intensity;
+
+    if (angle < M_PI / 2 && angle < this->angle * (M_PI / 180.0))
+        luminescencetmp *= (1 - (angle / (M_PI / 2)));
+    else
+        luminescencetmp = 0;
+
+    return luminescencetmp / std::pow(distance, 2);
 }

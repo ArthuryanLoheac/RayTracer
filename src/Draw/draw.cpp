@@ -23,50 +23,46 @@
 
 std::mutex imageMutex;
 
-static double getLuminescence(RayTracer::Point3D &intersection,
-    std::unique_ptr<Light> &Light) {
-    RayTracer::Vector3D lightRotation;
-    lightRotation = Light->getRotation();
-    RayTracer::Vector3D vect = Light->getPosition() - intersection;
+static void editColor(double luminescence, sf::Color &c,
+    sf::Color &origin, float &minRayLen, RayTracer::Point3D &intersection,
+    RayTracer::Ray &ray) {
+    // Edit color with luminescence values
+    int r = std::min(255, static_cast<int>(c.r * luminescence));
+    int g = std::min(255, static_cast<int>(c.g * luminescence));
+    int b = std::min(255, static_cast<int>(c.b * luminescence));
 
-    lightRotation.normalize();
-    vect.normalize();
+    // Edit color with transparency values
+    float percentA = (c.a != 0) ? (255 / c.a) : 1.0f;
+    float len = intersection.distance(ray.origin);
+    if (len > minRayLen)  // object is behind other object
+        percentA = 1 - percentA;
+    else
+        minRayLen = len;
+    c = sf::Color((r * percentA) + (origin.r * (1 - percentA)),
+                    (g * percentA) + (origin.g * (1 - percentA)),
+                    (b * percentA) + (origin.b * (1 - percentA)));
+}
 
-    double dotProduct = lightRotation.dot(vect);
-    dotProduct = std::clamp(dotProduct, -1.0, 1.0);
-
-    double angle = std::acos(dotProduct) * 180.0 / M_PI;
-
-    double distance = intersection.distance(Light->getPosition());
-    return Light->getLuminescence(distance, angle);
+double computeLuminescence(RayTracer::Point3D &intersection,
+std::shared_ptr<Prim> &s) {
+    double luminescence = 0;
+    for (std::shared_ptr<Light> Light : RayTracer::Scene::i->Lights) {
+        luminescence += Light->getLuminescence(intersection, Light, s);
+    }
+    return luminescence;
 }
 
 static void hit(sf::Image &image, int i, int j, RayTracer::Ray &ray,
-    std::shared_ptr<Prim> &s, RayTracer::Point3D &intersection,
-    std::unique_ptr<Light> &Light, float &minRayLen) {
+std::shared_ptr<Prim> &s, RayTracer::Point3D &intersection,
+float &minRayLen) {
     try {
         // Get base colors
         sf::Color origin = image.getPixel(i, j);
         sf::Color c = s->getMaterial()->getColorAt(i, j);
 
-        double luminescence = getLuminescence(intersection, Light);
+        double luminescence = computeLuminescence(intersection, s);
 
-        // Edit color with luminescence values
-        int r = std::min(255, static_cast<int>(c.r * luminescence));
-        int g = std::min(255, static_cast<int>(c.g * luminescence));
-        int b = std::min(255, static_cast<int>(c.b * luminescence));
-
-        // Edit color with transparency values
-        float percentA = (c.a != 0) ? (255 / c.a) : 1.0f;
-        float len = intersection.distance(ray.origin);
-        if (len > minRayLen)  // object is behind other object
-            percentA = 1 - percentA;
-        else
-            minRayLen = len;
-        c = sf::Color((r * percentA) + (origin.r * (1 - percentA)),
-                      (g * percentA) + (origin.g * (1 - percentA)),
-                      (b * percentA) + (origin.b * (1 - percentA)));
-        std::lock_guard<std::mutex> lock(imageMutex);
+        editColor(luminescence, c, origin, minRayLen, intersection, ray);
         image.setPixel(i, j, c);
     } catch (std::exception &e) {
         std::lock_guard<std::mutex> lock(imageMutex);
@@ -77,37 +73,35 @@ static void hit(sf::Image &image, int i, int j, RayTracer::Ray &ray,
 }
 
 static void checkHitsAtPixel(double i, double j, RayTracer::Ray r,
-sf::Image &image, std::unique_ptr<Light> &Light, std::shared_ptr<Prim> &obj,
+sf::Image &image, std::shared_ptr<Prim> &obj,
 float &minRayLength) {
     RayTracer::Point3D intersection;
 
     if (obj->hits(r, intersection)) {
         hit(image, static_cast<int>(i), static_cast<int>(j), r,
-            obj, intersection, Light, minRayLength);
+            obj, intersection, minRayLength);
     }
     for (std::shared_ptr<Prim> &o : obj->getChildrens())
-        checkHitsAtPixel(i, j, r, image, Light, o, minRayLength);
+        checkHitsAtPixel(i, j, r, image, o, minRayLength);
 }
 
-void generatePixelColumn(float i, RayTracer::Camera cam, sf::Image &image,
-    std::unique_ptr<Light> &Light) {
+void generatePixelColumn(float i, RayTracer::Camera cam, sf::Image &image) {
     for (float j = 0; j < HEIGHT; j++) {
         float minRayLength = 10000000.f;
 
         RayTracer::Ray r = cam.ray(i / WIDTH, j / HEIGHT);
-        checkHitsAtPixel(i, j, r, image, Light,
-        RayTracer::Scene::i->ObjectHead, minRayLength);
+        checkHitsAtPixel(i, j, r, image,
+            RayTracer::Scene::i->ObjectHead, minRayLength);
     }
 }
 
-void generateImage(sf::RenderWindow &window, sf::Image &image,
-    std::unique_ptr<Light> &Light) {
+void generateImage(sf::RenderWindow &window, sf::Image &image) {
     RayTracer::Camera cam;
     std::vector<std::thread> threadVector;
 
     for (float i = 0; i < WIDTH; i++) {
         threadVector.emplace_back(generatePixelColumn, i,
-            std::ref(cam), std::ref(image), std::ref(Light));
+            std::ref(cam), std::ref(image));
     }
     for (auto &t : threadVector) {
         if (t.joinable())

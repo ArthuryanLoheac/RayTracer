@@ -11,6 +11,7 @@ class Scene {
     static Scene *i;
 
     std::shared_ptr<I_Primitive> ObjectHead;
+    std::vector<std::shared_ptr<I_Light>> Lights;
 
     Scene();
 };

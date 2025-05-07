@@ -47,9 +47,25 @@ void RayTracer::A_Lights::setScale(Point3D scale) {
     this->scale = scale;
 }
 
-float RayTracer::A_Lights::getLuminescence(float distance, float angle) {
-    (void) angle;
-    return intensity / distance;
+float RayTracer::A_Lights::getLuminescence(
+    RayTracer::Point3D intersection, std::shared_ptr<I_Light> Light,
+    std::shared_ptr<I_Primitive> obj) {
+    (void) intersection;
+    (void) Light;
+    (void) obj;
+    return intensity;
+}
+
+RayTracer::Vector3D RayTracer::A_Lights::getNormalAt(RayTracer::Point3D point) {
+    (void) point;
+    return RayTracer::Vector3D(0, 0, 0);
+}
+
+bool RayTracer::A_Lights::hits(RayTracer::Ray ray,
+    RayTracer::Point3D &intersection) {
+    (void) ray;
+    (void) intersection;
+    return false;
 }
 
 float RayTracer::A_Lights::getIntensity() {

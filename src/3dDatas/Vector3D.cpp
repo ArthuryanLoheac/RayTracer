@@ -25,13 +25,14 @@ double RayTracer::Vector3D::dot(const Vector3D &other) {
     return x * other.x + y * other.y + z * other.z;
 }
 
-void RayTracer::Vector3D::normalize() {
+RayTracer::Vector3D &RayTracer::Vector3D::normalize() {
     double len = length();
     if (len != 0) {
         x /= len;
         y /= len;
         z /= len;
     }
+    return *this;
 }
 
 #pragma endregion TOOLS

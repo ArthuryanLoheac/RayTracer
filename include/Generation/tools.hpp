@@ -8,8 +8,7 @@
 #include <SFML/Window.hpp>
 
 // Create Image
-void generateImage(sf::RenderWindow &window, sf::Image &image,
-    std::unique_ptr<Light> &Light);
+void generateImage(sf::RenderWindow &window, sf::Image &image);
 
 // Render image
 void displayImage(sf::RenderWindow &window, sf::Image &image);

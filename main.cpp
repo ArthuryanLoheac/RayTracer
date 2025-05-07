@@ -23,14 +23,15 @@
 static void setupAndRun(sf::RenderWindow &window, sf::Image &image) {
     RayTracer::Scene::i->ObjectHead = dlLoader<Prim>::getLib(
         "./libs/primitive_sphere.so", "getPrimitive");
-    std::unique_ptr<Light> light = dlLoader<Light>::getLib(
-        "./libs/light_spot.so", "getLight");
+
+    RayTracer::Scene::i->ObjectHead->AddChildren(dlLoader<Prim>::getLib(
+        "./libs/light_spot.so", "getLight"));
 
     RayTracer::Scene::i->ObjectHead->AddChildren(
         dlLoader<Prim>::getLib("./libs/primitive_sphere.so", "getPrimitive"));
 
     computeTreeValues(RayTracer::Scene::i->ObjectHead);
-    generateImage(window, image, light);
+    generateImage(window, image);
     displayImage(window, image);
 }
 

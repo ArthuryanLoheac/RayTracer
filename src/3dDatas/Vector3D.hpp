@@ -15,7 +15,7 @@ class Vector3D {
 
     double length();
     double dot(const Vector3D& other);
-    void normalize();
+    Vector3D &normalize();
 
     // Vector3D
     Vector3D operator+(const Vector3D& other);
