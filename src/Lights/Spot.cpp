@@ -24,7 +24,7 @@ bool Spot::checkBlockingLight(std::shared_ptr<I_Primitive> &obj,
     if (head != obj && head->hits(r, inter))
         return true;
     for (std::shared_ptr<I_Primitive> &c : head->getChildrens())
-        if(checkBlockingLight(obj, c, r))
+        if (checkBlockingLight(obj, c, r))
             return true;
     return false;
 }

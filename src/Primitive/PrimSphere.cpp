@@ -44,7 +44,7 @@ RayTracer::Vector3D PrimSphere::getNormalAt(RayTracer::Point3D point) {
 void PrimSphere::Init() {
     static int i = 0;
 
-    if (i==0) {
+    if (i == 0) {
         position = RayTracer::Point3D(0, -1, 5);
         radius = 1.f;
     } else {
