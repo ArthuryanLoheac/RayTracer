@@ -22,7 +22,7 @@
 
 static void setupAndRun(sf::RenderWindow &window, sf::Image &image) {
     RayTracer::Scene::i->ObjectHead = dlLoader<Prim>::getLib(
-        "./libs/primitive_sphere.so", "getPrimitive");
+        "./libs/primitive_none.so", "getPrimitive");
 
     RayTracer::Scene::i->ObjectHead->AddChildren(dlLoader<Prim>::getLib(
         "./libs/light_spot.so", "getLight"));
