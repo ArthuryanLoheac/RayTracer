@@ -4,7 +4,7 @@
 #include "dlLoader/dlLoader.hpp"
 #include "Interfaces/Primitive/I_Primitive.hpp"
 
-std::shared_ptr<RayTracer::I_Primitive> getPrimitive(std::string libName) {
+static std::shared_ptr<RayTracer::I_Primitive> getPrimitive(std::string libName) {
     return dlLoader<RayTracer::I_Primitive>::getLib("./libs/" + libName, "getPrimitive");
 }
 
