@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "Interfaces/Light/I_Light.hpp"
-#include "Primitive/I_Primitive.hpp"
+#include "Interfaces/Primitive/I_Primitive.hpp"
 
 namespace RayTracer {
 class Scene {

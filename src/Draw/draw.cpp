@@ -37,6 +37,7 @@ static void editColor(double luminescence, sf::Color &c,
         percentA = 1 - percentA;
     else
         minRayLen = len;
+
     c = sf::Color((r * percentA) + (origin.r * (1 - percentA)),
                     (g * percentA) + (origin.g * (1 - percentA)),
                     (b * percentA) + (origin.b * (1 - percentA)));
@@ -46,7 +47,8 @@ double computeLuminescence(RayTracer::Point3D &intersection,
 std::shared_ptr<Prim> &s) {
     double luminescence = 0;
     for (std::shared_ptr<Light> Light : RayTracer::Scene::i->Lights) {
-        luminescence += Light->getLuminescence(intersection, Light, s);
+        luminescence += Light->getLuminescence(intersection, Light, s,
+            RayTracer::Scene::i->ObjectHead);
     }
     return luminescence;
 }

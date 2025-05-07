@@ -17,9 +17,11 @@ void Ambient::Init() {
 }
 
 float Ambient::getLuminescence(RayTracer::Point3D intersection,
-std::shared_ptr<I_Light> Light, std::shared_ptr<I_Primitive> obj) {
+std::shared_ptr<I_Light> Light, std::shared_ptr<I_Primitive> obj,
+std::shared_ptr<I_Primitive> head) {
     (void) intersection;
     (void) Light;
     (void) obj;
+    (void) head;
     return intensity;
 }
