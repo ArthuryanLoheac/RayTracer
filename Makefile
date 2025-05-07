@@ -96,6 +96,8 @@ primitive:
 	@mkdir -p libs
 	$(COMPILER) -olibs/primitive_sphere.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimSphere.cpp $(FLAGS_SO)
+	$(COMPILER) -olibs/primitive_none.so -shared -fPIC $(SRC_PRIMITIVE) \
+		src/Primitive/PrimNone.cpp $(FLAGS_SO)
 
 material:
 	@mkdir -p libs
