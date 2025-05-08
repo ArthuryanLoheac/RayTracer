@@ -10,7 +10,8 @@
 
 #include "Generation/tools.hpp"
 #include "Consts/const.hpp"
-#include "Primitive/I_Primitive.hpp"
+#include "Interfaces/Primitive/I_Primitive.hpp"
+#include "Interfaces/Light/I_Light.hpp"
 #include "dlLoader/dlLoader.hpp"
 #include "Parsing/Parsing.hpp"
 #include "Scene/Scene.hpp"
@@ -20,10 +21,27 @@
 #include <SFML/System.hpp>
 
 static void setupAndRun(sf::RenderWindow &window, sf::Image &image) {
-    std::unique_ptr<Prim> sphere = dlLoader<Prim>::getLib(
-        "./libs/primitive_sphere.so", "getPrimitive");
+    RayTracer::Scene::i->ObjectHead = dlLoader<Prim>::getLib(
+        "./libs/primitive_none.so", "getPrimitive");
+    RayTracer::Scene::i->ObjectHead->AddChildren(dlLoader<Prim>::getLib(
+       "./libs/light_ambient.so", "getLight"));
 
-    generateImage(window, image, sphere);
+    RayTracer::Scene::i->ObjectHead->AddChildren(
+        dlLoader<Prim>::getLib("./libs/primitive_sphere.so", "getPrimitive"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(
+        dlLoader<Prim>::getLib("./libs/primitive_sphere.so", "getPrimitive"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(
+        dlLoader<Prim>::getLib("./libs/primitive_plane.so", "getPrimitive"));
+
+    RayTracer::Scene::i->ObjectHead->AddChildren(
+        dlLoader<Prim>::getLib("./libs/light_spot.so", "getLight"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(
+        dlLoader<Prim>::getLib("./libs/light_spot.so", "getLight"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(
+        dlLoader<Prim>::getLib("./libs/light_spot.so", "getLight"));
+
+    computeTreeValues(RayTracer::Scene::i->ObjectHead);
+    generateImage(window, image);
     displayImage(window, image);
 }
 
@@ -41,11 +59,11 @@ void testMain() {
 
 int main(int argc, char **argv) {
     RayTracer::Parsing parser;
-    RayTracer::Scene scene;
 
     try {
         parser.parseArgs(argc, argv);
-        scene = parser.parseSceneFile();
+        RayTracer::Scene scene = parser.parseSceneFile();
+        testMain();
     } catch (const RayTracer::Parsing::ParsingError &e) {
         std::cerr << e.what() << std::endl;
         return 84;

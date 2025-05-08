@@ -28,7 +28,7 @@ EXTENSION = cpp
 FLAGS = $(FLAGS_INCLUDE) \
 	$(shell find include src -type d -exec echo -I{} \;) \
 	-MMD -MP $(FLAGS_LIB) -lsfml-graphics -lsfml-window -lsfml-system -ldl \
-	-lconfig++ \
+	-lconfig++ -g \
 
 FLAGS_INCLUDE = -I./include -I./src -I./src/dlLoader \
 
@@ -44,7 +44,7 @@ FLAGS_LINTER =	\
 	--recursive
 
 FLAGS_SO = $(FLAGS_LIB) -lsfml-graphics -lsfml-window -lsfml-system \
-            $(FLAGS_INCLUDE) -ldl \
+            $(FLAGS_INCLUDE) -ldl -g \
 
 FLAGS_LIB = -std=c++20 -Wall -Wextra -Werror
 
@@ -54,10 +54,6 @@ NAME_LIB	= \
 
 NAME	=	raytracer
 
-NAME_SPHERE = libs/primitive_sphere.so
-
-NAME_FLAT = libs/mat_flat.so
-
 # ============= SOURCES ============= #
 
 SRC_LIB	=	\
@@ -65,9 +61,16 @@ SRC_LIB	=	\
 SRC_MAIN	=	main.cpp \
 
 SRC	= 	$(shell find src -type f -name "*.cpp" ! -name "main.cpp" \
-		! -path "src/Primitive/**" ! -path "src/Material/**") \
+		! -path "src/Primitive/**" ! -path "src/Material/**" \
+		! -path "src/Lights/**") \
 
 SRC_TESTS	= 	\
+	tests/test_Vector3D.cpp \
+	tests/test_Rectangle3D.cpp \
+	tests/test_Ray.cpp \
+	tests/test_Point3D.cpp \
+	tests/test_PrimNone.cpp \
+	tests/test_computeTreeValues.cpp \
 
 COMMON_SRC = src/3dDatas/Point3D.cpp \
 			src/3dDatas/Vector3D.cpp \
@@ -76,11 +79,14 @@ COMMON_SRC = src/3dDatas/Point3D.cpp \
 SRC_PRIMITIVE = $(COMMON_SRC) \
 				src/Interfaces/Primitive/A_Primitive.cpp \
 
+SRC_LIGHT = $(COMMON_SRC) \
+			src/Interfaces/Light/A_Light.cpp \
+
 SRC_MATERIAL = $(COMMON_SRC)
 
 # ============= RULES ============= #
 
-all: core primitive material
+all: core primitive material light
 
 $(NAME): $(OBJ_SRC) $(OBJ_MAIN)
 	$(COMPILER) -o $(NAME) $(OBJ_SRC) $(OBJ_MAIN) $(FLAGS)
@@ -88,15 +94,41 @@ $(NAME): $(OBJ_SRC) $(OBJ_MAIN)
 $(NAME_LIB): $(OBJ)
 	ar rc $(NAME_LIB) $(OBJ)
 
-primitive:
+sphere:
 	@mkdir -p libs
-	$(COMPILER) -o $(NAME_SPHERE) -shared -fPIC $(SRC_PRIMITIVE) \
+	$(COMPILER) -olibs/primitive_sphere.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimSphere.cpp $(FLAGS_SO)
 
-material:
+plane:
 	@mkdir -p libs
-	$(COMPILER) -o $(NAME_FLAT) -shared -fPIC $(SRC_MATERIAL) \
+	$(COMPILER) -olibs/primitive_plane.so -shared -fPIC $(SRC_PRIMITIVE) \
+		src/Primitive/PrimPlane.cpp $(FLAGS_SO)
+
+none:
+	@mkdir -p libs
+	$(COMPILER) -olibs/primitive_none.so -shared -fPIC $(SRC_PRIMITIVE) \
+		src/Primitive/PrimNone.cpp $(FLAGS_SO)
+
+primitive: sphere plane none
+
+flat_mat:
+	@mkdir -p libs
+	$(COMPILER) -o libs/mat_flat.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/FlatMat.cpp $(FLAGS_SO)
+
+material: flat_mat
+
+ambient_light:
+	@mkdir -p libs
+	$(COMPILER) -o libs/light_ambient.so -shared -fPIC $(SRC_LIGHT) \
+		src/Lights/Ambient.cpp $(FLAGS_SO)
+
+spot_light:
+	@mkdir -p libs
+	$(COMPILER) -o libs/light_spot.so -shared -fPIC $(SRC_LIGHT) \
+		src/Lights/Spot.cpp $(FLAGS_SO)
+
+light: ambient_light spot_light
 
 core: $(NAME) $(NAME_LIB)
 
@@ -110,6 +142,9 @@ clean:
 fclean: clean
 	rm -rf libs
 	rm -f $(NAME) $(NAME_LIB) unit_tests
+
+screenshot:
+	rm -rf renders/*.ppm
 
 # ============= COMPILATION ============= #
 
@@ -128,7 +163,7 @@ run: all
 
 # ============= TESTS ============= #
 
-unit_tests:
+unit_tests: fclean primitive light material
 	@mkdir -p $(OBJ_DIR)
 	$(COMPILER) -o $(OBJ_DIR)/unit_tests $(SRC_TESTS) $(SRC) $(FLAGS_TEST)
 	cp $(OBJ_DIR)/unit_tests unit_tests

@@ -25,6 +25,16 @@ double RayTracer::Vector3D::dot(const Vector3D &other) {
     return x * other.x + y * other.y + z * other.z;
 }
 
+RayTracer::Vector3D &RayTracer::Vector3D::normalize() {
+    double len = length();
+    if (len != 0) {
+        x /= len;
+        y /= len;
+        z /= len;
+    }
+    return *this;
+}
+
 #pragma endregion TOOLS
 #pragma region OPERATORS
 
@@ -102,6 +112,13 @@ RayTracer::Vector3D &RayTracer::Vector3D::operator/=(double other) {
     x /= other;
     y /= other;
     z /= other;
+    return *this;
+}
+
+RayTracer::Vector3D &RayTracer::Vector3D::operator=(Point3D other) {
+    x = other.x;
+    y = other.y;
+    z = other.z;
     return *this;
 }
 
