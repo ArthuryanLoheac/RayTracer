@@ -71,6 +71,8 @@ SRC_TESTS	= 	\
 	tests/test_Point3D.cpp \
 	tests/test_PrimNone.cpp \
 	tests/test_computeTreeValues.cpp \
+	tests/test_LoadSo.cpp \
+	tests/test_A_Primitive.cpp \
 
 COMMON_SRC = src/3dDatas/Point3D.cpp \
 			src/3dDatas/Vector3D.cpp \
@@ -114,7 +116,7 @@ none:
 	$(COMPILER) -olibs/primitive_none.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimNone.cpp $(FLAGS_SO)
 
-primitive: sphere plane none
+primitive: sphere plane none cylinder
 
 flat_mat:
 	@mkdir -p libs
