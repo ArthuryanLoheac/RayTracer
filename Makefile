@@ -41,7 +41,8 @@ FLAGS_LINTER =	\
 	--quiet \
 	--output=vs7	\
 	--filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references\
-	--recursive
+	--recursive \
+	--exclude=tests/ \
 
 FLAGS_SO = $(FLAGS_LIB) -lsfml-graphics -lsfml-window -lsfml-system \
             $(FLAGS_INCLUDE) -ldl -g \
@@ -73,6 +74,7 @@ SRC_TESTS	= 	\
 	tests/test_computeTreeValues.cpp \
 	tests/test_LoadSo.cpp \
 	tests/test_A_Primitive.cpp \
+	tests/test_A_Light.cpp \
 
 COMMON_SRC = src/3dDatas/Point3D.cpp \
 			src/3dDatas/Vector3D.cpp \
