@@ -20,11 +20,10 @@ PrimPlane::PrimPlane() {
 }
 
 bool PrimPlane::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
-    RayTracer::Vector3D deltaP = ray.origin - position;
-    float denom = normal.dot(ray.direction);
-
-    if (std::abs(denom) > 1e-6f) {
-        float t = -normal.dot(deltaP) / denom;
+    double denom = normal.dot(ray.direction);
+    if (std::abs(denom) > 1e-6) {
+        RayTracer::Vector3D p0l0 = position - ray.origin;
+        double t = p0l0.dot(normal) / denom;
         if (t >= 0) {
             intersection = ray.origin + ray.direction * t;
             return true;
