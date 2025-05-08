@@ -12,11 +12,21 @@ Spot::Spot() {
 }
 
 void Spot::Init() {
+    static int i = 0;
+    i++;
+    if (i == 1) {
+        position = RayTracer::Point3D(2.5f, -2, 3);
+        color = sf::Color(255, 0, 0, 255);
+    } else if (i == 2) {
+        position = RayTracer::Point3D(-2.5f, -2, 3);
+        color = sf::Color(0, 255, 0, 255);
+    } else  {
+        position = RayTracer::Point3D(0, -2, 1);
+        color = sf::Color(0, 0, 255, 255);
+    }
     angle = 360;
     intensity = 1.f;
-    position = RayTracer::Point3D(0, -2.5f, 4);
     rotation = RayTracer::Point3D(1, 0, 0);
-    color = sf::Color(255, 0, 0, 255);
 }
 
 bool Spot::checkBlockingLight(std::shared_ptr<I_Primitive> &obj,
