@@ -23,13 +23,18 @@
 
 std::mutex imageMutex;
 
-static void editColor(double luminescence, sf::Color &c,
+static void editColor(sf::Color &c, sf::Vector3f &cLight,
     sf::Color &origin, float &minRayLen, RayTracer::Point3D &intersection,
     RayTracer::Ray &ray) {
     // Edit color with luminescence values
-    int r = std::min(255, static_cast<int>(c.r * luminescence));
-    int g = std::min(255, static_cast<int>(c.g * luminescence));
-    int b = std::min(255, static_cast<int>(c.b * luminescence));
+    int r = std::min(255, static_cast<int>(
+        (c.r * cLight.x)));
+    int g = std::min(255, static_cast<int>(
+        (c.g * cLight.y)));
+    int b = std::min(255, static_cast<int>(
+        (c.b * cLight.z)));
+    printf("COLOR: %d %d %d\n", r, g, b);
+
     // Edit color with transparency values
     float percentA = (c.a != 0) ? (255 / c.a) : 1.0f;
     float len = intersection.distance(ray.origin);
@@ -43,14 +48,15 @@ static void editColor(double luminescence, sf::Color &c,
                     (b * percentA) + (origin.b * (1 - percentA)));
 }
 
-double computeLuminescence(RayTracer::Point3D &intersection,
-std::shared_ptr<Prim> &s) {
-    double luminescence = 0;
+void computeLuminescence(RayTracer::Point3D &intersection,
+std::shared_ptr<Prim> &s, sf::Vector3f &cLight) {
     for (std::shared_ptr<Light> Light : RayTracer::Scene::i->Lights) {
-        luminescence += Light->getLuminescence(intersection, Light, s,
+        double lum = Light->getLuminescence(intersection, Light, s,
             RayTracer::Scene::i->ObjectHead);
+        cLight.x += (Light->getColor().r/255) * lum;
+        cLight.y += (Light->getColor().g/255) * lum;
+        cLight.z += (Light->getColor().b/255) * lum;
     }
-    return luminescence;
 }
 
 static void hit(sf::Image &image, int i, int j, RayTracer::Ray &ray,
@@ -60,8 +66,11 @@ float &minRayLen) {
         // Get base colors
         sf::Color origin = image.getPixel(i, j);
         sf::Color c = s->getMaterial()->getColorAt(i, j);
-        double luminescence = computeLuminescence(intersection, s);
-        editColor(luminescence, c, origin, minRayLen, intersection, ray);
+        sf::Vector3f cLight = sf::Vector3f(0,0,0);
+
+        computeLuminescence(intersection, s, cLight);
+
+        editColor(c, cLight, origin, minRayLen, intersection, ray);
         image.setPixel(i, j, c);
     } catch (std::exception &e) {
         std::lock_guard<std::mutex> lock(imageMutex);
