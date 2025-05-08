@@ -33,7 +33,6 @@ static void editColor(sf::Color &c, sf::Vector3f &cLight,
         (c.g * cLight.y)));
     int b = std::min(255, static_cast<int>(
         (c.b * cLight.z)));
-    printf("COLOR: %d %d %d\n", r, g, b);
 
     // Edit color with transparency values
     float percentA = (c.a != 0) ? (255 / c.a) : 1.0f;
