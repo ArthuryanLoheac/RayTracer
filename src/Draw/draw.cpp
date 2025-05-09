@@ -111,7 +111,8 @@ std::vector<sf::Image> &images) {
     image.setPixel(i, j, sf::Color(r, g, b, a));
 }
 
-static void checkHitAt(float i, float j, float iplus, float jplus, RayTracer::Camera cam, sf::Image &image) {
+static void checkHitAt(float i, float j, float iplus, float jplus,
+RayTracer::Camera cam, sf::Image &image) {
     float minRayLength = 10000000.f;
 
     RayTracer::Ray r = cam.ray((i + iplus) / WIDTH, (j + jplus) / HEIGHT);
@@ -119,8 +120,8 @@ static void checkHitAt(float i, float j, float iplus, float jplus, RayTracer::Ca
         RayTracer::Scene::i->ObjectHead, minRayLength);
 }
 
-static void generatePixelColumn(float i, RayTracer::Camera cam, sf::Image &image,
-std::vector<sf::Image> &images) {
+static void generatePixelColumn(float i, RayTracer::Camera cam,
+sf::Image &image, std::vector<sf::Image> &images) {
     for (float j = 0; j < HEIGHT; j++) {
         checkHitAt(i, j, 0, 0, cam, images[0]);
         checkHitAt(i, j, 0, -0.5f, cam, images[1]);
@@ -142,7 +143,8 @@ void generateImage(sf::RenderWindow &window, sf::Image &image) {
 
     for (int i = 0; i < 9; i++) {
         sf::Image imageTmp;
-        imageTmp.create(image.getSize().x, image.getSize().y, image.getPixel(0, 0));
+        imageTmp.create(image.getSize().x, image.getSize().y,
+            image.getPixel(0, 0));
         images.push_back(imageTmp);
     }
 
