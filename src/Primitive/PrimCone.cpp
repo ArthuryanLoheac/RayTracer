@@ -33,7 +33,7 @@ bool PrimCone::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
 RayTracer::Vector3D PrimCone::getNormalAt(RayTracer::Point3D point) {
     RayTracer::Vector3D pointToBase = point - position;
     float tanTheta = tan(angle);
-    float r = sqrt(pointToBase.x * pointToBase.x +
+    float r = std::sqrt(pointToBase.x * pointToBase.x +
         pointToBase.z * pointToBase.z);
 
     RayTracer::Vector3D normal = pointToBase - va *
