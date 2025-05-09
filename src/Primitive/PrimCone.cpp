@@ -27,8 +27,7 @@ bool PrimCone::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     float C = cos2 * std::pow((deltaP - va * va.dot(deltaP)).length(), 2)
             - sin2 * std::pow(va.dot(deltaP), 2);
 
-    float d = B * B - 4 * A * C;
-    return returnCollision(d, A, B, intersection, ray);
+    return returnCollision(A, B, C, intersection, ray);
 }
 
 RayTracer::Vector3D PrimCone::getNormalAt(RayTracer::Point3D point) {

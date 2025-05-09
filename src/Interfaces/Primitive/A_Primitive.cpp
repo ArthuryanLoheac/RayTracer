@@ -52,8 +52,10 @@ void RayTracer::A_Primitive::setScale(Point3D scale) {
     this->scale = scale;
 }
 
-bool A_Primitive::returnCollision(float d, float A, float B,
+bool A_Primitive::returnCollision(float A, float B, float C,
     Point3D &intersection, Ray &ray) {
+    double d = B * B - 4 * A * C;
+
     if (d < 0)
         return false;
     float t1 = (-B - std::sqrt(d)) / (2 * A);

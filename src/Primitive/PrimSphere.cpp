@@ -21,20 +21,8 @@ bool PrimSphere::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     double b = 2.0 * oc.dot(ray.direction);
     double c = oc.dot(oc) - radius * radius;
 
-    double discriminant = b * b - 4 * a * c;
-    if (discriminant < 0)
-        return false;
-
-    double t1 = (-b - std::sqrt(discriminant)) / (2.0 * a);
-    double t2 = (-b + std::sqrt(discriminant)) / (2.0 * a);
-    double t = (t1 < 0) ?
-        (t2 < 0 ? -1 : t2) :
-        (t2 < 0 ? t1 : std::min(t1, t2));
-
-    intersection = ray.origin + ray.direction * t;
-    if (t < 0)
-        return false;
-    return true;
+    double d = b * b - 4 * a * c;
+    return returnCollision(a, b, c, intersection, ray);
 }
 
 RayTracer::Vector3D PrimSphere::getNormalAt(RayTracer::Point3D point) {
