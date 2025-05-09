@@ -28,6 +28,11 @@ static void setupAndRun(sf::RenderWindow &window, sf::Image &image) {
 
     RayTracer::Scene::i->ObjectHead->AddChildren(
         dlLoader<Prim>::getLib("./libs/primitive_plane.so", "getPrimitive"));
+
+    RayTracer::Scene::i->ObjectHead->AddChildren(
+        dlLoader<Prim>::getLib("./libs/light_spot.so", "getLight"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(
+        dlLoader<Prim>::getLib("./libs/light_spot.so", "getLight"));
     RayTracer::Scene::i->ObjectHead->AddChildren(
         dlLoader<Prim>::getLib("./libs/primitive_cylinder.so", "getPrimitive"));
     RayTracer::Scene::i->ObjectHead->AddChildren(

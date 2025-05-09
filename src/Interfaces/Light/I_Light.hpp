@@ -12,6 +12,7 @@ class I_Light : public I_Primitive {
         std::shared_ptr<I_Primitive> head) = 0;
     virtual float getIntensity() = 0;
     virtual float getAngle() = 0;
+    virtual sf::Color getColor() = 0;
 };
 }  // namespace RayTracer
 

@@ -13,6 +13,7 @@ class A_Lights : public I_Light {
     Point3D position;
     Point3D rotation;
     Point3D scale;
+    sf::Color color;
 
     float angle;
     float intensity;
@@ -38,6 +39,7 @@ class A_Lights : public I_Light {
     float getAngle() override;
     Vector3D getNormalAt(Point3D point) override;
     bool hits(RayTracer::Ray ray, Point3D &intersection) override;
+    sf::Color getColor() override;
 
     class LightError : public std::exception {
      private:

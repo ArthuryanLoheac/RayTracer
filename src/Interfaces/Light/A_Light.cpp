@@ -78,5 +78,9 @@ float RayTracer::A_Lights::getAngle() {
     return angle;
 }
 
+sf::Color RayTracer::A_Lights::getColor() {
+    return color;
+}
+
 RayTracer::A_Lights::LightError::LightError(const std::string &message)
     : message("A_Lights" + message) {}
