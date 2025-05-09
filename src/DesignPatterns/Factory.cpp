@@ -8,7 +8,7 @@ Factory::Factory() {
 Factory::~Factory() {
 }
 
-void Factory::createPrimitive(std::string path, std::string type) {
-    RayTracer::Scene::i->ObjectHead = dlLoader<Prim>::getLib(
-        path, type);
+std::unique_ptr<Prim> Factory::createPrimitive
+    (std::string path, std::string type) {
+    return (dlLoader<Prim>::getLib(path, type));
 }
