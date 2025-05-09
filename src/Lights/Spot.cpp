@@ -14,6 +14,7 @@ Spot::Spot() {
 void Spot::Init() {
     static int i = 0;
     i++;
+    angle = 360;
     if (i == 1) {
         position = RayTracer::Point3D(2.5f, -2, 3);
         color = sf::Color(255, 0, 0, 255);
@@ -24,7 +25,6 @@ void Spot::Init() {
         position = RayTracer::Point3D(0, -2, 1);
         color = sf::Color(0, 0, 255, 255);
     }
-    angle = 360;
     intensity = 5.f;
     rotation = RayTracer::Point3D(-1, 0, 0);
 }

@@ -75,6 +75,7 @@ SRC_TESTS	= 	\
 	tests/test_LoadSo.cpp \
 	tests/test_A_Primitive.cpp \
 	tests/test_A_Light.cpp \
+	tests/test_antiAliasing.cpp \
 
 COMMON_SRC = src/3dDatas/Point3D.cpp \
 			src/3dDatas/Vector3D.cpp \

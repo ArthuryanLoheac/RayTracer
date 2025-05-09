@@ -4,18 +4,20 @@
 
 #include "Generation/tools.hpp"
 
-void showImage(sf::RenderWindow &window, sf::Image &image) {
+void showImage(sf::RenderWindow &window, my_Image &image) {
     sf::Sprite sp;
     sf::Texture txt;
 
-    txt.loadFromImage(image);
+    image.imageMutex.lock();
+    txt.loadFromImage(image.image);
+    image.imageMutex.unlock();
     sp.setTexture(txt);
     window.clear();
     window.draw(sp);
     window.display();
 }
 
-void displayImage(sf::RenderWindow &window, sf::Image &image) {
+void displayImage(sf::RenderWindow &window, my_Image &image) {
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {

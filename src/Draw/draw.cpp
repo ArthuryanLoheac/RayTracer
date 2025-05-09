@@ -20,8 +20,7 @@
 #include "3dDatas/Point3D.hpp"
 #include "Consts/const.hpp"
 #include "Generation/tools.hpp"
-
-std::mutex imageMutex;
+#include "Draw/my_Image.hpp"
 
 static void editColor(sf::Color &c, sf::Vector3f &cLight,
     sf::Color &origin, float &minRayLen, RayTracer::Point3D &intersection,
@@ -58,29 +57,28 @@ std::shared_ptr<Prim> &s, sf::Vector3f &cLight) {
     }
 }
 
-static void hit(sf::Image &image, int i, int j, RayTracer::Ray &ray,
-std::shared_ptr<Prim> &s, RayTracer::Point3D &intersection,
+static void hit(std::unique_ptr<my_Image> &image, int i, int j,
+RayTracer::Ray &r, std::shared_ptr<Prim> &s, RayTracer::Point3D &intersection,
 float &minRayLen) {
     try {
         // Get base colors
-        sf::Color origin = image.getPixel(i, j);
+        sf::Color origin = image->getPixel(i, j);
         sf::Color c = s->getMaterial()->getColorAt(i, j);
         sf::Vector3f cLight = sf::Vector3f(0, 0, 0);
 
         computeLuminescence(intersection, s, cLight);
 
-        editColor(c, cLight, origin, minRayLen, intersection, ray);
-        image.setPixel(i, j, c);
+        editColor(c, cLight, origin, minRayLen, intersection, r);
+        image->setPixel(i, j, c);
     } catch (std::exception &e) {
-        std::lock_guard<std::mutex> lock(imageMutex);
-        image.setPixel(i, j,
+        image->setPixel(i, j,
             sf::Color(234, 58, 247));  // error pink
         return;
     }
 }
 
 static void checkHitsAtPixel(double i, double j, RayTracer::Ray r,
-sf::Image &image, std::shared_ptr<Prim> &obj,
+std::unique_ptr<my_Image> &image, std::shared_ptr<Prim> &obj,
 float &minRayLength) {
     RayTracer::Point3D intersection;
     if (obj->hits(r, intersection)) {
@@ -91,27 +89,47 @@ float &minRayLength) {
         checkHitsAtPixel(i, j, r, image, o, minRayLength);
 }
 
-void generatePixelColumn(float i, RayTracer::Camera cam, sf::Image &image) {
-    for (float j = 0; j < HEIGHT; j++) {
-        float minRayLength = 10000000.f;
+static void checkHitAt(float i, float j, float iplus, float jplus,
+RayTracer::Camera cam, std::unique_ptr<my_Image> &image) {
+    float minRayLength = 10000000.f;
 
-        RayTracer::Ray r = cam.ray(i / WIDTH, j / HEIGHT);
-        checkHitsAtPixel(i, j, r, image,
-            RayTracer::Scene::i->ObjectHead, minRayLength);
+    RayTracer::Ray r = cam.ray((i + iplus) / WIDTH, (j + jplus) / HEIGHT);
+    checkHitsAtPixel(i, j, r, image,
+        RayTracer::Scene::i->ObjectHead, minRayLength);
+}
+
+static void generatePixelColumn(float i, RayTracer::Camera cam,
+my_Image &image, std::vector<std::unique_ptr<my_Image>> &images) {
+    for (float j = 0; j < HEIGHT; j++) {
+        checkHitAt(i, j, 0, 0, cam, images[0]);
+        checkHitAt(i, j, 0, -0.5f, cam, images[1]);
+        checkHitAt(i, j, 0, 0.5f, cam, images[2]);
+        checkHitAt(i, j, -0.5f, 0, cam, images[3]);
+        checkHitAt(i, j, -0.5f, -0.5f, cam, images[4]);
+        checkHitAt(i, j, -0.5f, 0.5f, cam, images[5]);
+        checkHitAt(i, j, 0.5f, 0, cam, images[6]);
+        checkHitAt(i, j, 0.5f, -0.5f, cam, images[7]);
+        checkHitAt(i, j, 0.5f, 0.5f, cam, images[8]);
+        averageAllImages(i, j, image, images);
     }
 }
 
-void generateImage(sf::RenderWindow &window, sf::Image &image) {
+void generateImage(sf::RenderWindow &window, my_Image &image) {
     RayTracer::Camera cam;
     std::vector<std::thread> threadVector;
+    std::vector<std::unique_ptr<my_Image>> images;
 
+    showImage(window, image);
+    createListImages(images, image);
     for (float i = 0; i < WIDTH; i++) {
         threadVector.emplace_back(generatePixelColumn, i,
-            std::ref(cam), std::ref(image));
+            std::ref(cam), std::ref(image), std::ref(images));
     }
+
+    displayImage(window, image);
+
     for (auto &t : threadVector) {
         if (t.joinable())
             t.join();
-        showImage(window, image);
     }
 }
