@@ -2,6 +2,7 @@
 #include <string>
 #include <memory>
 #include <unordered_map>
+#include <utility>
 
 #include "dlLoader/dlLoader.hpp"
 #include "3dDatas/Vector3D.hpp"
@@ -14,8 +15,8 @@ class Factory {
     Factory();
     ~Factory();
 
-    std::unique_ptr<Prim> createPrimitive(std::string path, std::string type);
+    std::unique_ptr<Prim> createPrimitive(std::string primitive);
  private:
-    std::unordered_map<std::string, std::unique_ptr<Prim>
-                (*)(const std::string &, std::string)> _lib_list;
+    std::unordered_map<std::string, 
+        std::pair<std::string, std::string>> _arg_list;
 };
