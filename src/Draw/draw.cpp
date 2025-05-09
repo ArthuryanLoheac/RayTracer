@@ -91,26 +91,6 @@ float &minRayLength) {
         checkHitsAtPixel(i, j, r, image, o, minRayLength);
 }
 
-static void averagAllImages(float i, float j, sf::Image &image,
-std::vector<sf::Image> &images) {
-    float r = 0;
-    float g = 0;
-    float b = 0;
-    float a = 0;
-
-    for (sf::Image &im : images) {
-        r += im.getPixel(i, j).r;
-        g += im.getPixel(i, j).g;
-        b += im.getPixel(i, j).b;
-        a += im.getPixel(i, j).a;
-    }
-    r /= images.size();
-    g /= images.size();
-    b /= images.size();
-    a /= images.size();
-    image.setPixel(i, j, sf::Color(r, g, b, a));
-}
-
 static void checkHitAt(float i, float j, float iplus, float jplus,
 RayTracer::Camera cam, sf::Image &image) {
     float minRayLength = 10000000.f;
@@ -132,7 +112,7 @@ sf::Image &image, std::vector<sf::Image> &images) {
         checkHitAt(i, j, 0.5f, 0, cam, images[6]);
         checkHitAt(i, j, 0.5f, -0.5f, cam, images[7]);
         checkHitAt(i, j, 0.5f, 0.5f, cam, images[8]);
-        averagAllImages(i, j, image, images);
+        averageAllImages(i, j, image, images);
     }
 }
 
@@ -141,13 +121,8 @@ void generateImage(sf::RenderWindow &window, sf::Image &image) {
     std::vector<std::thread> threadVector;
     std::vector<sf::Image> images;
 
-    for (int i = 0; i < 9; i++) {
-        sf::Image imageTmp;
-        imageTmp.create(image.getSize().x, image.getSize().y,
-            image.getPixel(0, 0));
-        images.push_back(imageTmp);
-    }
-
+    showImage(window, image);
+    createListImages(images, image);
     for (float i = 0; i < WIDTH; i++) {
         threadVector.emplace_back(generatePixelColumn, i,
             std::ref(cam), std::ref(image), std::ref(images));
@@ -155,6 +130,5 @@ void generateImage(sf::RenderWindow &window, sf::Image &image) {
     for (auto &t : threadVector) {
         if (t.joinable())
             t.join();
-        showImage(window, image);
     }
 }

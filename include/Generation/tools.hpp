@@ -23,3 +23,7 @@ void computeTreeValues(std::shared_ptr<Prim> head,
 void screenshot(sf::RenderWindow &window);
 void renderAtClosing(sf::RenderWindow &window);
 std::string getTimestampAsString();
+// ----> Antialiasing
+void createListImages(std::vector<sf::Image> &images , sf::Image &image);
+void averageAllImages(float i, float j, sf::Image &image,
+std::vector<sf::Image> &images);
