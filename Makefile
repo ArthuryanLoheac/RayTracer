@@ -41,7 +41,8 @@ FLAGS_LINTER =	\
 	--quiet \
 	--output=vs7	\
 	--filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references\
-	--recursive
+	--recursive \
+	--exclude=tests/ \
 
 FLAGS_SO = $(FLAGS_LIB) -lsfml-graphics -lsfml-window -lsfml-system \
             $(FLAGS_INCLUDE) -ldl -g \
@@ -71,6 +72,9 @@ SRC_TESTS	= 	\
 	tests/test_Point3D.cpp \
 	tests/test_PrimNone.cpp \
 	tests/test_computeTreeValues.cpp \
+	tests/test_LoadSo.cpp \
+	tests/test_A_Primitive.cpp \
+	tests/test_A_Light.cpp \
 
 COMMON_SRC = src/3dDatas/Point3D.cpp \
 			src/3dDatas/Vector3D.cpp \
@@ -99,6 +103,11 @@ sphere:
 	$(COMPILER) -olibs/primitive_sphere.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimSphere.cpp $(FLAGS_SO)
 
+cylinder:
+	@mkdir -p libs
+	$(COMPILER) -olibs/primitive_cylinder.so -shared -fPIC $(SRC_PRIMITIVE) \
+		src/Primitive/PrimCylinder.cpp $(FLAGS_SO)
+
 plane:
 	@mkdir -p libs
 	$(COMPILER) -olibs/primitive_plane.so -shared -fPIC $(SRC_PRIMITIVE) \
@@ -109,7 +118,7 @@ none:
 	$(COMPILER) -olibs/primitive_none.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimNone.cpp $(FLAGS_SO)
 
-primitive: sphere plane none
+primitive: sphere plane none cylinder
 
 flat_mat:
 	@mkdir -p libs

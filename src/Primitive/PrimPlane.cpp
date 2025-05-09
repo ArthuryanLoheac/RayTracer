@@ -38,7 +38,7 @@ RayTracer::Vector3D PrimPlane::getNormalAt(RayTracer::Point3D point) {
 }
 
 void PrimPlane::Init() {
-    position = RayTracer::Point3D(0, 0.5f, 0);
+    position = RayTracer::Point3D(0, 1, 0);
     normal = RayTracer::Vector3D(0, -1, 0);
     radius = 10.f;
 
