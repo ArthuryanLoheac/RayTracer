@@ -30,13 +30,10 @@ Factory::~Factory() {
 
 std::unique_ptr<Prim> Factory::createPrimitive
     (std::string primitive) {
-    try
-    {
+    try {
         std::pair<std::string, std::string> args = _arg_list.at(primitive);
         return (dlLoader<Prim>::getLib(args.first, args.second));
-    }
-    catch(const std::exception& e)
-    {
+    } catch(const std::exception& e) {
         return (dlLoader<Prim>::getLib
             ("libs/primitive_none.so", "getPrimitive"));
     }

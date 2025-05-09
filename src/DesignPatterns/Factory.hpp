@@ -17,6 +17,6 @@ class Factory {
 
     std::unique_ptr<Prim> createPrimitive(std::string primitive);
  private:
-    std::unordered_map<std::string, 
+    std::unordered_map<std::string,
         std::pair<std::string, std::string>> _arg_list;
 };
