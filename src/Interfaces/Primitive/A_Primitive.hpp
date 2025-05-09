@@ -28,6 +28,9 @@ class A_Primitive : public I_Primitive {
     Point3D getScale() override;
     void setScale(Point3D scale) override;
 
+    bool returnCollision(float d, float A, float B,
+        Point3D &intersection, Ray &ray);
+
     class PrimitiveError : public std::exception {
      private:
         std::string message;
