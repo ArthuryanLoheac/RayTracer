@@ -20,7 +20,7 @@ bool PrimCone::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
 
     float A = cos2 * std::pow(
             ((ray.direction - va * va.dot(ray.direction)).length()), 2)
-            - sin2 * pow(va.dot(ray.direction), 2);
+            - sin2 * std::pow(va.dot(ray.direction), 2);
     float B = 2.0f * cos2 * (ray.direction - va * va.dot(ray.direction))
                          .dot(deltaP - va * va.dot(deltaP))
          - 2.0f * sin2 * va.dot(ray.direction) * va.dot(deltaP);
