@@ -125,6 +125,9 @@ void generateImage(sf::RenderWindow &window, my_Image &image) {
         threadVector.emplace_back(generatePixelColumn, i,
             std::ref(cam), std::ref(image), std::ref(images));
     }
+
+    displayImage(window, image);
+
     for (auto &t : threadVector) {
         if (t.joinable())
             t.join();

@@ -40,7 +40,6 @@ static void setupAndRun(sf::RenderWindow &window, my_Image &image) {
 
     computeTreeValues(RayTracer::Scene::i->ObjectHead);
     generateImage(window, image);
-    displayImage(window, image);
 }
 
 void testMain() {
