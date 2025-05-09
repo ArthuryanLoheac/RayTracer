@@ -57,8 +57,8 @@ std::shared_ptr<Prim> &s, sf::Vector3f &cLight) {
     }
 }
 
-static void hit(std::unique_ptr<my_Image> &image, int i, int j, RayTracer::Ray &ray,
-std::shared_ptr<Prim> &s, RayTracer::Point3D &intersection,
+static void hit(std::unique_ptr<my_Image> &image, int i, int j,
+RayTracer::Ray &r, std::shared_ptr<Prim> &s, RayTracer::Point3D &intersection,
 float &minRayLen) {
     try {
         // Get base colors
@@ -68,7 +68,7 @@ float &minRayLen) {
 
         computeLuminescence(intersection, s, cLight);
 
-        editColor(c, cLight, origin, minRayLen, intersection, ray);
+        editColor(c, cLight, origin, minRayLen, intersection, r);
         image->setPixel(i, j, c);
     } catch (std::exception &e) {
         image->setPixel(i, j,
