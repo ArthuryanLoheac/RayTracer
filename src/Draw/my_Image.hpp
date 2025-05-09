@@ -16,8 +16,8 @@ class my_Image {
 
     sf::Image image;
     std::mutex imageMutex;
-    void setPixel(float x, float y, sf::Color c);
-    sf::Color getPixel(float x, float y);
+    virtual void setPixel(float x, float y, sf::Color c);
+    virtual sf::Color getPixel(float x, float y);
     float getSizeX();
     float getSizeY();
 };
