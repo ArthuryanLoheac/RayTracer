@@ -103,6 +103,11 @@ sphere:
 	$(COMPILER) -olibs/primitive_sphere.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimSphere.cpp $(FLAGS_SO)
 
+cone:
+	@mkdir -p libs
+	$(COMPILER) -olibs/primitive_cone.so -shared -fPIC $(SRC_PRIMITIVE) \
+		src/Primitive/PrimCone.cpp $(FLAGS_SO)
+
 cylinder:
 	@mkdir -p libs
 	$(COMPILER) -olibs/primitive_cylinder.so -shared -fPIC $(SRC_PRIMITIVE) \
@@ -118,7 +123,7 @@ none:
 	$(COMPILER) -olibs/primitive_none.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimNone.cpp $(FLAGS_SO)
 
-primitive: sphere plane none cylinder
+primitive: sphere plane none cylinder cone
 
 flat_mat:
 	@mkdir -p libs
