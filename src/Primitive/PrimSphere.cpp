@@ -21,7 +21,6 @@ bool PrimSphere::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     double b = 2.0 * oc.dot(ray.direction);
     double c = oc.dot(oc) - radius * radius;
 
-    double d = b * b - 4 * a * c;
     return returnCollision(a, b, c, intersection, ray);
 }
 

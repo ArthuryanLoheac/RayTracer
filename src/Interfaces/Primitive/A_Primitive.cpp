@@ -3,7 +3,6 @@
 #include <string>
 
 #include "Interfaces/Primitive/A_Primitive.hpp"
-#include "A_Primitive.hpp"
 
 namespace RayTracer {
 
@@ -53,7 +52,7 @@ void RayTracer::A_Primitive::setScale(Point3D scale) {
 }
 
 bool A_Primitive::returnCollision(float A, float B, float C,
-    Point3D &intersection, Ray &ray) {
+Point3D &intersection, Ray &ray) {
     double d = B * B - 4 * A * C;
 
     if (d < 0)
@@ -68,5 +67,5 @@ bool A_Primitive::returnCollision(float A, float B, float C,
 }
 
 A_Primitive::PrimitiveError::PrimitiveError(const std::string &message)
-    : message("PrimitiveError: " + message) {}
+: message("PrimitiveError: " + message) {}
 }  // namespace RayTracer

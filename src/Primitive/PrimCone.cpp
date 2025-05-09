@@ -31,22 +31,32 @@ bool PrimCone::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
 }
 
 RayTracer::Vector3D PrimCone::getNormalAt(RayTracer::Point3D point) {
-    RayTracer::Point3D posUpdated = position;
-    posUpdated.y = point.y;
-    return (point - posUpdated).normalize();
+    RayTracer::Vector3D pointToBase = point - position;
+    float tanTheta = tan(angle);
+    float r = sqrt(pointToBase.x * pointToBase.x +
+        pointToBase.z * pointToBase.z);
+
+    RayTracer::Vector3D normal = pointToBase - va *
+        (pointToBase.dot(va) / va.dot(va));
+
+    normal *= (r / tanTheta);
+    normal.normalize();
+
+    return normal;
 }
 
 void PrimCone::Init() {
     static int i = 0;
 
-    va = RayTracer::Vector3D(0, 1, 0);
+    va = RayTracer::Vector3D(0, -1, 0);
     if (i == 0) {
-        position = RayTracer::Point3D(0, -1, 5);
-        angle = 10;
+        position = RayTracer::Point3D(0, -1.5f, 5);
+        angle = 30;
     } else {
         position = RayTracer::Point3D(0, .1f, 5);
         angle = 20;
     }
+    angle = angle * (3.14159265359f / 180);
     i++;
 
     try {
