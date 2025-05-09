@@ -20,7 +20,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 
-static void setupAndRun(sf::RenderWindow &window, sf::Image &image) {
+static void setupAndRun(sf::RenderWindow &window, my_Image &image) {
     RayTracer::Scene::i->ObjectHead = dlLoader<Prim>::getLib(
         "./libs/primitive_none.so", "getPrimitive");
     RayTracer::Scene::i->ObjectHead->AddChildren(dlLoader<Prim>::getLib(
@@ -45,8 +45,8 @@ static void setupAndRun(sf::RenderWindow &window, sf::Image &image) {
 
 void testMain() {
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Ray Tracer");
-    sf::Image image;
-    image.create(WIDTH, HEIGHT, sf::Color::Black);
+    my_Image image;
+    image.image.create(WIDTH, HEIGHT, sf::Color::Black);
 
     try {
         setupAndRun(window, image);
