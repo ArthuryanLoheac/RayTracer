@@ -37,7 +37,7 @@ RayTracer::Vector3D &RayTracer::Vector3D::normalize() {
 
 RayTracer::Vector3D RayTracer::Vector3D::normalized() {
     double len = length();
-    return RayTracer::Vector3D(x / len, y / len, y / len);
+    return RayTracer::Vector3D(x / len, y / len, z / len);
 }
 
 #pragma endregion TOOLS
