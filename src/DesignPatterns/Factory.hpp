@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <memory>
 
 #include "dlLoader/dlLoader.hpp"
 #include "3dDatas/Vector3D.hpp"
