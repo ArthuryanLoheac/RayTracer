@@ -9,7 +9,7 @@ extern "C" std::unique_ptr<RayTracer::I_Material> getMaterial() {
 void PsychMat::Init() {
 }
 
-sf::Color PsychMat::getColorAt(int x, int y) {
+sf::Color PsychMat::getColorAt(float x, float y) {
     (void) x;
     (void) y;
     sf::Color color(255, 255, 255);

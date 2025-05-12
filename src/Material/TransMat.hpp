@@ -10,5 +10,5 @@ class TransMat : public RayTracer::I_Material {
     ~TransMat() override = default;
 
     void Init() override;
-    sf::Color getColorAt(int x, int y) override;
+    sf::Color getColorAt(float x, float y) override;
 };
