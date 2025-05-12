@@ -56,7 +56,7 @@ void PrimSphere::Init()
     i++;
 
     try {
-        material = dlLoader<Mat>::getLib("libs/mat_chess.so", "getMaterial");
+        material = dlLoader<Mat>::getLib("libs/mat_flat.so", "getMaterial");
     } catch (std::exception &e) {
         material = nullptr;
     }

@@ -1,11 +1,5 @@
-/*
-** EPITECH PROJECT, 2025
-** RayTracer
-** File description:
-** PrimPlane
-*/
-
 #include <memory>
+#include <cmath>
 
 #include "Primitive/PrimPlane.hpp"
 #include "dlLoader/dlLoader.hpp"
@@ -38,8 +32,9 @@ RayTracer::Vector3D PrimPlane::getNormalAt(RayTracer::Point3D point) {
 }
 
 RayTracer::Vector3D PrimPlane::getUV(RayTracer::Point3D point) {
-    (void)point;
-    return RayTracer::Vector3D(0, 1, 0);
+    float u = std::fmod(point.x, 1.0f);
+    float v = std::fmod(point.z, 1.0f);
+    return RayTracer::Vector3D(u, v, 0);
 }
 
 void PrimPlane::Init() {
@@ -48,7 +43,7 @@ void PrimPlane::Init() {
     radius = 10.f;
 
     try {
-        material = dlLoader<Mat>::getLib("libs/mat_flat.so", "getMaterial");
+        material = dlLoader<Mat>::getLib("libs/mat_chess.so", "getMaterial");
     } catch (std::exception &e) {
         material = nullptr;
     }

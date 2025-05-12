@@ -12,7 +12,7 @@ ChessboardMat::ChessboardMat() {
 }
 
 void ChessboardMat::Init() {
-    scale = RayTracer::Vector3D(30, 30, 0);
+    scale = RayTracer::Vector3D(10, 10, 0);
     col1 = sf::Color(255, 255, 255);
     col2 = sf::Color(255, 0, 0);
 }
