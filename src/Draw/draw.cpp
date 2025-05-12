@@ -34,7 +34,7 @@ static void editColor(sf::Color &c, sf::Vector3f &cLight,
         (c.b * cLight.z)));
 
     // Edit color with transparency values
-    float percentA = (c.a != 0) ? (255 / c.a) : 1.0f;
+    float percentA = (c.a != 0.f) ? (c.a / 255.f) : 0.f;
     float len = intersection.distance(ray.origin);
     if (len > minRayLen)  // object is behind other object
         percentA = 1 - percentA;
