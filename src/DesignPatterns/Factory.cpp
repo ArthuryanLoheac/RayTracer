@@ -17,12 +17,15 @@ Factory::Factory() {
         {"libs/light_ambient.so", "getLight"};
     std::pair<std::string, std::string> spot =
         {"libs/light_spot.so", "getLight"};
+    std::pair<std::string, std::string> cone =
+        {"./libs/primitive_cone.so", "getPrimitive"};
     _arg_list.insert({"sphere", sphere});
     _arg_list.insert({"none", none});
     _arg_list.insert({"cylinder", cylinder});
     _arg_list.insert({"plane", plane});
     _arg_list.insert({"ambient", ambient});
     _arg_list.insert({"spot", spot});
+    _arg_list.insert({"cone", cone});
 }
 
 Factory::~Factory() {
