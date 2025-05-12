@@ -5,12 +5,14 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
-class FlatMat : public RayTracer::I_Material {
+class ChessboardMat : public RayTracer::I_Material {
  private:
-    sf::Color col;
+    sf::Color col1;
+    sf::Color col2;
+    RayTracer::Vector3D scale;
  public:
-    FlatMat();
-    ~FlatMat() override = default;
+    ChessboardMat();
+    ~ChessboardMat() override = default;
 
     void Init() override;
     sf::Color getColorAt(float u, float v) override;
