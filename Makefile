@@ -131,7 +131,12 @@ flat_mat:
 	$(COMPILER) -o libs/mat_flat.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/FlatMat.cpp $(FLAGS_SO)
 
-material: flat_mat
+trans_mat:
+	@mkdir -p libs
+	$(COMPILER) -o libs/mat_trans.so -shared -fPIC $(SRC_MATERIAL) \
+		src/Material/TransMat.cpp $(FLAGS_SO)
+
+material: flat_mat trans_mat
 
 ambient_light:
 	@mkdir -p libs
