@@ -45,8 +45,8 @@ void PrimSphere::Init() {
     static int i = 0;
 
     if (i == 0) {
-        position = RayTracer::Point3D(0, -1, 5);
-        radius = 1.f;
+        position = RayTracer::Point3D(0, 1, 5);
+        radius = 2.f;
     } else {
         position = RayTracer::Point3D(0, .1f, 5);
         radius = 0.2f;
@@ -54,7 +54,7 @@ void PrimSphere::Init() {
     i++;
 
     try {
-        material = dlLoader<Mat>::getLib("libs/mat_flat.so", "getMaterial");
+        material = dlLoader<Mat>::getLib("libs/mat_trans.so", "getMaterial");
     } catch (std::exception &e) {
         material = nullptr;
     }
