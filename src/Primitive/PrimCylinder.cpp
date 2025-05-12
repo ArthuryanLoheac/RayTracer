@@ -50,3 +50,8 @@ void PrimCylinder::Init() {
         material = nullptr;
     }
 }
+
+RayTracer::Vector3D PrimCylinder::getUV(RayTracer::Point3D point) {
+    (void)point;
+    return RayTracer::Vector3D(0, 0, 0);
+}

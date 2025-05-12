@@ -27,6 +27,7 @@ class I_Primitive {
     virtual void setScale(Point3D scale) = 0;
 
     virtual bool hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) = 0;
+    virtual RayTracer::Vector3D getUV(RayTracer::Point3D point) = 0;
 };
 }  // namespace RayTracer
 

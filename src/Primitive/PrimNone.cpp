@@ -29,3 +29,8 @@ void PrimNone::Init() {
     radius = 0.f;
     material = nullptr;
 }
+
+RayTracer::Vector3D PrimNone::getUV(RayTracer::Point3D point) {
+    (void)point;
+    return RayTracer::Vector3D(0, 0, 0);
+}

@@ -4,6 +4,7 @@
 #include "Primitive/PrimSphere.hpp"
 #include "dlLoader/dlLoader.hpp"
 #include "Consts/const.hpp"
+#include "PrimSphere.hpp"
 
 extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
     return std::make_unique<PrimSphere>();
@@ -28,7 +29,13 @@ RayTracer::Vector3D PrimSphere::getNormalAt(RayTracer::Point3D point) {
     return (point - position).normalize();
 }
 
-void PrimSphere::Init() {
+RayTracer::Vector3D PrimSphere::getUV(RayTracer::Point3D point) {
+    (void) point;
+    return RayTracer::Vector3D(0, 0, 0);
+}
+
+void PrimSphere::Init()
+{
     static int i = 0;
 
     if (i == 0) {
@@ -41,7 +48,7 @@ void PrimSphere::Init() {
     i++;
 
     try {
-        material = dlLoader<Mat>::getLib("libs/mat_flat.so", "getMaterial");
+        material = dlLoader<Mat>::getLib("libs/mat_chess.so", "getMaterial");
     } catch (std::exception &e) {
         material = nullptr;
     }

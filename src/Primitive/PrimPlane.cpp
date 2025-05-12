@@ -37,13 +37,18 @@ RayTracer::Vector3D PrimPlane::getNormalAt(RayTracer::Point3D point) {
     return rotation;
 }
 
+RayTracer::Vector3D PrimPlane::getUV(RayTracer::Point3D point) {
+    (void)point;
+    return RayTracer::Vector3D(0, 1, 0);
+}
+
 void PrimPlane::Init() {
     position = RayTracer::Point3D(0, -2, 5);
     rotation = RayTracer::Vector3D(0, 1, 0);
     radius = 10.f;
 
     try {
-        material = dlLoader<Mat>::getLib("libs/mat_flat.so", "getMaterial");
+        material = dlLoader<Mat>::getLib("libs/mat_chess.so", "getMaterial");
     } catch (std::exception &e) {
         material = nullptr;
     }

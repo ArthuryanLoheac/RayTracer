@@ -65,3 +65,8 @@ void PrimCone::Init() {
         material = nullptr;
     }
 }
+
+RayTracer::Vector3D PrimCone::getUV(RayTracer::Point3D point) {
+    (void) point;
+    return RayTracer::Vector3D(0, 0, 0);
+}

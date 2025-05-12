@@ -63,7 +63,7 @@ float &minRayLen) {
     try {
         // Get base colors
         sf::Color origin = image->getPixel(i, j);
-        sf::Color c = s->getMaterial()->getColorAt(i, j);
+        sf::Color c = s->getMaterial()->getColorAt(i, j, intersection);
         sf::Vector3f cLight = sf::Vector3f(0, 0, 0);
 
         computeLuminescence(intersection, s, cLight);
