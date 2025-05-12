@@ -15,17 +15,18 @@ PrimCone::PrimCone() {
 
 bool PrimCone::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     RayTracer::Vector3D deltaP = ray.origin - position;
+    RayTracer::Vector3D va = rotation;
     float cos2 = cos(angle) * cos(angle);
     float sin2 = sin(angle) * sin(angle);
 
     float A = cos2 * std::pow(
-            ((ray.direction - rotation * rotation.dot(ray.direction)).length()), 2)
-            - sin2 * std::pow(rotation.dot(ray.direction), 2);
-    float B = 2.0f * cos2 * (ray.direction - rotation * rotation.dot(ray.direction))
-                         .dot(deltaP - rotation * rotation.dot(deltaP))
-         - 2.0f * sin2 * rotation.dot(ray.direction) * rotation.dot(deltaP);
-    float C = cos2 * std::pow((deltaP - rotation * rotation.dot(deltaP)).length(), 2)
-            - sin2 * std::pow(rotation.dot(deltaP), 2);
+            ((ray.direction - va * va.dot(ray.direction)).length()), 2)
+            - sin2 * std::pow(va.dot(ray.direction), 2);
+    float B = 2.0f * cos2 * (ray.direction - va * va.dot(ray.direction))
+                         .dot(deltaP - va * va.dot(deltaP))
+         - 2.0f * sin2 * va.dot(ray.direction) * va.dot(deltaP);
+    float C = cos2 * std::pow((deltaP - va * va.dot(deltaP)).length(), 2)
+            - sin2 * std::pow(va.dot(deltaP), 2);
 
     return returnCollision(A, B, C, intersection, ray);
 }

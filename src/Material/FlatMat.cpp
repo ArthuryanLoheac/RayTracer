@@ -1,7 +1,6 @@
 #include <memory>
 
 #include "Material/FlatMat.hpp"
-#include "FlatMat.hpp"
 
 extern "C" std::unique_ptr<RayTracer::I_Material> getMaterial() {
     return std::make_unique<FlatMat>();

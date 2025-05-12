@@ -4,7 +4,6 @@
 #include "Primitive/PrimSphere.hpp"
 #include "dlLoader/dlLoader.hpp"
 #include "Consts/const.hpp"
-#include "PrimSphere.hpp"
 
 extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
     return std::make_unique<PrimSphere>();
@@ -42,8 +41,7 @@ RayTracer::Vector3D PrimSphere::getUV(RayTracer::Point3D point) {
     return RayTracer::Vector3D(u, v, 0);
 }
 
-void PrimSphere::Init()
-{
+void PrimSphere::Init() {
     static int i = 0;
 
     if (i == 0) {
