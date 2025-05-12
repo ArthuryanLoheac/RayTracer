@@ -15,8 +15,8 @@ PrimCylinder::PrimCylinder() {
 
 bool PrimCylinder::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     RayTracer::Vector3D deltaP = ray.origin - position;
-    RayTracer::Vector3D vPerp = ray.direction - va * ray.direction.dot(va);
-    RayTracer::Vector3D deltaPPerp = deltaP - va * deltaP.dot(va);
+    RayTracer::Vector3D vPerp = ray.direction - rotation * ray.direction.dot(rotation);
+    RayTracer::Vector3D deltaPPerp = deltaP - rotation * deltaP.dot(rotation);
 
     float A = vPerp.dot(vPerp);
     float B = 2.0f * vPerp.dot(deltaPPerp);
@@ -34,7 +34,7 @@ RayTracer::Vector3D PrimCylinder::getNormalAt(RayTracer::Point3D point) {
 void PrimCylinder::Init() {
     static int i = 0;
 
-    va = RayTracer::Vector3D(0, 1, 0);
+    rotation = RayTracer::Vector3D(0, 1, 0);
     if (i == 0) {
         position = RayTracer::Point3D(0, -1, 5);
         radius = 0.1f;

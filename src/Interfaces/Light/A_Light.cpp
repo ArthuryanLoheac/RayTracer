@@ -31,11 +31,11 @@ void RayTracer::A_Lights::setPosition(Point3D pos) {
     position = pos;
 }
 
-RayTracer::Point3D RayTracer::A_Lights::getRotation() {
+RayTracer::Vector3D RayTracer::A_Lights::getRotation() {
     return rotation;
 }
 
-void RayTracer::A_Lights::setRotation(Point3D rot) {
+void RayTracer::A_Lights::setRotation(Vector3D rot) {
     rotation = rot;
 }
 

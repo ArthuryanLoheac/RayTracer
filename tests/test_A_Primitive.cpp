@@ -48,7 +48,7 @@ Test(A_Primitive, SetAndGetPosition) {
 
 Test(A_Primitive, SetAndGetRotation) {
     std::shared_ptr<RayTracer::A_Primitive> primitive = std::make_shared<TestPrimitive>();
-    RayTracer::Point3D rotation(10, 20, 30);
+    RayTracer::Vector3D rotation(10, 20, 30);
 
     primitive->setRotation(rotation);
     cr_assert_eq(primitive->getRotation().x, 10);

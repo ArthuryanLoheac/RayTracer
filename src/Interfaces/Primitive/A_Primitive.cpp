@@ -35,11 +35,11 @@ void RayTracer::A_Primitive::setPosition(Point3D pos) {
     position = pos;
 }
 
-Point3D RayTracer::A_Primitive::getRotation() {
+Vector3D RayTracer::A_Primitive::getRotation() {
     return rotation;
 }
 
-void RayTracer::A_Primitive::setRotation(Point3D rot) {
+void RayTracer::A_Primitive::setRotation(Vector3D rot) {
     rotation = rot;
 }
 

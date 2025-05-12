@@ -19,13 +19,13 @@ bool PrimCone::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     float sin2 = sin(angle) * sin(angle);
 
     float A = cos2 * std::pow(
-            ((ray.direction - va * va.dot(ray.direction)).length()), 2)
-            - sin2 * std::pow(va.dot(ray.direction), 2);
-    float B = 2.0f * cos2 * (ray.direction - va * va.dot(ray.direction))
-                         .dot(deltaP - va * va.dot(deltaP))
-         - 2.0f * sin2 * va.dot(ray.direction) * va.dot(deltaP);
-    float C = cos2 * std::pow((deltaP - va * va.dot(deltaP)).length(), 2)
-            - sin2 * std::pow(va.dot(deltaP), 2);
+            ((ray.direction - rotation * rotation.dot(ray.direction)).length()), 2)
+            - sin2 * std::pow(rotation.dot(ray.direction), 2);
+    float B = 2.0f * cos2 * (ray.direction - rotation * rotation.dot(ray.direction))
+                         .dot(deltaP - rotation * rotation.dot(deltaP))
+         - 2.0f * sin2 * rotation.dot(ray.direction) * rotation.dot(deltaP);
+    float C = cos2 * std::pow((deltaP - rotation * rotation.dot(deltaP)).length(), 2)
+            - sin2 * std::pow(rotation.dot(deltaP), 2);
 
     return returnCollision(A, B, C, intersection, ray);
 }
@@ -36,8 +36,8 @@ RayTracer::Vector3D PrimCone::getNormalAt(RayTracer::Point3D point) {
     float r = std::sqrt(pointToBase.x * pointToBase.x +
         pointToBase.z * pointToBase.z);
 
-    RayTracer::Vector3D normal = pointToBase - va *
-        (pointToBase.dot(va) / va.dot(va));
+    RayTracer::Vector3D normal = pointToBase - rotation *
+        (pointToBase.dot(rotation) / rotation.dot(rotation));
 
     normal *= (r / tanTheta);
     normal.normalize();
@@ -48,9 +48,9 @@ RayTracer::Vector3D PrimCone::getNormalAt(RayTracer::Point3D point) {
 void PrimCone::Init() {
     static int i = 0;
 
-    va = RayTracer::Vector3D(0, -1, 0);
+    rotation = RayTracer::Vector3D(0, -1, 0);
     if (i == 0) {
-        position = RayTracer::Point3D(0, -1.5f, 5);
+        position = RayTracer::Point3D(0, 1.5f, 5);
         angle = 30;
     } else {
         position = RayTracer::Point3D(0, .1f, 5);
