@@ -6,11 +6,16 @@ extern "C" std::unique_ptr<RayTracer::I_Material> getMaterial() {
     return std::make_unique<FlatMat>();
 }
 
-void FlatMat::Init() {
+FlatMat::FlatMat() {
+    Init();
 }
 
-sf::Color FlatMat::getColorAt(int x, int y) {
-    (void) x;
-    (void) y;
-    return sf::Color(255, 255, 255);
+void FlatMat::Init() {
+    col = sf::Color(255, 255, 255);
+}
+
+sf::Color FlatMat::getColorAt(float u, float v) {
+    (void) u;
+    (void) v;
+    return col;
 }

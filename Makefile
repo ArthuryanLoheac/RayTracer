@@ -131,6 +131,11 @@ flat_mat:
 	$(COMPILER) -o libs/mat_flat.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/FlatMat.cpp $(FLAGS_SO)
 
+chess_mat:
+	@mkdir -p libs
+	$(COMPILER) -o libs/mat_chess.so -shared -fPIC $(SRC_MATERIAL) \
+		src/Material/ChessboardMat.cpp $(FLAGS_SO)
+
 trans_mat:
 	@mkdir -p libs
 	$(COMPILER) -o libs/mat_trans.so -shared -fPIC $(SRC_MATERIAL) \
@@ -141,7 +146,7 @@ psych_mat:
 	$(COMPILER) -o libs/mat_psych.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/PsychMat.cpp $(FLAGS_SO)
 
-material: flat_mat trans_mat psych_mat
+material: flat_mat chess_mat trans_mat psych_mat
 
 ambient_light:
 	@mkdir -p libs

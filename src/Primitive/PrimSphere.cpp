@@ -28,6 +28,19 @@ RayTracer::Vector3D PrimSphere::getNormalAt(RayTracer::Point3D point) {
     return (point - position).normalize();
 }
 
+RayTracer::Vector3D PrimSphere::getUV(RayTracer::Point3D point) {
+    RayTracer::Vector3D vec = point - position;
+    vec = vec.normalize();
+
+    float theta = std::atan2(vec.x, vec.z);
+    float phi = std::acos(vec.y);
+
+    float u = 1.0f - (theta / (2.0f * M_PI) + 0.5f);
+    float v = 1.0f - phi / M_PI;
+
+    return RayTracer::Vector3D(u, v, 0);
+}
+
 void PrimSphere::Init() {
     static int i = 0;
 
