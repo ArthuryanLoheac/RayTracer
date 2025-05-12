@@ -15,17 +15,18 @@ PrimCone::PrimCone() {
 
 bool PrimCone::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     RayTracer::Vector3D deltaP = ray.origin - position;
+    RayTracer::Vector3D va = rotation;
     float cos2 = cos(angle) * cos(angle);
     float sin2 = sin(angle) * sin(angle);
 
     float A = cos2 * std::pow(
-        ((ray.direction - rotation * rotation.dot(ray.direction)).length()), 2)
-            - sin2 * std::pow(rotation.dot(ray.direction), 2);
-    float B = 2.0f * cos2 * (ray.direction - rotation * rotation.dot
-        (ray.direction)).dot(deltaP - rotation * rotation.dot(deltaP))
-         - 2.0f * sin2 * rotation.dot(ray.direction) * rotation.dot(deltaP);
-    float C = cos2 * std::pow((deltaP - rotation * rotation.dot(deltaP)).
-        length(), 2) - sin2 * std::pow(rotation.dot(deltaP), 2);
+            ((ray.direction - va * va.dot(ray.direction)).length()), 2)
+            - sin2 * std::pow(va.dot(ray.direction), 2);
+    float B = 2.0f * cos2 * (ray.direction - va * va.dot(ray.direction))
+                         .dot(deltaP - va * va.dot(deltaP))
+         - 2.0f * sin2 * va.dot(ray.direction) * va.dot(deltaP);
+    float C = cos2 * std::pow((deltaP - va * va.dot(deltaP)).length(), 2)
+            - sin2 * std::pow(va.dot(deltaP), 2);
 
     return returnCollision(A, B, C, intersection, ray);
 }
@@ -50,18 +51,30 @@ void PrimCone::Init() {
 
     rotation = RayTracer::Vector3D(0, -1, 0);
     if (i == 0) {
-        position = RayTracer::Point3D(0, 1.5f, 5);
+        position = RayTracer::Point3D(1, 1.5f, 5);
         angle = 30;
     } else {
         position = RayTracer::Point3D(0, .1f, 5);
         angle = 20;
     }
-    angle = angle * (3.14159265359f / 180);
+    angle = angle * (M_PI / 180);
     i++;
 
     try {
-        material = dlLoader<Mat>::getLib("libs/mat_flat.so", "getMaterial");
+        material = dlLoader<Mat>::getLib("libs/mat_chess.so", "getMaterial");
     } catch (std::exception &e) {
         material = nullptr;
     }
+}
+
+RayTracer::Vector3D PrimCone::getUV(RayTracer::Point3D point) {
+    RayTracer::Vector3D pointToAxis = point - position;
+
+    float theta = std::atan2(pointToAxis.x, pointToAxis.z);
+    float u = (theta / (2 * M_PI)) + 0.5f;
+
+    float height = pointToAxis.dot(rotation);
+    float v = std::fmod(height, 1.0f);
+
+    return RayTracer::Vector3D(u, v, 0);
 }

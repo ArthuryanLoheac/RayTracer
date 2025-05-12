@@ -131,7 +131,12 @@ flat_mat:
 	$(COMPILER) -o libs/mat_flat.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/FlatMat.cpp $(FLAGS_SO)
 
-material: flat_mat
+chess_mat:
+	@mkdir -p libs
+	$(COMPILER) -o libs/mat_chess.so -shared -fPIC $(SRC_MATERIAL) \
+		src/Material/ChessboardMat.cpp $(FLAGS_SO)
+
+material: flat_mat chess_mat
 
 ambient_light:
 	@mkdir -p libs

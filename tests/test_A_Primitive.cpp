@@ -15,6 +15,10 @@ class TestPrimitive : public RayTracer::A_Primitive {
         (void)point;
         return RayTracer::Vector3D(0, 0, 0);
     }
+    RayTracer::Vector3D getUV(RayTracer::Point3D point) override {
+        (void)point;
+        return RayTracer::Vector3D(0, 0, 0);
+    }
     void Init() override {}
 };
 
