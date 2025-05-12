@@ -50,7 +50,7 @@ void PrimCone::Init() {
 
     rotation = RayTracer::Vector3D(0, -1, 0);
     if (i == 0) {
-        position = RayTracer::Point3D(0, 1.5f, 5);
+        position = RayTracer::Point3D(1, 1.5f, 5);
         angle = 30;
     } else {
         position = RayTracer::Point3D(0, .1f, 5);
@@ -60,13 +60,20 @@ void PrimCone::Init() {
     i++;
 
     try {
-        material = dlLoader<Mat>::getLib("libs/mat_flat.so", "getMaterial");
+        material = dlLoader<Mat>::getLib("libs/mat_chess.so", "getMaterial");
     } catch (std::exception &e) {
         material = nullptr;
     }
 }
 
 RayTracer::Vector3D PrimCone::getUV(RayTracer::Point3D point) {
-    (void) point;
-    return RayTracer::Vector3D(0, 0, 0);
+    RayTracer::Vector3D pointToAxis = point - position;
+
+    float theta = std::atan2(pointToAxis.x, pointToAxis.z);
+    float u = (theta / (2 * M_PI)) + 0.5f;
+
+    float height = pointToAxis.dot(rotation);
+    float v = std::fmod(height, 1.0f);
+
+    return RayTracer::Vector3D(u, v, 0);
 }
