@@ -11,10 +11,12 @@
 #include <SFML/Window.hpp>
 
 // Create Image
-void generateImage(sf::RenderWindow &window, my_Image &image);
+int generateImage(sf::RenderWindow &window, my_Image &image, std::string
+    sceneFile);
 
 // Render image
-void displayImage(sf::RenderWindow &window, my_Image &image);
+int displayImage(sf::RenderWindow &window, my_Image &image, std::string
+    sceneFile);
 void showImage(sf::RenderWindow &window, my_Image &image);
 
 // Compute values of the tree
@@ -30,3 +32,6 @@ void createListImages(std::vector<std::unique_ptr<my_Image>> &images,
     my_Image &image);
 void averageAllImages(float i, float j, my_Image &image,
     std::vector<std::unique_ptr<my_Image>> &images);
+
+// Random tools
+bool hasFileChanged(std::string sceneFile);
