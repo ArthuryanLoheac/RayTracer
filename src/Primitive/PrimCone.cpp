@@ -57,7 +57,7 @@ void PrimCone::Init() {
         position = RayTracer::Point3D(0, .1f, 5);
         angle = 20;
     }
-    angle = angle * (3.14159265359f / 180);
+    angle = angle * (M_PI / 180);
     i++;
 
     try {

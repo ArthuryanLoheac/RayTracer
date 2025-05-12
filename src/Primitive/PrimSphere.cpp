@@ -35,8 +35,8 @@ RayTracer::Vector3D PrimSphere::getUV(RayTracer::Point3D point) {
     float theta = std::atan2(vec.x, vec.z);
     float phi = std::acos(vec.y);
 
-    float u = 1.0f - (theta / (2.0f * 3.14159265358f) + 0.5f);
-    float v = 1.0f - phi / 3.14159265358f;
+    float u = 1.0f - (theta / (2.0f * M_PI) + 0.5f);
+    float v = 1.0f - phi / M_PI;
 
     return RayTracer::Vector3D(u, v, 0);
 }

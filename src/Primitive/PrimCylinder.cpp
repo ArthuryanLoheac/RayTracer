@@ -55,7 +55,7 @@ void PrimCylinder::Init() {
 
 RayTracer::Vector3D PrimCylinder::getUV(RayTracer::Point3D point) {
     float theta = std::atan2(point.x, point.z);
-    float raw_u = theta / (2 * 3.141592653f);
+    float raw_u = theta / (2 * M_PI);
     float u = 1 - (raw_u + 0.5);
 
     float v = std::fmod(point.y, 1.0f);
