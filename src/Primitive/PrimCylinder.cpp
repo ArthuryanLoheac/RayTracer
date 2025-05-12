@@ -15,7 +15,8 @@ PrimCylinder::PrimCylinder() {
 
 bool PrimCylinder::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     RayTracer::Vector3D deltaP = ray.origin - position;
-    RayTracer::Vector3D vPerp = ray.direction - rotation * ray.direction.dot(rotation);
+    RayTracer::Vector3D vPerp = ray.direction - rotation * ray.
+        direction.dot(rotation);
     RayTracer::Vector3D deltaPPerp = deltaP - rotation * deltaP.dot(rotation);
 
     float A = vPerp.dot(vPerp);
