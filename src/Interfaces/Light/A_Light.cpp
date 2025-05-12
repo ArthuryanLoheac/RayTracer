@@ -70,6 +70,12 @@ bool RayTracer::A_Lights::hits(RayTracer::Ray ray,
     return false;
 }
 
+RayTracer::Vector3D RayTracer::A_Lights::getUV(RayTracer::Point3D point) {
+    (void) point;
+    return RayTracer::Vector3D(0, 0, 0);
+}
+
+
 float RayTracer::A_Lights::getIntensity() {
     return intensity;
 }

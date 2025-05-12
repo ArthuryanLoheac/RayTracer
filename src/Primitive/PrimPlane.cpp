@@ -1,11 +1,5 @@
-/*
-** EPITECH PROJECT, 2025
-** RayTracer
-** File description:
-** PrimPlane
-*/
-
 #include <memory>
+#include <cmath>
 
 #include "Primitive/PrimPlane.hpp"
 #include "dlLoader/dlLoader.hpp"
@@ -35,6 +29,12 @@ bool PrimPlane::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
 RayTracer::Vector3D PrimPlane::getNormalAt(RayTracer::Point3D point) {
     (void)point;
     return rotation;
+}
+
+RayTracer::Vector3D PrimPlane::getUV(RayTracer::Point3D point) {
+    float u = std::fmod(point.x, 1.0f);
+    float v = std::fmod(point.z, 1.0f);
+    return RayTracer::Vector3D(u, v, 0);
 }
 
 void PrimPlane::Init() {

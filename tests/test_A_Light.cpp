@@ -30,7 +30,7 @@ Test(A_Light, SetAndGetPosition) {
 
 Test(A_Light, SetAndGetRotation) {
     std::shared_ptr<RayTracer::A_Lights> light = std::make_shared<TestLight>();
-    RayTracer::Point3D rotation(10, 20, 30);
+    RayTracer::Vector3D rotation(10, 20, 30);
 
     light->setRotation(rotation);
     cr_assert_eq(light->getRotation().x, 10);
