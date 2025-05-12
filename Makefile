@@ -141,12 +141,7 @@ trans_mat:
 	$(COMPILER) -o libs/mat_trans.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/TransMat.cpp $(FLAGS_SO)
 
-psych_mat:
-	@mkdir -p libs
-	$(COMPILER) -o libs/mat_psych.so -shared -fPIC $(SRC_MATERIAL) \
-		src/Material/PsychMat.cpp $(FLAGS_SO)
-
-material: flat_mat chess_mat trans_mat psych_mat
+material: flat_mat chess_mat trans_mat
 
 ambient_light:
 	@mkdir -p libs
