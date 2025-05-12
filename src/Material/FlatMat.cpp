@@ -15,9 +15,8 @@ void FlatMat::Init() {
     col = sf::Color(255, 255, 255);
 }
 
-sf::Color FlatMat::getColorAt(float u, float v, RayTracer::Point3D point) {
+sf::Color FlatMat::getColorAt(float u, float v) {
     (void) u;
     (void) v;
-    (void) point;
     return col;
 }

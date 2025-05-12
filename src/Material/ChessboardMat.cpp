@@ -12,23 +12,17 @@ ChessboardMat::ChessboardMat() {
 }
 
 void ChessboardMat::Init() {
-    Inv_scale = 10;
+    scale = RayTracer::Vector3D(30, 30, 0);
     col1 = sf::Color(255, 255, 255);
     col2 = sf::Color(255, 0, 0);
 }
 
-sf::Color ChessboardMat::getColorAt(float u, float v, RayTracer::Point3D point) {
-    (void) u;
-    (void) v;
-    int x = std::floor(Inv_scale * point.x);
-    int y = std::floor(Inv_scale * point.y);
-    int z = std::floor(Inv_scale * point.z);
+sf::Color ChessboardMat::getColorAt(float u, float v) {
+    int u2 = floor(u * scale.x);
+    int v2 = floor(v * scale.y);
 
-    bool is_even = (x + y + z) % 2 == 0;
-
-    if (is_even) {
+    if ((u2 + v2) % 2 == 0)
         return col1;
-    } else {
+    else
         return col2;
-    }
 }

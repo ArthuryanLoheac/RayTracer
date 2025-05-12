@@ -9,11 +9,11 @@ class ChessboardMat : public RayTracer::I_Material {
  private:
     sf::Color col1;
     sf::Color col2;
-    float Inv_scale;
+    RayTracer::Vector3D scale;
  public:
     ChessboardMat();
     ~ChessboardMat() override = default;
 
     void Init() override;
-    sf::Color getColorAt(float u, float v, RayTracer::Point3D point) override;
+    sf::Color getColorAt(float u, float v) override;
 };

@@ -8,7 +8,7 @@ class I_Material {
  public:
     virtual ~I_Material() = default;
     virtual void Init() = 0;
-    virtual sf::Color getColorAt(float u, float v, Point3D point) = 0;
+    virtual sf::Color getColorAt(float u, float v) = 0;
 };
 }  // namespace RayTracer
 

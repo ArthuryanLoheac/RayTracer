@@ -13,5 +13,5 @@ class FlatMat : public RayTracer::I_Material {
     ~FlatMat() override = default;
 
     void Init() override;
-    sf::Color getColorAt(float u, float v, RayTracer::Point3D point) override;
+    sf::Color getColorAt(float u, float v) override;
 };
