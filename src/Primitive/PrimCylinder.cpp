@@ -1,5 +1,6 @@
 #include <memory>
 #include <algorithm>
+#include <cmath>
 
 #include "Primitive/PrimCylinder.hpp"
 #include "dlLoader/dlLoader.hpp"
@@ -37,7 +38,7 @@ void PrimCylinder::Init() {
     rotation = RayTracer::Vector3D(0, 1, 0);
     if (i == 0) {
         position = RayTracer::Point3D(0, -1, 5);
-        radius = 0.1f;
+        radius = 1.f;
     } else {
         position = RayTracer::Point3D(0, .1f, 5);
         radius = 0.2f;
@@ -45,13 +46,18 @@ void PrimCylinder::Init() {
     i++;
 
     try {
-        material = dlLoader<Mat>::getLib("libs/mat_flat.so", "getMaterial");
+        material = dlLoader<Mat>::getLib("libs/mat_chess.so", "getMaterial");
     } catch (std::exception &e) {
         material = nullptr;
     }
 }
 
 RayTracer::Vector3D PrimCylinder::getUV(RayTracer::Point3D point) {
-    (void)point;
-    return RayTracer::Vector3D(0, 0, 0);
+    float theta = std::atan2(point.x, point.z);
+    float raw_u = theta / (2 * 3.141592653f);
+    float u = 1 - (raw_u + 0.5);
+
+    float v = std::fmod(point.y, 1.0f);
+
+    return RayTracer::Vector3D(u, v, 0);
 }
