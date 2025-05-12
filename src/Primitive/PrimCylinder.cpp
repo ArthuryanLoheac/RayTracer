@@ -22,16 +22,7 @@ bool PrimCylinder::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     float B = 2.0f * vPerp.dot(deltaPPerp);
     float C = deltaPPerp.dot(deltaPPerp) - radius * radius;
 
-    float d = B * B - 4.0f * A * C;
-    if (d < 0)
-        return false;
-    float t1 = (-B - std::sqrt(d)) / (2 * A);
-    float t2 = (-B + std::sqrt(d)) / (2 * A);
-    float t = (t1 < t2) ? t1 : t2;
-    if (t < 0)
-        return false;
-    intersection = ray.origin + ray.direction * t;
-    return true;
+    return returnCollision(A, B, C, intersection, ray);
 }
 
 RayTracer::Vector3D PrimCylinder::getNormalAt(RayTracer::Point3D point) {
