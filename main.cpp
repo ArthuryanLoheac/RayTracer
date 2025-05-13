@@ -40,9 +40,7 @@ static int setupAndRun(sf::RenderWindow &window, my_Image &image,
     RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("spot"));
     RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("spot"));
     RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("spot"));
-
-    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("plane"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("cone"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("sphere"));
 
     computeTreeValues(RayTracer::Scene::i->ObjectHead);
     return generateImage(window, image, sceneFile);
@@ -65,6 +63,7 @@ int main(int argc, char **argv) {
     RayTracer::Parsing parser;
     Factory factory;
     int hasFileChanged = 2;
+    srand(time(NULL));
 
     while (hasFileChanged != 0) {
         try {
