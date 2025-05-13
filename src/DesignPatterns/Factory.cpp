@@ -23,6 +23,10 @@ Factory::Factory() {
     _arg_list.insert({"plane", plane});
     _arg_list.insert({"ambient", ambient});
     _arg_list.insert({"spot", spot});
+    _arg_list.insert({"flat", {"libs/mat_flat.so", "getMaterial"}});
+    _arg_list.insert({"chess", {"libs/mat_chess.so", "getMaterial"}});
+    _arg_list.insert({"perlin", {"libs/mat_perlin.so", "getMaterial"}});
+    _arg_list.insert({"image", {"libs/mat_image.so", "getMaterial"}});
 }
 
 Factory::~Factory() {

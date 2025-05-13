@@ -9,6 +9,7 @@ class ImageMat : public RayTracer::I_Material {
  private:
     sf::Image img;
     RayTracer::Vector3D scale;
+    RayTracer::Vector3D rotation;
  public:
     ImageMat();
     ~ImageMat() override = default;

@@ -11,16 +11,21 @@ ImageMat::ImageMat() {
 }
 
 void ImageMat::Init() {
-    scale = RayTracer::Vector3D(4, 4, 0);
+    scale = RayTracer::Vector3D(1, 1, 0);
+    rotation = RayTracer::Vector3D(0.5f, 0, 0);
     img = sf::Image();
-    img.loadFromFile("assets/shrek-5.jpg");
+    img.loadFromFile("assets/earth.jpg");
 }
 
 sf::Color ImageMat::getColorAt(float u, float v) {
+    if (scale.x == 0 || scale.y == 0)
+        return sf::Color(234, 58, 247); // error pink
+    u /= scale.x;
+    v /= -scale.y;
     if (u < 0) u = 1 + u;
     if (v < 0) v = 1 + v;
-    u /= scale.x;
-    v /= scale.y;
+    u = fmod(u + rotation.x, 1);
+    v = fmod(v + rotation.y, 1);
     int pixX = (int)(u * img.getSize().x);
     int pixY = (int)(v * img.getSize().y);
     return img.getPixel(pixX, pixY);
