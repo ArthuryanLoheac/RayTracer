@@ -7,9 +7,10 @@
 
 class PerlinMat : public RayTracer::I_Material {
  private:
-    sf::Color col1;
-    sf::Color col2;
     RayTracer::Vector3D scale;
+    RayTracer::Vector3D rotation;
+
+    float Noise2D(float x, float y);
  public:
     PerlinMat();
     ~PerlinMat() override = default;
