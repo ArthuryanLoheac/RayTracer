@@ -26,21 +26,16 @@ void PerlinMat::Shuffle(std::vector<float> &arrayToShuffle) {
 }
 
 std::vector<float> PerlinMat::MakePermutation() {
-	for (float i = 0; i < 128; i++) {
+	for (float i = 0; i < 256; i++)
 		Permutation.push_back(i);
-	}
-
     Shuffle(Permutation);
-
-	for(float i = 0; i < 128; i++) {
+	for (float i = 0; i < 256; i++)
 		Permutation.push_back(Permutation[i]);
-	}
-
 	return Permutation;
 }
 
 RayTracer::Vector3D PerlinMat::GetConstantVector(int v) {
-	int h = v & 3;
+	int h = v % 4;
 	if(h == 0)
 		return RayTracer::Vector3D(1.0, 1.0, 0);
 	else if(h == 1)
@@ -58,8 +53,8 @@ float PerlinMat::Noise2D(float x, float y) {
 	if (xi < 0) xi += repeatX;
 	if (yi < 0) yi += repeatY;
 
-	int X = xi & 255;
-	int Y = yi & 255;
+	int X = xi % 256;
+	int Y = yi % 256;
 
 	float xf = x-floor(x);
 	float yf = y-floor(y);
@@ -90,10 +85,10 @@ float PerlinMat::Noise2D(float x, float y) {
 
 void PerlinMat::Init() {
     scale = RayTracer::Vector3D(1, 1, 0);
-    rotation = RayTracer::Vector3D(0.5f, 0, 0);
+    rotation = RayTracer::Vector3D(50, 50, 0);
     Permutation = MakePermutation();
-    c1 = sf::Color(255, 255, 0);
-    c2 = sf::Color(0, 0, 255);
+    c1 = sf::Color(66, 66, 66);
+    c2 = sf::Color(231, 25, 25);
 	repeatX = 64;
 	repeatY = 64;
 }
@@ -103,6 +98,8 @@ sf::Color PerlinMat::getColorAt(float u, float v) {
         return sf::Color(234, 58, 247);  // error pink
     u /= scale.x;
     v /= -scale.y;
+	u += rotation.x;
+	v += rotation.y;
 	if (u < 0)
 		u = -u;
 	if (v < 0)
