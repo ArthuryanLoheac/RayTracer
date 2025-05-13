@@ -6,6 +6,12 @@
 
 namespace RayTracer {
 class Camera {
+ private:
+    double aspect_ratio;
+    int image_width;
+    int image_height;
+    double vfov;  // vertical field of view
+    Point3D lookingAt;
  public:
     Point3D origin;
     Rectangle3D screen;

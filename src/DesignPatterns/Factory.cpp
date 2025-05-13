@@ -10,17 +10,17 @@ Factory::Factory() {
     std::string mat = "getMaterial";
     std::string light = "getLight";
 
-    _arg_list.insert({"sphere", {"libs/primitive_sphere.so", prim}});
-    _arg_list.insert({"none", {"libs/primitive_none.so", prim}});
-    _arg_list.insert({"cylinder", {"libs/primitive_cylinder.so", prim}});
-    _arg_list.insert({"cone", {"libs/primitive_cone.so", prim}});
-    _arg_list.insert({"plane", {"libs/primitive_plane.so", prim}});
-    _arg_list.insert({"ambient", {"libs/light_ambient.so", light}});
-    _arg_list.insert({"spot", {"libs/light_spot.so", light}});
-    _arg_list.insert({"flat", {"libs/mat_flat.so", mat}});
-    _arg_list.insert({"chess", {"libs/mat_chess.so", mat}});
-    _arg_list.insert({"perlin", {"libs/mat_perlin.so", mat}});
-    _arg_list.insert({"image", {"libs/mat_image.so", mat}});
+    _arg_list.insert({"sphere", {"plugins/primitive_sphere.so", prim}});
+    _arg_list.insert({"none", {"plugins/primitive_none.so", prim}});
+    _arg_list.insert({"cylinder", {"plugins/primitive_cylinder.so", prim}});
+    _arg_list.insert({"cone", {"plugins/primitive_cone.so", prim}});
+    _arg_list.insert({"plane", {"plugins/primitive_plane.so", prim}});
+    _arg_list.insert({"ambient", {"plugins/light_ambient.so", light}});
+    _arg_list.insert({"spot", {"plugins/light_spot.so", light}});
+    _arg_list.insert({"flat", {"plugins/mat_flat.so", mat}});
+    _arg_list.insert({"chess", {"plugins/mat_chess.so", mat}});
+    _arg_list.insert({"perlin", {"plugins/mat_perlin.so", mat}});
+    _arg_list.insert({"image", {"plugins/mat_image.so", mat}});
 }
 
 Factory::~Factory() {
@@ -34,6 +34,6 @@ std::unique_ptr<Prim> Factory::create
     } catch(const std::exception& e) {
         std::cerr << "Primitive not found: " << primitive << std::endl;
         return (dlLoader<Prim>::getLib
-            ("libs/primitive_none.so", "getPrimitive"));
+            ("plugins/primitive_none.so", "getPrimitive"));
     }
 }

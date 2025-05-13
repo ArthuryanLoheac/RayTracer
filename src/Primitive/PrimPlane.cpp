@@ -43,7 +43,7 @@ void PrimPlane::Init() {
     radius = 10.f;
 
     try {
-        material = dlLoader<Mat>::getLib("libs/mat_chess.so", "getMaterial");
+        material = dlLoader<Mat>::getLib("plugins/mat_chess.so", "getMaterial");
     } catch (std::exception &e) {
         material = nullptr;
     }

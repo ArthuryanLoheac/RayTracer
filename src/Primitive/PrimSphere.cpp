@@ -55,7 +55,7 @@ void PrimSphere::Init() {
     i++;
 
     try {
-        material = dlLoader<Mat>::getLib("libs/mat_image.so", "getMaterial");
+        material = dlLoader<Mat>::getLib("plugins/mat_image.so", "getMaterial");
     } catch (std::exception &e) {
         material = nullptr;
     }
