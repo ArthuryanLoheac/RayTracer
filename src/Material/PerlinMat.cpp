@@ -105,10 +105,21 @@ sf::Color PerlinMat::getColorAt(float u, float v) {
 	if (v < 0)
 		v = -v;
 
-    float n = Noise2D(u, v);
+	float n = 0;
+	float tt = 0;
+	int nbOctave = 8;
+	float frequency = 1;
+	float amplitude = 1;
 
-    n += 1.0;
-    n /= 2.0;
+	for (float i = 1; i <= nbOctave; i++) {
+    	n += amplitude * Noise2D(u * frequency, v * frequency);
+		tt += amplitude;
+		frequency *= 2;
+		amplitude /= 2;
+	}
+
+    n += tt;
+    n /= tt*2;
 
     sf::Color c(
         (c1.r * n) + (c2.r * (1-n)),

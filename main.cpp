@@ -65,6 +65,7 @@ int main(int argc, char **argv) {
     RayTracer::Parsing parser;
     Factory factory;
     int hasFileChanged = 2;
+	srand(time(NULL));
 
     while (hasFileChanged != 0) {
         try {
