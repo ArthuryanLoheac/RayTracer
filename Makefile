@@ -40,7 +40,7 @@ FLAGS_LINTER =	\
 	--repository=. \
 	--quiet \
 	--output=vs7	\
-	--filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references\
+	--filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references \
 	--recursive \
 	--exclude=tests/ \
 

@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+
 #include "Interfaces/Material/I_Material.hpp"
 #include "3dDatas/Point3D.hpp"
 
@@ -19,6 +21,7 @@ class PerlinMat : public RayTracer::I_Material {
     std::vector<float> MakePermutation();
     void Shuffle(std::vector<float> &arrayToShuffle);
     RayTracer::Vector3D GetConstantVector(int v);
+
  public:
     PerlinMat();
     ~PerlinMat() override = default;
