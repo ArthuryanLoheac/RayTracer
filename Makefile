@@ -142,7 +142,17 @@ trans_mat:
 	$(COMPILER) -o libs/mat_trans.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/TransMat.cpp $(FLAGS_SO)
 
-material: flat_mat chess_mat trans_mat
+perlin_mat:
+	@mkdir -p libs
+	$(COMPILER) -o libs/mat_perlin.so -shared -fPIC $(SRC_MATERIAL) \
+		src/Material/PerlinMat.cpp $(FLAGS_SO)
+
+image_mat:
+	@mkdir -p libs
+	$(COMPILER) -o libs/mat_image.so -shared -fPIC $(SRC_MATERIAL) \
+		src/Material/ImageMat.cpp $(FLAGS_SO)
+
+material: flat_mat chess_mat perlin_mat image_mat trans_mat
 
 ambient_light:
 	@mkdir -p libs

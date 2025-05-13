@@ -61,7 +61,7 @@ void PrimCone::Init() {
     i++;
 
     try {
-        material = dlLoader<Mat>::getLib("libs/mat_chess.so", "getMaterial");
+        material = dlLoader<Mat>::getLib("libs/mat_image.so", "getMaterial");
     } catch (std::exception &e) {
         material = nullptr;
     }
@@ -74,7 +74,7 @@ RayTracer::Vector3D PrimCone::getUV(RayTracer::Point3D point) {
     float u = (theta / (2 * M_PI)) + 0.5f;
 
     float height = pointToAxis.dot(rotation);
-    float v = std::fmod(height, 1.0f);
+    float v = height;
 
     return RayTracer::Vector3D(u, v, 0);
 }

@@ -33,8 +33,8 @@ RayTracer::Vector3D PrimPlane::getNormalAt(RayTracer::Point3D point) {
 }
 
 RayTracer::Vector3D PrimPlane::getUV(RayTracer::Point3D point) {
-    float u = std::fmod(point.x, 1.0f);
-    float v = std::fmod(point.z, 1.0f);
+    float u = point.x;
+    float v = point.z;
     return RayTracer::Vector3D(u, v, 0);
 }
 

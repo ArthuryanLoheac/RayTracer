@@ -115,10 +115,12 @@ my_Image &image, std::vector<std::unique_ptr<my_Image>> &images) {
     }
 }
 
-void generateImage(sf::RenderWindow &window, my_Image &image) {
+int generateImage(sf::RenderWindow &window, my_Image &image, std::string
+    sceneFile) {
     RayTracer::Camera cam;
     std::vector<std::thread> threadVector;
     std::vector<std::unique_ptr<my_Image>> images;
+    int configChanged = 0;
 
     showImage(window, image);
     createListImages(images, image);
@@ -127,10 +129,11 @@ void generateImage(sf::RenderWindow &window, my_Image &image) {
             std::ref(cam), std::ref(image), std::ref(images));
     }
 
-    displayImage(window, image);
+    configChanged = displayImage(window, image, sceneFile);
 
     for (auto &t : threadVector) {
         if (t.joinable())
             t.join();
     }
+    return configChanged;
 }

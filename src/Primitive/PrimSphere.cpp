@@ -46,6 +46,7 @@ void PrimSphere::Init() {
     Factory factory;
     static int i = 0;
 
+    rotation = RayTracer::Vector3D(2, 0, 0);
     if (i == 0) {
         position = RayTracer::Point3D(0, 0, 5);
         radius = 2.f;
