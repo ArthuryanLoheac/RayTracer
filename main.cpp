@@ -68,6 +68,5 @@ int main(int argc, char **argv) {
         std::cerr << e.what() << std::endl;
         return 84;
     }
-    testMain();
     return 0;
 }
