@@ -24,9 +24,14 @@ void Parsing::parseArgs(int argc, char **argv) {
 Scene Parsing::parseSceneFile() {
     RayTracer::Scene scene;
     libconfig::Config cfg;
+    libconfig::Setting &root = cfg.getRoot();
+    libconfig::Setting &raytracer = root["raytracer"];
 
     try {
         cfg.readFile(sceneFile.c_str());
+        // parseCamera(raytracer["camera"], scene);
+        parsePrimitive(raytracer["primitives"], scene);
+        // parseLights(raytracer["lights"], scene);
     } catch (const libconfig::FileIOException &fioex) {
         throw ParsingError("I/O error while reading file.");
     } catch (const libconfig::ConfigException &ex) {

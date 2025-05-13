@@ -11,6 +11,9 @@ class Parsing {
  public:
      void parseArgs(int argc, char **argv);
      Scene parseSceneFile();
+    //  void parseCamera(const libconfig::Setting &setting, Scene &scene);
+     void parsePrimitive(const libconfig::Setting &setting, Scene &scene);
+    //  void parseLights(const libconfig::Setting &setting, Scene &scene);
 
      class ParsingError : public std::exception {
       private:
