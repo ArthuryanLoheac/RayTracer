@@ -16,6 +16,7 @@ class Factory {
     ~Factory();
 
     std::unique_ptr<Prim> createPrimitive(std::string primitive);
+    std::unique_ptr<Mat> createMaterial(std::string material);
  private:
     std::unordered_map<std::string,
         std::pair<std::string, std::string>> _arg_list;
