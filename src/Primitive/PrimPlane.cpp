@@ -32,8 +32,8 @@ RayTracer::Vector3D PrimPlane::getNormalAt(RayTracer::Point3D point) {
 }
 
 RayTracer::Vector3D PrimPlane::getUV(RayTracer::Point3D point) {
-    float u = std::fmod(point.x, 1.0f);
-    float v = std::fmod(point.z, 1.0f);
+    float u = point.x;
+    float v = point.z;
     return RayTracer::Vector3D(u, v, 0);
 }
 
@@ -43,7 +43,7 @@ void PrimPlane::Init() {
     radius = 10.f;
 
     try {
-        material = dlLoader<Mat>::getLib("libs/mat_flat.so", "getMaterial");
+        material = dlLoader<Mat>::getLib("libs/mat_chess.so", "getMaterial");
     } catch (std::exception &e) {
         material = nullptr;
     }

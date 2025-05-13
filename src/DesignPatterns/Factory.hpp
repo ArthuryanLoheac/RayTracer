@@ -12,10 +12,15 @@
 
 class Factory {
  public:
+    static Factory &i() {
+        static Factory instance;
+        return instance;
+    }
+
     Factory();
     ~Factory();
 
-    std::unique_ptr<Prim> createPrimitive(std::string primitive);
+    std::unique_ptr<Prim> create(std::string primitive);
  private:
     std::unordered_map<std::string,
         std::pair<std::string, std::string>> _arg_list;
