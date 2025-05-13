@@ -43,7 +43,6 @@ RayTracer::Vector3D PrimSphere::getUV(RayTracer::Point3D point) {
 }
 
 void PrimSphere::Init() {
-    Factory factory;
     static int i = 0;
 
     rotation = RayTracer::Vector3D(2, 0, 0);
@@ -57,7 +56,7 @@ void PrimSphere::Init() {
     i++;
 
     try {
-        material = factory.createMaterial("trans");
+        material = Factory<Mat>::i().create("trans");
     } catch (std::exception &e) {
         material = nullptr;
     }
