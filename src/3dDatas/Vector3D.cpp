@@ -1,5 +1,4 @@
 #include "3dDatas/Vector3D.hpp"
-#include "Vector3D.hpp"
 
 #pragma region CONSTRUCTORS
 

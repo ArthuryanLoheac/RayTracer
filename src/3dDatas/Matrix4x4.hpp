@@ -1,7 +1,8 @@
 #pragma once
-#include "Point3D.hpp"
-#include "Vector3D.hpp"
 #include <array>
+
+#include "3dDatas/Point3D.hpp"
+#include "3dDatas/Vector3D.hpp"
 
 namespace RayTracer {
 class Matrix4x4 {
