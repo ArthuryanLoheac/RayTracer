@@ -31,7 +31,8 @@ static void waitForFileModification(std::string sceneFile) {
     }
 }
 
-static void setupAndRun(sf::RenderWindow &window, my_Image &image) {
+static int setupAndRun(sf::RenderWindow &window, my_Image &image,
+    std::string sceneFile) {
     RayTracer::Scene::i->ObjectHead = Factory::i().create("none");
 
     RayTracer::Scene::i->ObjectHead->AddChildren(

@@ -1,7 +1,7 @@
 #include <memory>
+#include <iostream>
 
 #include "Material/ImageMat.hpp"
-#include <iostream>
 
 extern "C" std::unique_ptr<RayTracer::I_Material> getMaterial() {
     return std::make_unique<ImageMat>();
@@ -15,7 +15,7 @@ void ImageMat::Init() {
     scale = RayTracer::Vector3D(1, 1, 0);
     rotation = RayTracer::Vector3D(0.5f, 0, 0);
     img = sf::Image();
-    if (!img.loadFromFile("assets/imagess.jpeg")) {
+    if (!img.loadFromFile("assets/images.jpeg")) {
         std::cerr << "Error loading image" << std::endl;
         img.create(100, 100, sf::Color(234, 58, 247));
     }
