@@ -5,6 +5,7 @@
 #include "Primitive/PrimCylinder.hpp"
 #include "dlLoader/dlLoader.hpp"
 #include "Consts/const.hpp"
+#include "DesignPatterns/Factory.hpp"
 
 extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
     return std::make_unique<PrimCylinder>();
@@ -34,6 +35,8 @@ RayTracer::Vector3D PrimCylinder::getNormalAt(RayTracer::Point3D point) {
 }
 
 void PrimCylinder::Init() {
+    Factory factory;
+
     static int i = 0;
 
     rotation = RayTracer::Vector3D(0, 1, 0);
@@ -47,7 +50,7 @@ void PrimCylinder::Init() {
     i++;
 
     try {
-        material = dlLoader<Mat>::getLib("libs/mat_chess.so", "getMaterial");
+        material = factory.createMaterial("chess");
     } catch (std::exception &e) {
         material = nullptr;
     }
