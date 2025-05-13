@@ -22,6 +22,17 @@ RayTracer::Vector3D RayTracer::Point3D::operator-(const Point3D &vec) {
     return Vector3D(x - vec.x, y - vec.y, z - vec.z);
 }
 
+RayTracer::Point3D RayTracer::Point3D::operator*(float scalar) const {
+    return Point3D(x * scalar, y * scalar, z * scalar);
+}
+
+RayTracer::Point3D RayTracer::Point3D::operator/(float scalar) const {
+    if (scalar == 0) {
+        throw std::invalid_argument("Division by zero");
+    }
+    return Point3D(x / scalar, y / scalar, z / scalar);
+}
+
 bool RayTracer::Point3D::operator==(const Point3D &other) {
     return (x == other.x && y == other.y && z == other.z);
 }

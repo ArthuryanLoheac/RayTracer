@@ -14,6 +14,8 @@ class Point3D {
     Point3D operator+(const Point3D& other);
     Point3D operator-(const Vector3D& vec);
     Vector3D operator-(const Point3D& vec);
+    Point3D operator*(float scalar) const;
+    Point3D operator/(float scalar) const;
     bool operator==(const Point3D& other);
     bool operator!=(const Point3D& other);
 

@@ -17,6 +17,7 @@ class Vector3D {
     double dot(const Vector3D& other);
     Vector3D &normalize();
     Vector3D normalized();
+    Vector3D cross(const Vector3D& other);
 
     // Vector3D
     Vector3D operator+(const Vector3D& other);

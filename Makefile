@@ -119,12 +119,17 @@ plane:
 	$(COMPILER) -olibs/primitive_plane.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimPlane.cpp $(FLAGS_SO)
 
+obj:
+	@mkdir -p libs
+	$(COMPILER) -olibs/primitive_obj.so -shared -fPIC $(SRC_PRIMITIVE) \
+		src/Primitive/PrimObj.cpp $(FLAGS_SO)
+
 none:
 	@mkdir -p libs
 	$(COMPILER) -olibs/primitive_none.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimNone.cpp $(FLAGS_SO)
 
-primitive: sphere plane none cylinder cone
+primitive: sphere plane none cylinder cone obj
 
 flat_mat:
 	@mkdir -p libs

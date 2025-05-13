@@ -40,6 +40,13 @@ RayTracer::Vector3D RayTracer::Vector3D::normalized() {
     return RayTracer::Vector3D(x / len, y / len, z / len);
 }
 
+RayTracer::Vector3D RayTracer::Vector3D::cross(const Vector3D &other) {
+    return RayTracer::Vector3D(
+        y * other.z - z * other.y,
+        z * other.x - x * other.z,
+        x * other.y - y * other.x);
+}
+
 #pragma endregion TOOLS
 #pragma region OPERATORS
 
