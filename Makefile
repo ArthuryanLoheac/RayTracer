@@ -80,6 +80,7 @@ SRC_TESTS	= 	\
 COMMON_SRC = src/3dDatas/Point3D.cpp \
 			src/3dDatas/Vector3D.cpp \
 			src/3dDatas/Ray.cpp \
+			src/DesignPatterns/Factory.cpp
 
 SRC_PRIMITIVE = $(COMMON_SRC) \
 				src/Interfaces/Primitive/A_Primitive.cpp \
@@ -136,6 +137,11 @@ chess_mat:
 	$(COMPILER) -o libs/mat_chess.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/ChessboardMat.cpp $(FLAGS_SO)
 
+trans_mat:
+	@mkdir -p libs
+	$(COMPILER) -o libs/mat_trans.so -shared -fPIC $(SRC_MATERIAL) \
+		src/Material/TransMat.cpp $(FLAGS_SO)
+
 perlin_mat:
 	@mkdir -p libs
 	$(COMPILER) -o libs/mat_perlin.so -shared -fPIC $(SRC_MATERIAL) \
@@ -146,7 +152,7 @@ image_mat:
 	$(COMPILER) -o libs/mat_image.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/ImageMat.cpp $(FLAGS_SO)
 
-material: flat_mat chess_mat perlin_mat image_mat
+material: flat_mat chess_mat perlin_mat image_mat trans_mat
 
 ambient_light:
 	@mkdir -p libs

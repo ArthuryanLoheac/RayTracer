@@ -21,6 +21,7 @@ Factory::Factory() {
     _arg_list.insert({"chess", {"libs/mat_chess.so", mat}});
     _arg_list.insert({"perlin", {"libs/mat_perlin.so", mat}});
     _arg_list.insert({"image", {"libs/mat_image.so", mat}});
+    _arg_list.insert({"trans", {"libs/mat_trans.so", mat}});
 }
 
 Factory::~Factory() {
@@ -35,5 +36,15 @@ std::unique_ptr<Prim> Factory::create
         std::cerr << "Primitive not found: " << primitive << std::endl;
         return (dlLoader<Prim>::getLib
             ("libs/primitive_none.so", "getPrimitive"));
+    }
+}
+
+std::unique_ptr<Mat> Factory::createMaterial
+    (std::string material) {
+    try {
+        std::pair<std::string, std::string> args = _arg_list.at(material);
+        return (dlLoader<Mat>::getLib(args.first, args.second));
+    } catch(const std::exception& e) {
+        return nullptr;
     }
 }
