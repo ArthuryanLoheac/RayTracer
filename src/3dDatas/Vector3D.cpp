@@ -1,4 +1,5 @@
 #include "3dDatas/Vector3D.hpp"
+#include "Vector3D.hpp"
 
 #pragma region CONSTRUCTORS
 
@@ -12,6 +13,11 @@ RayTracer::Vector3D::Vector3D(double x, double y, double z) {
     this->x = x;
     this->y = y;
     this->z = z;
+}
+RayTracer::Vector3D::Vector3D(Point3D other) {
+    this->x = other.x;
+    this->y = other.y;
+    this->z = other.z;
 }
 
 #pragma endregion CONSTRUCTORS
@@ -40,12 +46,19 @@ RayTracer::Vector3D RayTracer::Vector3D::normalized() {
     return RayTracer::Vector3D(x / len, y / len, z / len);
 }
 
+RayTracer::Vector3D RayTracer::Vector3D::cross(const Vector3D &v) {
+    return Vector3D(y * v.z - z * v.y,
+            z * v.x - x * v.z,
+            x * v.y - y * v.x);
+}
+
 #pragma endregion TOOLS
 #pragma region OPERATORS
 
-// Add Vector3D
-RayTracer::Vector3D RayTracer::Vector3D::operator+
-  (const RayTracer::Vector3D &other) {
+        // Add Vector3D
+        RayTracer::Vector3D RayTracer::Vector3D::
+        operator+
+    (const RayTracer::Vector3D &other) {
     return Vector3D(x + other.x, y + other.y, z +  other.z);
 }
 
@@ -59,6 +72,10 @@ RayTracer::Vector3D &RayTracer::Vector3D::operator+=
 
 // Substract Vector3D
 RayTracer::Vector3D RayTracer::Vector3D::operator-(const Vector3D& other) {
+    return Vector3D(x - other.x, y - other.y, z -  other.z);
+}
+
+RayTracer::Vector3D RayTracer::Vector3D::operator-(const Point3D& other) {
     return Vector3D(x - other.x, y - other.y, z -  other.z);
 }
 
