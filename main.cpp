@@ -15,28 +15,22 @@
 #include "dlLoader/dlLoader.hpp"
 #include "Parsing/Parsing.hpp"
 #include "Scene/Scene.hpp"
+#include "DesignPatterns/Factory.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 
 static void setupAndRun(sf::RenderWindow &window, my_Image &image) {
-    RayTracer::Scene::i->ObjectHead = dlLoader<Prim>::getLib(
-        "./libs/primitive_none.so", "getPrimitive");
-    RayTracer::Scene::i->ObjectHead->AddChildren(dlLoader<Prim>::getLib(
-       "./libs/light_ambient.so", "getLight"));
+    RayTracer::Scene::i->ObjectHead = Factory::i().create("none");
 
-    RayTracer::Scene::i->ObjectHead->AddChildren(
-        dlLoader<Prim>::getLib("./libs/primitive_plane.so", "getPrimitive"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("ambient"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("spot"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("spot"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("spot"));
 
-    RayTracer::Scene::i->ObjectHead->AddChildren(
-        dlLoader<Prim>::getLib("./libs/light_spot.so", "getLight"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(
-        dlLoader<Prim>::getLib("./libs/light_spot.so", "getLight"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(
-        dlLoader<Prim>::getLib("./libs/primitive_sphere.so", "getPrimitive"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(
-        dlLoader<Prim>::getLib("./libs/light_spot.so", "getLight"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("plane"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("cone"));
 
     computeTreeValues(RayTracer::Scene::i->ObjectHead);
     generateImage(window, image);
@@ -56,6 +50,7 @@ void testMain() {
 
 int main(int argc, char **argv) {
     RayTracer::Parsing parser;
+    Factory factory;
 
     try {
         parser.parseArgs(argc, argv);

@@ -14,7 +14,7 @@ void ImageMat::Init() {
     scale = RayTracer::Vector3D(1, 1, 0);
     rotation = RayTracer::Vector3D(0.5f, 0, 0);
     img = sf::Image();
-    img.loadFromFile("assets/earth.jpg");
+    img.loadFromFile("assets/images.jpeg");
 }
 
 sf::Color ImageMat::getColorAt(float u, float v) {
@@ -26,6 +26,8 @@ sf::Color ImageMat::getColorAt(float u, float v) {
     if (v < 0) v = 1 + v;
     u = fmod(u + rotation.x, 1);
     v = fmod(v + rotation.y, 1);
+    if (u < 0) u = 1 + u;
+    if (v < 0) v = 1 + v;
     int pixX = (int)(u * img.getSize().x);
     int pixY = (int)(v * img.getSize().y);
     return img.getPixel(pixX, pixY);
