@@ -9,8 +9,12 @@ Camera::Camera() {
     double viewport_width = viewport_height * aspect_ratio;
     double focal_length = 1.0;  // Distance from camera to screen
 
+    origin = Point3D(0, 0, 0);
+
     screen = Rectangle3D(
-        Point3D(-viewport_width / 2, viewport_height / 2, focal_length),
+        Point3D(origin.x + -viewport_width / 2,
+            origin.y +  viewport_height / 2,
+            origin.z +  focal_length),
         Vector3D(viewport_width, 0, 0),
         Vector3D(0, -viewport_height, 0));
 }
