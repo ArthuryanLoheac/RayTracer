@@ -11,7 +11,7 @@ class A_Lights : public I_Light {
     std::vector<std::shared_ptr<I_Primitive>> childrens;
     std::shared_ptr<I_Material> material;
     Point3D position;
-    Point3D rotation;
+    Vector3D rotation;
     Point3D scale;
     sf::Color color;
 
@@ -27,8 +27,8 @@ class A_Lights : public I_Light {
     void setMaterial(std::shared_ptr<I_Material> material) override;
     Point3D getPosition() override;
     void setPosition(Point3D pos) override;
-    Point3D getRotation() override;
-    void setRotation(Point3D rot) override;
+    Vector3D getRotation() override;
+    void setRotation(Vector3D rot) override;
     Point3D getScale() override;
     void setScale(Point3D scale) override;
 
@@ -39,6 +39,7 @@ class A_Lights : public I_Light {
     float getAngle() override;
     Vector3D getNormalAt(Point3D point) override;
     bool hits(RayTracer::Ray ray, Point3D &intersection) override;
+    RayTracer::Vector3D getUV(RayTracer::Point3D point) override;
     sf::Color getColor() override;
 
     class LightError : public std::exception {

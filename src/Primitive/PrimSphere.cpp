@@ -4,6 +4,7 @@
 #include "Primitive/PrimSphere.hpp"
 #include "dlLoader/dlLoader.hpp"
 #include "Consts/const.hpp"
+#include "DesignPatterns/Factory.hpp"
 
 extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
     return std::make_unique<PrimSphere>();
@@ -21,32 +22,34 @@ bool PrimSphere::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     double b = 2.0 * oc.dot(ray.direction);
     double c = oc.dot(oc) - radius * radius;
 
-    double discriminant = b * b - 4 * a * c;
-    if (discriminant < 0)
-        return false;
-
-    double t1 = (-b - std::sqrt(discriminant)) / (2.0 * a);
-    double t2 = (-b + std::sqrt(discriminant)) / (2.0 * a);
-    double t = (t1 < 0) ?
-        (t2 < 0 ? -1 : t2) :
-        (t2 < 0 ? t1 : std::min(t1, t2));
-
-    intersection = ray.origin + ray.direction * t;
-    if (t < 0)
-        return false;
-    return true;
+    return returnCollision(a, b, c, intersection, ray);
 }
 
 RayTracer::Vector3D PrimSphere::getNormalAt(RayTracer::Point3D point) {
     return (point - position).normalize();
 }
 
+RayTracer::Vector3D PrimSphere::getUV(RayTracer::Point3D point) {
+    RayTracer::Vector3D vec = point - position;
+    vec = vec.normalize();
+
+    float theta = std::atan2(vec.x, vec.z);
+    float phi = std::acos(vec.y);
+
+    float u = 1.0f - (theta / (2.0f * M_PI) + 0.5f);
+    float v = 1.0f - phi / M_PI;
+
+    return RayTracer::Vector3D(u, v, 0);
+}
+
 void PrimSphere::Init() {
+    Factory factory;
     static int i = 0;
 
+    rotation = RayTracer::Vector3D(2, 0, 0);
     if (i == 0) {
-        position = RayTracer::Point3D(0, -1, 4);
-        radius = 1.f;
+        position = RayTracer::Point3D(0, 0, 5);
+        radius = 2.f;
     } else {
         position = RayTracer::Point3D(0, .1f, 5);
         radius = 0.2f;
@@ -54,7 +57,7 @@ void PrimSphere::Init() {
     i++;
 
     try {
-        material = dlLoader<Mat>::getLib("libs/mat_flat.so", "getMaterial");
+        material = factory.createMaterial("trans");
     } catch (std::exception &e) {
         material = nullptr;
     }

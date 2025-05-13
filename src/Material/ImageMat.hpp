@@ -5,12 +5,14 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
-class FlatMat : public RayTracer::I_Material {
+class ImageMat : public RayTracer::I_Material {
  private:
-    sf::Color col;
+    sf::Image img;
+    RayTracer::Vector3D scale;
+    RayTracer::Vector3D rotation;
  public:
-    FlatMat();
-    ~FlatMat() override = default;
+    ImageMat();
+    ~ImageMat() override = default;
 
     void Init() override;
     sf::Color getColorAt(float u, float v) override;

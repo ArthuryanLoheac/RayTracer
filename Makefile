@@ -40,8 +40,9 @@ FLAGS_LINTER =	\
 	--repository=. \
 	--quiet \
 	--output=vs7	\
-	--filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references\
-	--recursive
+	--filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references \
+	--recursive \
+	--exclude=tests/ \
 
 FLAGS_SO = $(FLAGS_LIB) -lsfml-graphics -lsfml-window -lsfml-system \
             $(FLAGS_INCLUDE) -ldl -g \
@@ -71,10 +72,15 @@ SRC_TESTS	= 	\
 	tests/test_Point3D.cpp \
 	tests/test_PrimNone.cpp \
 	tests/test_computeTreeValues.cpp \
+	tests/test_LoadSo.cpp \
+	tests/test_A_Primitive.cpp \
+	tests/test_A_Light.cpp \
+	tests/test_antiAliasing.cpp \
 
 COMMON_SRC = src/3dDatas/Point3D.cpp \
 			src/3dDatas/Vector3D.cpp \
 			src/3dDatas/Ray.cpp \
+			src/DesignPatterns/Factory.cpp
 
 SRC_PRIMITIVE = $(COMMON_SRC) \
 				src/Interfaces/Primitive/A_Primitive.cpp \
@@ -99,6 +105,16 @@ sphere:
 	$(COMPILER) -olibs/primitive_sphere.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimSphere.cpp $(FLAGS_SO)
 
+cone:
+	@mkdir -p libs
+	$(COMPILER) -olibs/primitive_cone.so -shared -fPIC $(SRC_PRIMITIVE) \
+		src/Primitive/PrimCone.cpp $(FLAGS_SO)
+
+cylinder:
+	@mkdir -p libs
+	$(COMPILER) -olibs/primitive_cylinder.so -shared -fPIC $(SRC_PRIMITIVE) \
+		src/Primitive/PrimCylinder.cpp $(FLAGS_SO)
+
 plane:
 	@mkdir -p libs
 	$(COMPILER) -olibs/primitive_plane.so -shared -fPIC $(SRC_PRIMITIVE) \
@@ -109,14 +125,34 @@ none:
 	$(COMPILER) -olibs/primitive_none.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimNone.cpp $(FLAGS_SO)
 
-primitive: sphere plane none
+primitive: sphere plane none cylinder cone
 
 flat_mat:
 	@mkdir -p libs
 	$(COMPILER) -o libs/mat_flat.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/FlatMat.cpp $(FLAGS_SO)
 
-material: flat_mat
+chess_mat:
+	@mkdir -p libs
+	$(COMPILER) -o libs/mat_chess.so -shared -fPIC $(SRC_MATERIAL) \
+		src/Material/ChessboardMat.cpp $(FLAGS_SO)
+
+trans_mat:
+	@mkdir -p libs
+	$(COMPILER) -o libs/mat_trans.so -shared -fPIC $(SRC_MATERIAL) \
+		src/Material/TransMat.cpp $(FLAGS_SO)
+
+perlin_mat:
+	@mkdir -p libs
+	$(COMPILER) -o libs/mat_perlin.so -shared -fPIC $(SRC_MATERIAL) \
+		src/Material/PerlinMat.cpp $(FLAGS_SO)
+
+image_mat:
+	@mkdir -p libs
+	$(COMPILER) -o libs/mat_image.so -shared -fPIC $(SRC_MATERIAL) \
+		src/Material/ImageMat.cpp $(FLAGS_SO)
+
+material: flat_mat chess_mat perlin_mat image_mat trans_mat
 
 ambient_light:
 	@mkdir -p libs

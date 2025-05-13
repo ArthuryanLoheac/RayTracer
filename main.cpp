@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <chrono>
+#include <thread>
 #include <iostream>
 #include <string>
 #include <cstdio>
@@ -15,58 +16,67 @@
 #include "dlLoader/dlLoader.hpp"
 #include "Parsing/Parsing.hpp"
 #include "Scene/Scene.hpp"
+#include "DesignPatterns/Factory.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 
-static void setupAndRun(sf::RenderWindow &window, sf::Image &image) {
-    RayTracer::Scene::i->ObjectHead = dlLoader<Prim>::getLib(
-        "./libs/primitive_none.so", "getPrimitive");
-    RayTracer::Scene::i->ObjectHead->AddChildren(dlLoader<Prim>::getLib(
-       "./libs/light_ambient.so", "getLight"));
-
-    RayTracer::Scene::i->ObjectHead->AddChildren(
-        dlLoader<Prim>::getLib("./libs/primitive_sphere.so", "getPrimitive"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(
-        dlLoader<Prim>::getLib("./libs/primitive_sphere.so", "getPrimitive"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(
-        dlLoader<Prim>::getLib("./libs/primitive_plane.so", "getPrimitive"));
-
-    RayTracer::Scene::i->ObjectHead->AddChildren(
-        dlLoader<Prim>::getLib("./libs/light_spot.so", "getLight"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(
-        dlLoader<Prim>::getLib("./libs/light_spot.so", "getLight"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(
-        dlLoader<Prim>::getLib("./libs/light_spot.so", "getLight"));
-
-    computeTreeValues(RayTracer::Scene::i->ObjectHead);
-    generateImage(window, image);
-    displayImage(window, image);
+static void waitForFileModification(std::string sceneFile) {
+    while (true) {
+        if (hasFileChanged(sceneFile)) {
+            break;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
 }
 
-void testMain() {
+static int setupAndRun(sf::RenderWindow &window, my_Image &image,
+    std::string sceneFile) {
+    RayTracer::Scene::i->ObjectHead = Factory::i().create("none");
+
+    RayTracer::Scene::i->ObjectHead->AddChildren(
+        Factory::i().create("ambient"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("spot"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("spot"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("spot"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("sphere"));
+
+    computeTreeValues(RayTracer::Scene::i->ObjectHead);
+    return generateImage(window, image, sceneFile);
+}
+
+int testMain(std::string sceneFile) {
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Ray Tracer");
-    sf::Image image;
-    image.create(WIDTH, HEIGHT, sf::Color::Black);
+    my_Image image;
+    image.image.create(WIDTH, HEIGHT, sf::Color::Black);
 
     try {
-        setupAndRun(window, image);
+         return setupAndRun(window, image, sceneFile);
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
     }
+    return 0;
 }
 
 int main(int argc, char **argv) {
     RayTracer::Parsing parser;
+    Factory factory;
+    int hasFileChanged = 2;
+    srand(time(NULL));
 
-    try {
-        parser.parseArgs(argc, argv);
-        RayTracer::Scene scene = parser.parseSceneFile();
-        testMain();
-    } catch (const RayTracer::Parsing::ParsingError &e) {
-        std::cerr << e.what() << std::endl;
-        return 84;
+    while (hasFileChanged != 0) {
+        try {
+            parser.parseArgs(argc, argv);
+            RayTracer::Scene scene = parser.parseSceneFile();
+            hasFileChanged = testMain(argv[1]);
+        }
+        catch (const RayTracer::Parsing::ParsingError &e) {
+            std::cerr << e.what() << std::endl;
+            if (hasFileChanged == 2)
+                return 84;
+            waitForFileModification(argv[1]);
+        }
     }
     return 0;
 }

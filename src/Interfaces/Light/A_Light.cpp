@@ -31,11 +31,11 @@ void RayTracer::A_Lights::setPosition(Point3D pos) {
     position = pos;
 }
 
-RayTracer::Point3D RayTracer::A_Lights::getRotation() {
+RayTracer::Vector3D RayTracer::A_Lights::getRotation() {
     return rotation;
 }
 
-void RayTracer::A_Lights::setRotation(Point3D rot) {
+void RayTracer::A_Lights::setRotation(Vector3D rot) {
     rotation = rot;
 }
 
@@ -69,6 +69,12 @@ bool RayTracer::A_Lights::hits(RayTracer::Ray ray,
     (void) intersection;
     return false;
 }
+
+RayTracer::Vector3D RayTracer::A_Lights::getUV(RayTracer::Point3D point) {
+    (void) point;
+    return RayTracer::Vector3D(0, 0, 0);
+}
+
 
 float RayTracer::A_Lights::getIntensity() {
     return intensity;

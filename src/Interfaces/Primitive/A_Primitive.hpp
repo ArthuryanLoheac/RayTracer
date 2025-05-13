@@ -11,7 +11,7 @@ class A_Primitive : public I_Primitive {
     std::vector<std::shared_ptr<I_Primitive>> childrens;
     std::shared_ptr<I_Material> material;
     Point3D position;
-    Point3D rotation;
+    Vector3D rotation;
     Point3D scale;
 
  public:
@@ -23,10 +23,13 @@ class A_Primitive : public I_Primitive {
     void setMaterial(std::shared_ptr<I_Material> material) override;
     Point3D getPosition() override;
     void setPosition(Point3D pos) override;
-    Point3D getRotation() override;
-    void setRotation(Point3D rot) override;
+    Vector3D getRotation() override;
+    void setRotation(Vector3D rot) override;
     Point3D getScale() override;
     void setScale(Point3D scale) override;
+
+    bool returnCollision(float A, float B, float C,
+        Point3D &intersection, Ray &ray);
 
     class PrimitiveError : public std::exception {
      private:

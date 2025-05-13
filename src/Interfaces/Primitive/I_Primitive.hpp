@@ -21,12 +21,13 @@ class I_Primitive {
     virtual void setMaterial(std::shared_ptr<I_Material> material) = 0;
     virtual Point3D getPosition() = 0;
     virtual void setPosition(Point3D pos) = 0;
-    virtual Point3D getRotation() = 0;
-    virtual void setRotation(Point3D rot) = 0;
+    virtual Vector3D getRotation() = 0;
+    virtual void setRotation(Vector3D rot) = 0;
     virtual Point3D getScale() = 0;
     virtual void setScale(Point3D scale) = 0;
 
     virtual bool hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) = 0;
+    virtual RayTracer::Vector3D getUV(RayTracer::Point3D point) = 0;
 };
 }  // namespace RayTracer
 

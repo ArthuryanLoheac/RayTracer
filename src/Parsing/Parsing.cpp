@@ -32,6 +32,8 @@ Scene Parsing::parseSceneFile() {
         // parseCamera(raytracer["camera"], scene);
         parsePrimitive(raytracer["primitives"], scene);
         // parseLights(raytracer["lights"], scene);
+        if (!cfg.exists("raytracer"))
+            throw ParsingError("Missing 'raytracer' section in config file.");
     } catch (const libconfig::FileIOException &fioex) {
         throw ParsingError("I/O error while reading file.");
     } catch (const libconfig::ConfigException &ex) {

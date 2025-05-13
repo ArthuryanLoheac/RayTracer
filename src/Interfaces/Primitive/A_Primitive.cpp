@@ -35,11 +35,11 @@ void RayTracer::A_Primitive::setPosition(Point3D pos) {
     position = pos;
 }
 
-Point3D RayTracer::A_Primitive::getRotation() {
+Vector3D RayTracer::A_Primitive::getRotation() {
     return rotation;
 }
 
-void RayTracer::A_Primitive::setRotation(Point3D rot) {
+void RayTracer::A_Primitive::setRotation(Vector3D rot) {
     rotation = rot;
 }
 
@@ -49,6 +49,21 @@ Point3D RayTracer::A_Primitive::getScale() {
 
 void RayTracer::A_Primitive::setScale(Point3D scale) {
     this->scale = scale;
+}
+
+bool A_Primitive::returnCollision(float A, float B, float C,
+Point3D &intersection, Ray &ray) {
+    double d = B * B - 4 * A * C;
+
+    if (d < 0)
+        return false;
+    float t1 = (-B - std::sqrt(d)) / (2 * A);
+    float t2 = (-B + std::sqrt(d)) / (2 * A);
+    float t = (t1 < t2) ? t1 : t2;
+    if (t < 0)
+        return false;
+    intersection = ray.origin + ray.direction * t;
+    return true;
 }
 
 A_Primitive::PrimitiveError::PrimitiveError(const std::string &message)
