@@ -27,6 +27,8 @@ Scene Parsing::parseSceneFile() {
 
     try {
         cfg.readFile(sceneFile.c_str());
+        if (!cfg.exists("raytracer"))
+            throw ParsingError("Missing 'raytracer' section in config file.");
     } catch (const libconfig::FileIOException &fioex) {
         throw ParsingError("I/O error while reading file.");
     } catch (const libconfig::ConfigException &ex) {

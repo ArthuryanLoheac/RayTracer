@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <chrono>
+#include <thread>
 #include <iostream>
 #include <string>
 #include <cstdio>
@@ -21,6 +22,15 @@
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 
+static void waitForFileModification(std::string sceneFile) {
+    while (true) {
+        if (hasFileChanged(sceneFile)) {
+            break;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+}
+
 static void setupAndRun(sf::RenderWindow &window, my_Image &image) {
     RayTracer::Scene::i->ObjectHead = Factory::i().create("none");
 
@@ -34,32 +44,39 @@ static void setupAndRun(sf::RenderWindow &window, my_Image &image) {
     RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("cone"));
 
     computeTreeValues(RayTracer::Scene::i->ObjectHead);
-    generateImage(window, image);
+    return generateImage(window, image, sceneFile);
 }
 
-void testMain() {
+int testMain(std::string sceneFile) {
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Ray Tracer");
     my_Image image;
     image.image.create(WIDTH, HEIGHT, sf::Color::Black);
 
     try {
-        setupAndRun(window, image);
+         return setupAndRun(window, image, sceneFile);
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
     }
+    return 0;
 }
 
 int main(int argc, char **argv) {
     RayTracer::Parsing parser;
     Factory factory;
+    int hasFileChanged = 2;
 
-    try {
-        parser.parseArgs(argc, argv);
-        RayTracer::Scene scene = parser.parseSceneFile();
-        testMain();
-    } catch (const RayTracer::Parsing::ParsingError &e) {
-        std::cerr << e.what() << std::endl;
-        return 84;
+    while (hasFileChanged != 0) {
+        try {
+            parser.parseArgs(argc, argv);
+            RayTracer::Scene scene = parser.parseSceneFile();
+            hasFileChanged = testMain(argv[1]);
+        }
+        catch (const RayTracer::Parsing::ParsingError &e) {
+            std::cerr << e.what() << std::endl;
+            if (hasFileChanged == 2)
+                return 84;
+            waitForFileModification(argv[1]);
+        }
     }
     return 0;
 }
