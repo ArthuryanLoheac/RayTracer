@@ -1,6 +1,7 @@
 #include <string>
 #include <memory>
 #include <utility>
+#include <iostream>
 
 #include "DesignPatterns/Factory.hpp"
 

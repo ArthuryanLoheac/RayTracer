@@ -24,7 +24,8 @@
 static void setupAndRun(sf::RenderWindow &window, my_Image &image) {
     RayTracer::Scene::i->ObjectHead = Factory::i().create("none");
 
-    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("ambient"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(
+        Factory::i().create("ambient"));
     RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("spot"));
     RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("spot"));
     RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("spot"));

@@ -19,7 +19,7 @@ void ImageMat::Init() {
 
 sf::Color ImageMat::getColorAt(float u, float v) {
     if (scale.x == 0 || scale.y == 0)
-        return sf::Color(234, 58, 247); // error pink
+        return sf::Color(234, 58, 247);  // error pink
     u /= scale.x;
     v /= -scale.y;
     if (u < 0) u = 1 + u;
@@ -28,7 +28,7 @@ sf::Color ImageMat::getColorAt(float u, float v) {
     v = fmod(v + rotation.y, 1);
     if (u < 0) u = 1 + u;
     if (v < 0) v = 1 + v;
-    int pixX = (int)(u * img.getSize().x);
-    int pixY = (int)(v * img.getSize().y);
+    int pixX = static_cast<int>(u * img.getSize().x);
+    int pixY = static_cast<int>(v * img.getSize().y);
     return img.getPixel(pixX, pixY);
 }
