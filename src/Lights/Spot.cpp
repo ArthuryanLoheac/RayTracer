@@ -1,4 +1,5 @@
 #include <memory>
+#include <vector>
 
 #include "Lights/Spot.hpp"
 #include "Scene/Scene.hpp"
@@ -43,22 +44,44 @@ bool Spot::checkBlockingLight(std::shared_ptr<I_Primitive> &obj,
 float Spot::getLuminescence(RayTracer::Point3D intersection,
 std::shared_ptr<I_Light> Light, std::shared_ptr<I_Primitive> obj,
 std::shared_ptr<I_Primitive> head) {
-    RayTracer::Vector3D lightDir = (Light->getPosition() - intersection);
-    lightDir.normalize();
-    RayTracer::Vector3D localNormal = obj->getNormalAt(intersection);
+    RayTracer::Vector3D toLight = Light->getPosition() - intersection;
+    float distanceToLight = toLight.length();
+    toLight = toLight.normalize();
 
-    double angle = std::acos(localNormal.dot(lightDir));
-    double distance = (Light->getPosition() - intersection).length();
-    double luminescencetmp = intensity;
+    RayTracer::Vector3D N = obj->getNormalAt(intersection);
+    float angleToSurface = std::acos(N.dot(toLight));
 
-    if (angle < M_PI / 2 && angle < this->angle * (M_PI / 180.0))
-        luminescencetmp *= (1 - (angle / (M_PI / 2)));
-    else
-        luminescencetmp = 0;
-
-    RayTracer::Ray ray(intersection, lightDir);
-    if (checkBlockingLight(obj, head, ray, distance))
-        return 0;
-
-    return luminescencetmp / std::pow(distance, 2);
+    float lum = 0.f;
+    if (angleToSurface < M_PI/2
+        && angleToSurface < this->angle * (M_PI/180.0f)) {
+        lum = intensity * (1.f - (angleToSurface / (M_PI/2)));
+    } else {
+        return 0.f;
+    }
+    RayTracer::Point3D origin = intersection + toLight * 1e-4f;
+    RayTracer::Ray shadowRay(origin, toLight);
+    float transmittance = 1.f;
+    std::vector<std::shared_ptr<I_Primitive>> stack = { head };
+    while (!stack.empty() && transmittance > 1e-3f) {
+        auto current = stack.back();
+        stack.pop_back();
+        if (current != obj) {
+            RayTracer::Point3D hitP;
+            if (current->hits(shadowRay, hitP)) {
+                float d = (hitP - intersection).length();
+                if (d < distanceToLight) {
+                    RayTracer::Vector3D uv = current->getUV(hitP);
+                    float alpha = current->getMaterial()
+                                      ->getColorAt(uv.x, uv.y).a / 255.f;
+                    float blockerTransparency = 1.f - alpha;
+                    transmittance *= blockerTransparency;
+                    if (transmittance < 1e-3f)
+                        break;
+                }
+            }
+        }
+        for (auto &ch : current->getChildrens())
+            stack.push_back(ch);
+    }
+    return lum * transmittance / (distanceToLight * distanceToLight);
 }
