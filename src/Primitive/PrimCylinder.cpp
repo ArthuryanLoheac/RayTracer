@@ -48,7 +48,7 @@ void PrimCylinder::Init() {
     i++;
 
     try {
-        material = Factory<Mat>::i().create("chess");
+        material = Factory<Mat>::i().create("trans");
     } catch (std::exception &e) {
         material = nullptr;
     }

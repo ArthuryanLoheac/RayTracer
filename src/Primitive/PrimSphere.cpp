@@ -43,20 +43,20 @@ RayTracer::Vector3D PrimSphere::getUV(RayTracer::Point3D point) {
 }
 
 void PrimSphere::Init() {
-    static int i = 0;
+    static int j = 0;
 
     rotation = RayTracer::Vector3D(2, 0, 0);
-    if (i == 0) {
-        position = RayTracer::Point3D(0, 0, 5);
+    if (j == 0) {
+        position = RayTracer::Point3D(0, 0, 6);
         radius = 2.f;
     } else {
         position = RayTracer::Point3D(3, 0, 10);
         radius = 1.f;
     }
-    i++;
+    j++;
 
     try {
-        material = Factory<Mat>::i().create("trans");
+        material = Factory<Mat>::i().create("chess");
     } catch (std::exception &e) {
         material = nullptr;
     }
