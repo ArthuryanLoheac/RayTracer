@@ -12,6 +12,15 @@
 
 namespace RayTracer {
 
+static sf::Color parseColor(const libconfig::Setting &color) {
+    float rgb[3] = {0.0f, 0.0f, 0.0f};
+
+    color.lookupValue("r", rgb[0]);
+    color.lookupValue("g", rgb[1]);
+    color.lookupValue("b", rgb[2]);
+    return sf::Color(rgb[0], rgb[1], rgb[2]);
+}
+
 std::shared_ptr<I_Material> Parsing::parseMaterial(
 const libconfig::Setting &material) {
     std::unordered_map<std::string, std::any> settings;
