@@ -9,22 +9,22 @@
 #include "Draw/my_Image.hpp"
 
 void averageAllImages(float i, float j, my_Image &image,
-std::vector<std::unique_ptr<my_Image>> &images) {
+std::vector<sf::Color> &colors) {
     float r = 0;
     float g = 0;
     float b = 0;
     float a = 0;
 
-    for (const auto &im : images) {
-        r += im->getPixel(i, j).r;
-        g += im->getPixel(i, j).g;
-        b += im->getPixel(i, j).b;
-        a += im->getPixel(i, j).a;
+    for (const auto &im : colors) {
+        r += im.r;
+        g += im.g;
+        b += im.b;
+        a += im.a;
     }
-    r /= images.size();
-    g /= images.size();
-    b /= images.size();
-    a /= images.size();
+    r /= colors.size();
+    g /= colors.size();
+    b /= colors.size();
+    a /= colors.size();
     image.setPixel(i, j, sf::Color(r, g, b, a));
 }
 

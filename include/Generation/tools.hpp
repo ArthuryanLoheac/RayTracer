@@ -32,7 +32,7 @@ std::string getTimestampAsString();
 void createListImages(std::vector<std::unique_ptr<my_Image>> &images,
     my_Image &image);
 void averageAllImages(float i, float j, my_Image &image,
-    std::vector<std::unique_ptr<my_Image>> &images);
+    std::vector<sf::Color> &images);
 
 // Random tools
 bool hasFileChanged(std::string sceneFile);

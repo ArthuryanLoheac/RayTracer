@@ -83,10 +83,10 @@ static sf::Color getColorReflected(hitDatas &datas, RayTracer::Vector3D uv)
 }
 
 static void hit(std::unique_ptr<my_Image> &image, int i, int j,
-hitDatas &datas) {
+hitDatas &datas, sf::Color &color) {
     try {
         // Get base colors
-        sf::Color origin = image->getPixel(i, j);
+        sf::Color origin = color;
         RayTracer::Vector3D uv = datas.obj->getUV(datas.intersection);
         sf::Color c = getColorReflected(datas, uv);
         sf::Vector3f cLight = sf::Vector3f(0, 0, 0);
@@ -94,7 +94,7 @@ hitDatas &datas) {
         computeLuminescence(datas.intersection, datas.obj, cLight);
 
         editColor(c, cLight, origin);
-        image->setPixel(i, j, c);
+        color = c;
     } catch (std::exception &e) {
         image->setPixel(i, j,
             sf::Color(234, 58, 247));  // error pink
@@ -122,6 +122,7 @@ std::vector<hitDatas> &lst) {
 static sf::Color checkHitAt(float i, float j,
 std::unique_ptr<my_Image> &image, RayTracer::Ray r) {
     std::vector<hitDatas> lst;
+    sf::Color c(0);
 
     checkHitsAtPixel(i, j, r, image,
         RayTracer::Scene::i->ObjectHead, lst);
@@ -131,30 +132,32 @@ std::unique_ptr<my_Image> &image, RayTracer::Ray r) {
             return a.len > b.len;
         });
     for (hitDatas &h : lst) {
-        hit(image, static_cast<int>(i), static_cast<int>(j), h);
+        hit(image, static_cast<int>(i), static_cast<int>(j), h, c);
     }
-    return image.get()->getPixel(i, j);
+    return c;
 }
 
-static void checkHitAtRay(float i, float j, float iplus, float jplus,
+static sf::Color checkHitAtRay(float i, float j, float iplus, float jplus,
     RayTracer::Camera cam, std::unique_ptr<my_Image> &image) {
     RayTracer::Ray r = cam.ray((i + iplus) / WIDTH, (j + jplus) / HEIGHT);
-    checkHitAt(i, j, image, r);
+    return checkHitAt(i, j, image, r);
 }
 
 static void generatePixelColumn(float i, RayTracer::Camera cam,
 my_Image &image, std::vector<std::unique_ptr<my_Image>> &images) {
+    std::vector<sf::Color> colors;
     for (float j = 0; j < HEIGHT; j++) {
-        checkHitAtRay(i, j, 0, 0, cam, images[0]);
-        checkHitAtRay(i, j, 0, -0.5f, cam, images[1]);
-        checkHitAtRay(i, j, 0, 0.5f, cam, images[2]);
-        checkHitAtRay(i, j, -0.5f, 0, cam, images[3]);
-        checkHitAtRay(i, j, -0.5f, -0.5f, cam, images[4]);
-        checkHitAtRay(i, j, -0.5f, 0.5f, cam, images[5]);
-        checkHitAtRay(i, j, 0.5f, 0, cam, images[6]);
-        checkHitAtRay(i, j, 0.5f, -0.5f, cam, images[7]);
-        checkHitAtRay(i, j, 0.5f, 0.5f, cam, images[8]);
-        averageAllImages(i, j, image, images);
+        colors.clear();
+        colors.push_back(checkHitAtRay(i, j, 0, 0, cam, images[0]));
+        colors.push_back(checkHitAtRay(i, j, 0, -0.5f, cam, images[1]));
+        colors.push_back(checkHitAtRay(i, j, 0, 0.5f, cam, images[2]));
+        colors.push_back(checkHitAtRay(i, j, -0.5f, 0, cam, images[3]));
+        colors.push_back(checkHitAtRay(i, j, -0.5f, -0.5f, cam, images[4]));
+        colors.push_back(checkHitAtRay(i, j, -0.5f, 0.5f, cam, images[5]));
+        colors.push_back(checkHitAtRay(i, j, 0.5f, 0, cam, images[6]));
+        colors.push_back(checkHitAtRay(i, j, 0.5f, -0.5f, cam, images[7]));
+        colors.push_back(checkHitAtRay(i, j, 0.5f, 0.5f, cam, images[8]));
+        averageAllImages(i, j, image, colors);
     }
 }
 
