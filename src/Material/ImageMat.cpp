@@ -32,3 +32,7 @@ sf::Color ImageMat::getColorAt(float u, float v) {
     int pixY = static_cast<int>(v * img.getSize().y);
     return img.getPixel(pixX, pixY);
 }
+
+bool ImageMat::isReflective() const {
+    return false;
+}

@@ -16,3 +16,7 @@ sf::Color ReflectMat::getColorAt(float x, float y) {
     (void)y;
     return sf::Color(255, 255, 255, 125);
 }
+
+bool ReflectMat::isReflective() const {
+    return true;
+}

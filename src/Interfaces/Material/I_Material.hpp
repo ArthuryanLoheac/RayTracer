@@ -13,6 +13,7 @@ class I_Material {
     virtual ~I_Material() = default;
     virtual void Init(std::unordered_map<std::string, std::any> &settings) = 0;
     virtual sf::Color getColorAt(float u, float v) = 0;
+    virtual bool isReflective() const;
 };
 }  // namespace RayTracer
 

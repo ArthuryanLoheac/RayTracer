@@ -29,4 +29,5 @@ class PerlinMat : public RayTracer::I_Material {
 
     void Init(std::unordered_map<std::string, std::any> &settings) override;
     sf::Color getColorAt(float u, float v) override;
+    bool isReflective() const override;
 };
