@@ -51,11 +51,11 @@ RayTracer::Vector3D PerlinMat::GetConstantVector(int v) {
 }
 
 float PerlinMat::Noise2D(float x, float y) {
-    int xi = (static_cast<int>(floor(x))) % repeatX;
-    int yi = (static_cast<int>(floor(y))) % repeatY;
+    int xi = (static_cast<int>(floor(x))) % 64;
+    int yi = (static_cast<int>(floor(y))) % 64;
 
-    if (xi < 0) xi += repeatX;
-    if (yi < 0) yi += repeatY;
+    if (xi < 0) xi += 64;
+    if (yi < 0) yi += 64;
 
     int X = xi % 256;
     int Y = yi % 256;
@@ -91,8 +91,7 @@ void PerlinMat::Init(std::unordered_map<std::string, std::any> &settings) {
     rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
     c1 = std::any_cast<sf::Color>(settings["color1"]);
     c2 = std::any_cast<sf::Color>(settings["color2"]);
-    repeatX = std::any_cast<int>(settings["repeatX"]);
-    repeatY = std::any_cast<int>(settings["repeatY"]);
+    octave = std::any_cast<int>(settings["octave"]);
     Permutation = MakePermutation();
 }
 
@@ -110,11 +109,10 @@ sf::Color PerlinMat::getColorAt(float u, float v) {
 
     float n = 0;
     float tt = 0;
-    int nbOctave = 8;
     float frequency = 1;
     float amplitude = 1;
 
-    for (float i = 1; i <= nbOctave; i++) {
+    for (float i = 1; i <= octave; i++) {
         n += amplitude * Noise2D(u * frequency, v * frequency);
         tt += amplitude;
         frequency *= 2;
