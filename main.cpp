@@ -51,6 +51,9 @@ static int setupAndRun(sf::RenderWindow &window, my_Image &image,
         create("sphere"));
 
     computeTreeValues(RayTracer::Scene::i->ObjectHead);
+    for (int i = WIDTH /2; i >= 8; i /= 2)
+        generateImagePreview(window, image, i);
+    printf("END FIRST DRAW\n");
     return generateImage(window, image, sceneFile);
 }
 
