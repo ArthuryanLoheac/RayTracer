@@ -1,3 +1,45 @@
-raytracer:
-{
-}
+# This is the configuration file for the raytracer program.
+raytracer : {
+
+    # Configuration of the camera
+    camera : {
+
+    };
+
+    # Configuration of the primitives
+    primitives : {
+        spheres = (
+            {
+                position = {
+                    x = 1.0;
+                    y = 1.0;
+                    z = 4.0;
+                };
+                rotation = {
+                    x = 0.0;
+                    y = 0.0;
+                    z = 0.0;
+                };
+                radius = 1.5;
+                material = {
+                    name = "flat";
+                    color = {
+                        r = 255;
+                        g = 255;
+                        b = 255;
+                    };
+                }
+            }
+        );
+
+        # planes = (
+        # );
+
+        # none = (
+        # );
+    };
+
+    # Configuration of the light sources
+    lights : {
+    };
+};

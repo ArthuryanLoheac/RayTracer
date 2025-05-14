@@ -151,7 +151,12 @@ image_mat:
 	$(COMPILER) -o plugins/mat_image.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/ImageMat.cpp $(FLAGS_SO)
 
-material: flat_mat chess_mat perlin_mat image_mat trans_mat
+reflect_mat:
+	@mkdir -p plugins
+	$(COMPILER) -o plugins/mat_reflect.so -shared -fPIC $(SRC_MATERIAL) \
+		src/Material/ReflectMat.cpp $(FLAGS_SO)
+
+material: flat_mat chess_mat perlin_mat image_mat trans_mat reflect_mat
 
 ambient_light:
 	@mkdir -p plugins
