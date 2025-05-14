@@ -10,6 +10,15 @@
 
 namespace RayTracer {
 
+static Point3D parsePosition(const libconfig::Setting &position) {
+    float pos[3] = {0.0f, 0.0f, 0.0f};
+
+    position.lookupValue("x", pos[0]);
+    position.lookupValue("y", pos[1]);
+    position.lookupValue("z", pos[2]);
+    return Point3D(pos[0], pos[1], pos[2]);
+}
+
 void parseSphere(const libconfig::Setting &sphere) {
     std::shared_ptr<I_Primitive> sphereObj = Factory::i().create("sphere");
     std::unordered_map<std::string, std::any> settings;
