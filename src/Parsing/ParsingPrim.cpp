@@ -48,13 +48,15 @@ static std::shared_ptr<I_Material> parseMaterial(const libconfig::Setting &mater
     color.lookupValue("g", rgb[1]);
     color.lookupValue("b", rgb[2]);
     settings["color"] = parseColor(material.lookup("color"));
-    std::shared_ptr<I_Material> mat = Factory::i().createMaterial(materialName);
+    std::shared_ptr<I_Material> mat =
+        Factory<RayTracer::I_Material>::i().create(materialName);
     mat->Init(settings);
     return mat;
 }
 
 void parseSphere(const libconfig::Setting &sphere) {
-    std::shared_ptr<I_Primitive> sphereObj = Factory::i().create("sphere");
+    std::shared_ptr<I_Primitive> sphereObj =
+        Factory<RayTracer::I_Primitive>::i().create("sphere");
     std::unordered_map<std::string, std::any> settings;
     const libconfig::Setting &position = sphere.lookup("position");
     const libconfig::Setting &rotation = sphere.lookup("rotation");
