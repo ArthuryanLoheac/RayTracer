@@ -19,7 +19,9 @@ class TestPrimitive : public RayTracer::A_Primitive {
         (void)point;
         return RayTracer::Vector3D(0, 0, 0);
     }
-    void Init() override {}
+    void Init(std::unordered_map<std::string, std::any> &settings) override {
+        (void)settings;
+    }
 };
 
 Test(A_Primitive, AddChildren) {
