@@ -14,7 +14,7 @@ void ReflectMat::Init(std::unordered_map<std::string, std::any> &settings) {
 sf::Color ReflectMat::getColorAt(float x, float y) {
     (void)x;
     (void)y;
-    return sf::Color(255, 255, 255, 125);
+    return sf::Color(255, 255, 255, 255);
 }
 
 bool ReflectMat::isReflective() const {
