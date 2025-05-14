@@ -9,15 +9,15 @@
 #include "Interfaces/Light/I_Light.hpp"
 
 static std::shared_ptr<RayTracer::I_Primitive> getPrimitive(std::string libName) {
-    return dlLoader<RayTracer::I_Primitive>::getLib("./libs/" + libName, "getPrimitive");
+    return dlLoader<RayTracer::I_Primitive>::getLib("./plugins/" + libName, "getPrimitive");
 }
 
 static std::shared_ptr<RayTracer::I_Material> getMaterial(std::string libName) {
-    return dlLoader<RayTracer::I_Material>::getLib("./libs/" + libName, "getMaterial");
+    return dlLoader<RayTracer::I_Material>::getLib("./plugins/" + libName, "getMaterial");
 }
 
 static std::shared_ptr<RayTracer::I_Light> getLight(std::string libName) {
-    return dlLoader<RayTracer::I_Light>::getLib("./libs/" + libName, "getLight");
+    return dlLoader<RayTracer::I_Light>::getLib("./plugins/" + libName, "getLight");
 }
 
 Test(LoadSo, PrimitiveSphere) {

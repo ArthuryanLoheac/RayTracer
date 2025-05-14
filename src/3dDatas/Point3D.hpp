@@ -9,6 +9,7 @@ class Point3D {
     double x, y, z;
     Point3D();
     Point3D(double x, double y, double z);
+    double length();
 
     Point3D operator+(const Vector3D& vec);
     Point3D operator+(const Point3D& other);

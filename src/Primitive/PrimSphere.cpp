@@ -50,8 +50,8 @@ void PrimSphere::Init() {
         position = RayTracer::Point3D(0, 0, 5);
         radius = 2.f;
     } else {
-        position = RayTracer::Point3D(0, .1f, 5);
-        radius = 0.2f;
+        position = RayTracer::Point3D(3, 0, 10);
+        radius = 1.f;
     }
     i++;
 
