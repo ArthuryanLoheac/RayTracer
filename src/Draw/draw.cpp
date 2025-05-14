@@ -51,7 +51,8 @@ std::shared_ptr<Prim> &s, sf::Vector3f &cLight) {
     }
 }
 
-static void hit(std::unique_ptr<my_Image> &image, int i, int j, hitDatas &datas) {
+static void hit(std::unique_ptr<my_Image> &image, int i, int j,
+hitDatas &datas) {
     try {
         // Get base colors
         sf::Color origin = image->getPixel(i, j);
