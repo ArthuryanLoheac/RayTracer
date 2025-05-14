@@ -15,6 +15,10 @@ class Camera {
     Point3D lookingAt;
     Matrix4x4 camera_to_world;  // 4x4 transformation matrix
  public:
+    static Camera &i() {
+        static Camera instance;
+        return instance;
+    }
     Point3D origin;
     Rectangle3D screen;
 
