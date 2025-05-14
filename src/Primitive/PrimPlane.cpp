@@ -44,7 +44,7 @@ void PrimPlane::Init() {
     radius = 1.f;
 
     try {
-        material = dlLoader<Mat>::getLib("plugins/mat_perlin.so", "getMaterial");
+        material = Factory<RayTracer::I_Material>::i().create("perlin");
     } catch (std::exception &e) {
         material = nullptr;
     }

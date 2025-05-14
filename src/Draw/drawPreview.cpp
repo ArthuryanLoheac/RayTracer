@@ -122,7 +122,8 @@ my_Image &image) {
     }
 }
 
-int generateImagePreview(sf::RenderWindow &window, my_Image &image, int pixels) {
+int generateImagePreview(sf::RenderWindow &window, my_Image &image,
+int pixels) {
     sizePixelPreview = pixels;
     RayTracer::Camera cam;
     std::vector<std::thread> threadVector;
