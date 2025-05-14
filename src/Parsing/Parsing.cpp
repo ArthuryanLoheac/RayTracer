@@ -5,6 +5,7 @@
 
 #include "Parsing/Parsing.hpp"
 #include "Scene/Scene.hpp"
+#include "DesignPatterns/Factory.hpp"
 
 namespace RayTracer {
 
@@ -21,20 +22,21 @@ void Parsing::parseArgs(int argc, char **argv) {
     sceneFile = argv[1];
 }
 
-Scene Parsing::parseSceneFile() {
-    RayTracer::Scene scene;
+void Parsing::parseSceneFile() {
     libconfig::Config cfg;
 
     try {
         cfg.readFile(sceneFile.c_str());
-        if (!cfg.exists("raytracer"))
-            throw ParsingError("Missing 'raytracer' section in config file.");
+        const libconfig::Setting &raytracer = cfg.lookup("raytracer");
+            Scene::i->ObjectHead = Factory<Prim>::i().create("none");
+        // parseCamera(raytracer);
+        parsePrimitive(raytracer);
+        // parseLights(raytracer);
     } catch (const libconfig::FileIOException &fioex) {
         throw ParsingError("I/O error while reading file.");
     } catch (const libconfig::ConfigException &ex) {
         throw ParsingError("Error in configuration file.");
     }
-    return scene;
 }
 
 Parsing::ParsingError::ParsingError(const std::string &message)

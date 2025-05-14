@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <libconfig.h++>
 
 #include "Scene/Scene.hpp"
 
@@ -10,7 +11,10 @@ class Parsing {
 
  public:
      void parseArgs(int argc, char **argv);
-     Scene parseSceneFile();
+     void parseSceneFile();
+    //  void parseCamera(const libconfig::Setting &setting);
+     void parsePrimitive(const libconfig::Setting &setting);
+    //  void parseLights(const libconfig::Setting &setting);
 
      class ParsingError : public std::exception {
       private:

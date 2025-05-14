@@ -1,5 +1,6 @@
 #include <memory>
 #include <vector>
+#include <string>
 
 #include "Lights/Spot.hpp"
 #include "Scene/Scene.hpp"
@@ -9,24 +10,14 @@ extern "C" std::unique_ptr<RayTracer::I_Light> getLight() {
 }
 
 Spot::Spot() {
-    Init();
 }
 
-void Spot::Init() {
-    static int i = 0;
-    i++;
-    angle = 360;
-    color = sf::Color(255, 255, 255, 255);
-    if (i % 2 == 1) {
-        color = sf::Color(0, 0, 255, 255);
-        position = RayTracer::Point3D(2.5f, 2, 3);
-    } else if (i %2 == 0) {
-        position = RayTracer::Point3D(-2.5f, 2, 3);
-    } else  {
-        position = RayTracer::Point3D(0, 2, 1);
-    }
-    intensity = 5.f;
-    rotation = RayTracer::Point3D(-1, 0, 0);
+void Spot::Init(std::unordered_map<std::string, std::any> &settings) {
+    angle = std::any_cast<float>(settings["angle"]);
+    position = std::any_cast<RayTracer::Point3D>(settings["position"]);
+    color = std::any_cast<sf::Color>(settings["color"]);
+    intensity = std::any_cast<float>(settings["intensity"]);
+    rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
 }
 
 bool Spot::checkBlockingLight(std::shared_ptr<I_Primitive> &obj,

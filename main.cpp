@@ -34,27 +34,6 @@ static void waitForFileModification(std::string sceneFile) {
 
 static int setupAndRun(sf::RenderWindow &window, my_Image &image,
     std::string sceneFile) {
-    RayTracer::Scene::i->ObjectHead = Factory<Prim>::i().create("none");
-
-    RayTracer::Scene::i->ObjectHead->AddChildren(
-        Factory<Prim>::i().create("ambient"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(Factory<Prim>::i().
-        create("spot"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(Factory<Prim>::i().
-        create("spot"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(Factory<Prim>::i().
-        create("spot"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(Factory<Prim>::i().
-        create("cone"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(Factory<Prim>::i().
-        create("plane"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(Factory<Prim>::i().
-        create("cylinder"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(Factory<Prim>::i().
-        create("sphere"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(Factory<Prim>::i().
-        create("sphere"));
-
     computeTreeValues(RayTracer::Scene::i->ObjectHead);
     for (int i = WIDTH /2; i >= 8; i /= 2)
         generateImagePreview(window, image, i);
@@ -76,6 +55,7 @@ int testMain(std::string sceneFile) {
 
 int main(int argc, char **argv) {
     RayTracer::Parsing parser;
+    RayTracer::Scene scene;
     int hasFileChanged = 2;
     RayTracer::Camera cam;
     srand(time(NULL));
@@ -83,7 +63,7 @@ int main(int argc, char **argv) {
     while (hasFileChanged != 0) {
         try {
             parser.parseArgs(argc, argv);
-            RayTracer::Scene scene = parser.parseSceneFile();
+            parser.parseSceneFile();
             hasFileChanged = testMain(argv[1]);
         }
         catch (const RayTracer::Parsing::ParsingError &e) {
