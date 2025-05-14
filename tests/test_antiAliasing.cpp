@@ -10,7 +10,7 @@ Test(createListImages, creates_correct_number_of_images) {
     my_Image baseImage(10, 10, sf::Color::Black);
     std::vector<std::unique_ptr<my_Image>> images;
 
-    createListImages(images, baseImage);
+    createListImages(images, baseImage, 9);
 
     cr_assert_eq(images.size(), 9, "Expected 9 images, but got %lu", images.size());
     for (const auto &img : images) {
@@ -24,7 +24,7 @@ Test(averageAllImages, averages_pixel_values_correctly) {
     my_Image baseImage(10, 10, sf::Color::Black);
     std::vector<std::unique_ptr<my_Image>> images;
 
-    createListImages(images, baseImage);
+    createListImages(images, baseImage, 9);
 
     for (size_t k = 0; k < images.size(); ++k) {
         for (float i = 0; i < baseImage.getSizeX(); ++i) {
