@@ -8,7 +8,7 @@
 
 static std::shared_ptr<RayTracer::I_Primitive> getPrimitive
 (std::string libName) {
-    return dlLoader<RayTracer::I_Primitive>::getLib("./libs/"
+    return dlLoader<RayTracer::I_Primitive>::getLib("./plugins/"
     + libName, "getPrimitive");
 }
 

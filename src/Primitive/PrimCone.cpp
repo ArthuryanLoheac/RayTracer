@@ -5,6 +5,8 @@
 #include "Primitive/PrimCone.hpp"
 #include "dlLoader/dlLoader.hpp"
 #include "Consts/const.hpp"
+#include "DesignPatterns/Factory.hpp"
+#include "Interfaces/Material/I_Material.hpp"
 
 extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
     return std::make_unique<PrimCone>();

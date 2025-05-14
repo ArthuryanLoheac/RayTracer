@@ -14,7 +14,5 @@ void TransMat::Init(std::unordered_map<std::string, std::any> &settings) {
 sf::Color TransMat::getColorAt(float x, float y) {
     (void)x;
     (void)y;
-    sf::Color color(255, 255, 255);
-    color.a = 125;
-    return (color);
+    return sf::Color(255, 255, 255, 125);
 }
