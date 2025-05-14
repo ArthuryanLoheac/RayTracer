@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <libconfig.h++>
 
 #include "Scene/Scene.hpp"
 
