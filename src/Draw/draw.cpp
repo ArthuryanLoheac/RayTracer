@@ -78,7 +78,7 @@ std::vector<hitDatas> &lst) {
     if (obj->hits(r, intersection)) {
         hitDatas h;
         h.intersection = intersection;
-        h.len = intersection.distance(r.origin);
+        h.len = r.origin.distance(intersection);
         h.obj = obj;
         lst.push_back(h);
     }
