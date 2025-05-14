@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include "Interfaces/Material/I_Material.hpp"
 #include "3dDatas/Point3D.hpp"
 
@@ -12,6 +13,6 @@ class FlatMat : public RayTracer::I_Material {
     FlatMat();
     ~FlatMat() override = default;
 
-    void Init() override;
+    void Init(std::unordered_map<std::string, std::any> &settings) override;
     sf::Color getColorAt(float u, float v) override;
 };

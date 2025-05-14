@@ -1,6 +1,8 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <string>
+#include <unordered_map>
 
 #include "3dDatas/Point3D.hpp"
 #include "3dDatas/Ray.hpp"
@@ -10,7 +12,7 @@ namespace RayTracer {
 class I_Primitive {
  public:
     virtual ~I_Primitive() = default;
-    virtual void Init() = 0;
+    virtual void Init(std::unordered_map<std::string, std::any> &settings) = 0;
 
     virtual std::vector<std::shared_ptr<I_Primitive>> &getChildrens() = 0;
     virtual Vector3D getNormalAt(Point3D point) = 0;
