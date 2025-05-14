@@ -15,7 +15,8 @@ void ImageMat::Init() {
     scale = RayTracer::Vector3D(1, 1, 0);
     rotation = RayTracer::Vector3D(0.5f, 0, 0);
     img = sf::Image();
-    if (!img.loadFromFile("assets/images.jpeg")) {
+
+    if (!img.loadFromFile("assets/shrek-5.jpg")) {
         std::cerr << "Error loading image" << std::endl;
         img.create(100, 100, sf::Color(234, 58, 247));
     }
