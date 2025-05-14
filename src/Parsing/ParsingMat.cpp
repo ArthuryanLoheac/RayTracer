@@ -40,6 +40,15 @@ static Vector3D parseRotation(const libconfig::Setting &rotation) {
     return Vector3D(rot[0], rot[1], rot[2]);
 }
 
+static Vector3D parseScale(const libconfig::Setting &scale) {
+    float sc[3] = {1.0f, 1.0f, 1.0f};
+
+    scale.lookupValue("x", sc[0]);
+    scale.lookupValue("y", sc[1]);
+    scale.lookupValue("z", sc[2]);
+    return Vector3D(sc[0], sc[1], sc[2]);
+}
+
 std::shared_ptr<I_Material> Parsing::parseMaterial(
 const libconfig::Setting &material) {
     std::unordered_map<std::string, std::any> settings;
