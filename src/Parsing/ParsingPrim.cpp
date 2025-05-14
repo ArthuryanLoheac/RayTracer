@@ -44,19 +44,26 @@ const std::string &type) {
     std::shared_ptr<I_Primitive> primObj =
         Factory<Prim>::i().create(type);
     std::unordered_map<std::string, std::any> settings;
-    float radius = 0.0f;
 
     settings["position"] = parsePosition(primitive.lookup("position"));
     settings["rotation"] = parseRotation(primitive.lookup("rotation"));
     settings["scale"] = parseScale(primitive.lookup("scale"));
     settings["material"] = parseMaterial(primitive.lookup("material"));
-    if (type == "sphere" || type == "plane" || type == "cylinder") {
+    if (type == "sphere" || type == "plane" ||
+        type == "cylinder" || type == "limcylinder") {
+        float radius = 0.0f;
         primitive.lookupValue("radius", radius);
         settings["radius"] = radius;
     }
     if (type == "cone") {
-        primitive.lookupValue("angle", radius);
-        settings["angle"] = radius;
+        float angle = 0.0f;
+        primitive.lookupValue("angle", angle);
+        settings["angle"] = angle;
+    }
+    if (type == "limcylinder") {
+        float height = 0.0f;
+        primitive.lookupValue("height", height);
+        settings["height"] = height;
     }
     primObj->Init(settings);
     Scene::i->ObjectHead->AddChildren(primObj);
@@ -78,6 +85,12 @@ void Parsing::parsePrimitives(const libconfig::Setting &primitives) {
         for (int i = 0; i < cylinders.getLength(); i++) {
             const libconfig::Setting &cylinder = cylinders[i];
             parsePrimitive(cylinder, "cylinder");
+        }
+        const libconfig::Setting &limcylinders =
+            primitives.lookup("limcylinders");
+        for (int i = 0; i < limcylinders.getLength(); i++) {
+            const libconfig::Setting &limcylinder = limcylinders[i];
+            parsePrimitive(limcylinder, "limcylinder");
         }
         const libconfig::Setting &cones = primitives.lookup("cones");
         for (int i = 0; i < cones.getLength(); i++) {
