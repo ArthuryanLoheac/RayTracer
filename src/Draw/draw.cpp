@@ -53,8 +53,7 @@ std::shared_ptr<Prim> &s, sf::Vector3f &cLight) {
     }
 }
 
-static sf::Color getColorReflected(hitDatas &datas, RayTracer::Vector3D uv)
-{
+static sf::Color getColorReflected(hitDatas &datas, RayTracer::Vector3D uv) {
     sf::Color c(0, 0, 0);
     if (datas.obj->getMaterial()->isReflective()) {
         RayTracer::Vector3D normal = datas.obj->getNormalAt(datas.intersection);
