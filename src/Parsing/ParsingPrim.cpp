@@ -84,6 +84,10 @@ void Parsing::parsePrimitives(const libconfig::Setting &primitives) {
             const libconfig::Setting &cone = cones[i];
             parsePrimitive(cone, "cone");
         }
+        const libconfig::Setting &lights = primitives.lookup("none");
+        for (int i = 0; i < lights.getLength(); i++) {
+            const libconfig::Setting &light = lights[i];
+            parsePrimitive(light, "none");
         }
     } catch (const libconfig::SettingNotFoundException &nfex) {
         throw ParsingError("Missing primitives in configuration file.");
