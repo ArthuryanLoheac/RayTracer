@@ -36,13 +36,13 @@ static int setupAndRun(sf::RenderWindow &window, my_Image &image,
     RayTracer::Scene::i->ObjectHead = Factory<Prim>::i().create("none");
 
     RayTracer::Scene::i->ObjectHead->AddChildren(
-        Factory::i().create("ambient"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("spot"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("spot"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("spot"));
+        Factory<Prim>::i().create("ambient"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(Factory<Prim>::i().create("spot"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(Factory<Prim>::i().create("spot"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(Factory<Prim>::i().create("spot"));
 
-    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("plane"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(Factory::i().create("cone"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(Factory<Prim>::i().create("plane"));
+    RayTracer::Scene::i->ObjectHead->AddChildren(Factory<Prim>::i().create("cone"));
 
     computeTreeValues(RayTracer::Scene::i->ObjectHead);
     return generateImage(window, image, sceneFile);
@@ -63,7 +63,6 @@ int testMain(std::string sceneFile) {
 
 int main(int argc, char **argv) {
     RayTracer::Parsing parser;
-    Factory factory;
     int hasFileChanged = 2;
     srand(time(NULL));
 
