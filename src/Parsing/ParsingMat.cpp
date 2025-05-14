@@ -79,6 +79,13 @@ std::unordered_map<std::string, std::any> &settings) {
     settings["octave"] = octave;
 }
 
+void parseImage(const libconfig::Setting &image,
+std::unordered_map<std::string, std::any> &settings) {
+    settings["image"] = parseImage(image.lookup("image"));
+    settings["scale"] = parseScale(image.lookup("scale"));
+    settings["rotation"] = parseRotation(image.lookup("rotation"));
+}
+
 std::shared_ptr<I_Material> Parsing::parseMaterial(
 const libconfig::Setting &material) {
     std::unordered_map<std::string, std::any> settings;
