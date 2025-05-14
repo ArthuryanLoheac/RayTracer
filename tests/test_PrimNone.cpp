@@ -24,9 +24,10 @@ Test(I_Primitive, PrimNone) {
 
 Test(I_Primitive, Hits) {
     try {
+        std::unordered_map<std::string, std::any> settings;
         std::shared_ptr<RayTracer::I_Primitive> prim =
             getPrimitive("primitive_none.so");
-        prim->Init();
+        prim->Init(settings);
         RayTracer::Ray ray;
         RayTracer::Point3D p(0, 0, 0);
         cr_assert(prim->hits(ray, p) == false);
@@ -40,9 +41,10 @@ Test(I_Primitive, Hits) {
 
 Test(I_Primitive, GetNormalAt) {
     try {
+        std::unordered_map<std::string, std::any> settings;
         std::shared_ptr<RayTracer::I_Primitive> prim =
             getPrimitive("primitive_none.so");
-        prim->Init();
+        prim->Init(settings);
         RayTracer::Ray ray;
         RayTracer::Point3D p(0, 0, 0);
         RayTracer::Vector3D norm = prim->getNormalAt(p);
