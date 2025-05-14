@@ -11,7 +11,6 @@ extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
 }
 
 PrimPlane::PrimPlane() {
-    Init();
 }
 
 bool PrimPlane::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
@@ -38,15 +37,9 @@ RayTracer::Vector3D PrimPlane::getUV(RayTracer::Point3D point) {
     return RayTracer::Vector3D(u, v, 0);
 }
 
-void PrimPlane::Init() {
-    Factory factory;
-    position = RayTracer::Point3D(0, -2, 5);
-    rotation = RayTracer::Vector3D(0, 1, 0);
-    radius = 1.f;
-
-    try {
-        material = dlLoader<Mat>::getLib("libs/mat_perlin.so", "getMaterial");
-    } catch (std::exception &e) {
-        material = nullptr;
-    }
+void PrimPlane::Init(std::unordered_map<std::string, std::any> &settings) {
+    position = std::any_cast<RayTracer::Point3D>(settings["position"]);
+    rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
+    radius = std::any_cast<float>(settings["radius"]);
+    material = std::any_cast<std::shared_ptr<RayTracer::I_Material>>(settings["material"]);
 }
