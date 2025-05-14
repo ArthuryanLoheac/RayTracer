@@ -52,8 +52,8 @@ void PrimCone::Init() {
     static int i = 0;
 
     rotation = RayTracer::Vector3D(0, 1.2f, 0.1f);
-    if (i == 0) {
-        position = RayTracer::Point3D(1, 1.5f, 5);
+    if (i % 2 == 0) {
+        position = RayTracer::Point3D(-3, 1.5f, 8);
         angle = 30;
     } else {
         position = RayTracer::Point3D(0, .1f, 5);
@@ -63,7 +63,7 @@ void PrimCone::Init() {
     i++;
 
     try {
-        material = Factory<RayTracer::I_Material>::i().create("trans");
+        material = Factory<RayTracer::I_Material>::i().create("flat");
     } catch (std::exception &e) {
         material = nullptr;
     }

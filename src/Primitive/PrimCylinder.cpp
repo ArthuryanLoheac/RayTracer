@@ -38,8 +38,8 @@ void PrimCylinder::Init() {
     static int i = 0;
 
     rotation = RayTracer::Vector3D(0, 1, 0);
-    if (i == 0) {
-        position = RayTracer::Point3D(0, -1, 5);
+    if (i % 2 == 0) {
+        position = RayTracer::Point3D(-0.5f, -1, 6);
         radius = 1.f;
     } else {
         position = RayTracer::Point3D(0, .1f, 5);

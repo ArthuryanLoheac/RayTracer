@@ -11,7 +11,7 @@ FlatMat::FlatMat() {
 }
 
 void FlatMat::Init() {
-    col = sf::Color(255, 255, 255);
+    col = sf::Color(0, 255, 155);
 }
 
 sf::Color FlatMat::getColorAt(float u, float v) {

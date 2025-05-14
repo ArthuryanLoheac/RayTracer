@@ -46,18 +46,20 @@ void PrimSphere::Init() {
     static int j = 0;
 
     rotation = RayTracer::Vector3D(2, 0, 0);
-    if (j == 0) {
+    if (j % 2 == 0) {
         position = RayTracer::Point3D(0, 0, 6);
         radius = 2.f;
+        material = Factory<Mat>::i().create("chess");
     } else {
         position = RayTracer::Point3D(3, 0, 10);
         radius = 1.f;
+        material = Factory<Mat>::i().create("image");
     }
     j++;
 
-    try {
-        material = Factory<Mat>::i().create("chess");
-    } catch (std::exception &e) {
-        material = nullptr;
-    }
+    //try {
+    //    material = Factory<Mat>::i().create("chess");
+    //} catch (std::exception &e) {
+    //    material = nullptr;
+    //}
 }
