@@ -53,7 +53,6 @@ int testMain(std::string sceneFile) {
 int main(int argc, char **argv) {
     RayTracer::Parsing parser;
     RayTracer::Scene scene;
-    Factory factory;
     int hasFileChanged = 2;
     srand(time(NULL));
 
