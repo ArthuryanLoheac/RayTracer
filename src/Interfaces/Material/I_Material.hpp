@@ -1,5 +1,6 @@
 #pragma once
 #include <any>
+#include <string>
 #include <unordered_map>
 
 #include <SFML/Graphics.hpp>

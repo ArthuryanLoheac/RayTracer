@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <string>
 #include <unordered_map>
 
 #include "3dDatas/Point3D.hpp"

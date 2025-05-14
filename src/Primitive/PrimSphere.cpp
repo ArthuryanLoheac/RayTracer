@@ -1,5 +1,6 @@
 #include <memory>
 #include <algorithm>
+#include <string>
 
 #include "Primitive/PrimSphere.hpp"
 #include "dlLoader/dlLoader.hpp"
@@ -45,5 +46,5 @@ void PrimSphere::Init(std::unordered_map<std::string, std::any> &settings) {
     rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
     position = std::any_cast<RayTracer::Point3D>(settings["position"]);
     radius = std::any_cast<float>(settings["radius"]);
-    material = std::any_cast<std::shared_ptr<RayTracer::I_Material>>(settings["material"]);
+    material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
 }

@@ -1,5 +1,7 @@
 #include <memory>
 #include <algorithm>
+#include <string>
+#include <unordered_map>
 
 #include "Primitive/PrimNone.hpp"
 #include "dlLoader/dlLoader.hpp"

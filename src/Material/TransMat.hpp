@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+
 #include "Interfaces/Material/I_Material.hpp"
 
 #include <SFML/Graphics.hpp>

@@ -1,5 +1,6 @@
 #include <memory>
 #include <vector>
+#include <string>
 
 #include "Lights/Spot.hpp"
 #include "Scene/Scene.hpp"

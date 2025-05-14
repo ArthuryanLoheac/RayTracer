@@ -1,6 +1,7 @@
 #include <memory>
 #include <vector>
 #include <utility>
+#include <string>
 
 #include "Material/PerlinMat.hpp"
 

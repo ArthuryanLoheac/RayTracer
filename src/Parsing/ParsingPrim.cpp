@@ -1,6 +1,8 @@
 
 #include <iostream>
 #include <string>
+#include <unordered_map>
+#include <memory>
 #include <libconfig.h++>
 
 #include "Parsing/Parsing.hpp"
@@ -37,7 +39,8 @@ static sf::Color parseColor(const libconfig::Setting &color) {
     return sf::Color(rgb[0], rgb[1], rgb[2]);
 }
 
-static std::shared_ptr<I_Material> parseMaterial(const libconfig::Setting &material) {
+static std::shared_ptr<I_Material> parseMaterial(
+const libconfig::Setting &material) {
     std::unordered_map<std::string, std::any> settings;
     const libconfig::Setting &color = material.lookup("color");
     std::string materialName;
@@ -54,7 +57,8 @@ static std::shared_ptr<I_Material> parseMaterial(const libconfig::Setting &mater
 }
 
 void parseSphere(const libconfig::Setting &sphere) {
-    std::shared_ptr<I_Primitive> sphereObj = Factory<Prim>::i().create("sphere");
+    std::shared_ptr<I_Primitive> sphereObj =
+        Factory<Prim>::i().create("sphere");
     std::unordered_map<std::string, std::any> settings;
     const libconfig::Setting &position = sphere.lookup("position");
     const libconfig::Setting &rotation = sphere.lookup("rotation");
@@ -81,7 +85,7 @@ void Parsing::parsePrimitive(const libconfig::Setting &setting) {
     } catch (const libconfig::SettingNotFoundException &nfex) {
         throw ParsingError("Missing primitives in configuration file.");
     } catch (const libconfig::SettingTypeException &tex) {
-        throw ParsingError("Invalid type for primitives in configuration file.");
+        throw ParsingError("Invalid primitives type in configuration file.");
     }
 }
 

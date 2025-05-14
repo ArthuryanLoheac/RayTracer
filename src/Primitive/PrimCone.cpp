@@ -1,5 +1,6 @@
 #include <memory>
 #include <algorithm>
+#include <string>
 
 #include "Primitive/PrimCone.hpp"
 #include "dlLoader/dlLoader.hpp"
@@ -46,7 +47,6 @@ RayTracer::Vector3D PrimCone::getNormalAt(RayTracer::Point3D point) {
 }
 
 void PrimCone::Init(std::unordered_map<std::string, std::any> &settings) {
-
     rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
     position = std::any_cast<RayTracer::Point3D>(settings["position"]);
     angle = std::any_cast<float>(settings["angle"]);

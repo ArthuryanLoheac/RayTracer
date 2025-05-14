@@ -1,5 +1,6 @@
 #include <memory>
 #include <cmath>
+#include <string>
 
 #include "Primitive/PrimPlane.hpp"
 #include "dlLoader/dlLoader.hpp"
@@ -41,5 +42,5 @@ void PrimPlane::Init(std::unordered_map<std::string, std::any> &settings) {
     position = std::any_cast<RayTracer::Point3D>(settings["position"]);
     rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
     radius = std::any_cast<float>(settings["radius"]);
-    material = std::any_cast<std::shared_ptr<RayTracer::I_Material>>(settings["material"]);
+    material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
 }

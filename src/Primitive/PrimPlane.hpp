@@ -6,6 +6,7 @@
 */
 
 #pragma once
+#include <string>
 
 #include "Interfaces/Primitive/A_Primitive.hpp"
 #include "3dDatas/Point3D.hpp"

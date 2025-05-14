@@ -1,5 +1,6 @@
 #include <memory>
 #include <iostream>
+#include <string>
 
 #include "Material/ImageMat.hpp"
 
