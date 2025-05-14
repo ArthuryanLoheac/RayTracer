@@ -15,7 +15,7 @@ Camera::Camera() {
     aspect_ratio = 1;
     image_width = 800;
     vfov = 90;
-    origin = Point3D(0, 0, 0);
+    origin = Point3D(0, 3, -1);
     lookingAt = origin + Point3D(0, 0, 1);
 
     image_height = static_cast<int>(image_width / aspect_ratio);
@@ -27,7 +27,7 @@ Camera::Camera() {
     auto viewport_height = 2 * h * focal_length;
     auto viewport_width = viewport_height *
         (static_cast<double>(image_width)/image_height);
-    rotate(0, 0, 0);
+    rotate(30, 0, 0);
 
     screen = Rectangle3D(
         Point3D(origin.x + -viewport_width / 2,
