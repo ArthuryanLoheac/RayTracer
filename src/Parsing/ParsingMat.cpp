@@ -67,6 +67,18 @@ std::unordered_map<std::string, std::any> &settings) {
     settings["scale"] = parseScale(chess.lookup("scale"));
 }
 
+void parsePerlin(const libconfig::Setting &perlin,
+std::unordered_map<std::string, std::any> &settings) {
+    int octave = 0;
+
+    perlin.lookupValue("octave", octave);
+    settings["scale"] = parseScale(perlin.lookup("scale"));
+    settings["rotation"] = parseRotation(perlin.lookup("rotation"));
+    settings["color1"] = parseColor(perlin.lookup("color1"));
+    settings["color2"] = parseColor(perlin.lookup("color2"));
+    settings["octave"] = octave;
+}
+
 std::shared_ptr<I_Material> Parsing::parseMaterial(
 const libconfig::Setting &material) {
     std::unordered_map<std::string, std::any> settings;
