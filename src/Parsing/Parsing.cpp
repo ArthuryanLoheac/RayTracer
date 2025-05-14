@@ -34,7 +34,7 @@ void Parsing::parseSceneFile() {
         std::shared_ptr<Prim> ambient =
             Factory<Prim>::i().create("ambient");
         std::unordered_map<std::string, std::any> ambientSettings;
-        ambientSettings["intensity"] = std::make_any<float>(0.1);
+        ambientSettings["intensity"] = std::make_any<float>(0.2);
         ambientSettings["color"] = std::make_any<sf::Color>(sf::Color(255, 255, 255));
         ambientSettings["angle"] = std::make_any<float>(0.0);
         ambientSettings["position"] = std::make_any<Point3D>(Point3D(0, 0, 0));
@@ -45,19 +45,24 @@ void Parsing::parseSceneFile() {
         std::shared_ptr<Prim> spot =
             Factory<Prim>::i().create("spot");
         std::unordered_map<std::string, std::any> spotSettings;
-        spotSettings["intensity"] = std::make_any<float>(1);
+        spotSettings["intensity"] = std::make_any<float>(3);
         spotSettings["color"] = std::make_any<sf::Color>(sf::Color(255, 255, 255));
         spotSettings["angle"] = std::make_any<float>(180.0);
-        spotSettings["position"] = std::make_any<Point3D>(Point3D(0, 2, 2));
+        spotSettings["position"] = std::make_any<Point3D>(Point3D(0, 5, 2));
         spotSettings["rotation"] = std::make_any<Vector3D>(Vector3D(0, 0, 0));
         spot->Init(spotSettings);
         Scene::i->ObjectHead->AddChildren(spot);
 
 
         std::shared_ptr<Mat> mat =
-            Factory<Mat>::i().create("flat");
+            Factory<Mat>::i().create("perlin");
         std::unordered_map<std::string, std::any> matSettings;
-        matSettings["color"] = std::make_any<sf::Color>(sf::Color(255, 0, 0));
+        matSettings["color1"] = std::make_any<sf::Color>(sf::Color(255, 255, 255));
+        matSettings["color2"] = std::make_any<sf::Color>(sf::Color(0, 0, 255));
+        matSettings["repeatX"] = std::make_any<int>(64);
+        matSettings["repeatY"] = std::make_any<int>(64);
+        matSettings["scale"] = std::make_any<RayTracer::Vector3D>(RayTracer::Vector3D(1, 1, 0));
+        matSettings["rotation"] = std::make_any<RayTracer::Vector3D>(RayTracer::Vector3D(0, 0, 0));
         mat->Init(matSettings);
 
         // PLANE

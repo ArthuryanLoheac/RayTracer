@@ -46,6 +46,7 @@ Factory<T>::Factory() {
     _arg_list.insert({"perlin", {"plugins/mat_perlin.so", mat}});
     _arg_list.insert({"image", {"plugins/mat_image.so", mat}});
     _arg_list.insert({"trans", {"plugins/mat_trans.so", mat}});
+    _arg_list.insert({"reflect", {"plugins/mat_reflect.so", mat}});
 }
 
 template <typename T>

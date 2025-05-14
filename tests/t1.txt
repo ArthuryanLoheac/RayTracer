@@ -22,7 +22,7 @@ raytracer : {
                 };
                 radius = 1.5;
                 material = {
-                    name = "flat";
+                    name = "reflect";
                     color = {
                         r = 255;
                         g = 255;
