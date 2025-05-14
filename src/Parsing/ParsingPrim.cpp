@@ -69,6 +69,11 @@ void Parsing::parsePrimitives(const libconfig::Setting &primitives) {
             const libconfig::Setting &sphere = spheres[i];
             parsePrimitive(sphere, "sphere");
         }
+        const libconfig::Setting &planes = primitives.lookup("planes");
+        for (int i = 0; i < planes.getLength(); i++) {
+            const libconfig::Setting &plane = planes[i];
+            parsePrimitive(plane, "plane");
+        }
         }
     } catch (const libconfig::SettingNotFoundException &nfex) {
         throw ParsingError("Missing primitives in configuration file.");
