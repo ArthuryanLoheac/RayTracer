@@ -4,6 +4,8 @@
 #include "Primitive/PrimCone.hpp"
 #include "dlLoader/dlLoader.hpp"
 #include "Consts/const.hpp"
+#include "DesignPatterns/Factory.hpp"
+#include "Interfaces/Material/I_Material.hpp"
 
 extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
     return std::make_unique<PrimCone>();
@@ -61,7 +63,7 @@ void PrimCone::Init() {
     i++;
 
     try {
-        material = dlLoader<Mat>::getLib("libs/mat_image.so", "getMaterial");
+        material = Factory<RayTracer::I_Material>::i().create("trans");
     } catch (std::exception &e) {
         material = nullptr;
     }
