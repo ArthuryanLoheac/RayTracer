@@ -138,7 +138,7 @@ chess_mat:
 
 trans_mat:
 	@mkdir -p libs
-	$(COMPILER) -o libs/mat_trans.so -shared -fPIC $(SRC_MATERIAL) \
+	$(COMPILER) -o plugins/mat_trans.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/TransMat.cpp $(FLAGS_SO)
 
 perlin_mat:
