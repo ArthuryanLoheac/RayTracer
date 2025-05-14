@@ -125,7 +125,6 @@ my_Image &image) {
 int generateImagePreview(sf::RenderWindow &window, my_Image &image,
 int pixels) {
     sizePixelPreview = pixels;
-    RayTracer::Camera cam;
     std::vector<std::thread> threadVector;
     int configChanged = 0;
 
@@ -133,7 +132,7 @@ int pixels) {
     image.image.create(WIDTH, HEIGHT, sf::Color::Black);
     for (float i = 0; i < WIDTH; i += sizePixelPreview) {
         threadVector.emplace_back(generatePixelColumn, i,
-            std::ref(cam), std::ref(image));
+            std::ref(RayTracer::Camera::i()), std::ref(image));
     }
 
     for (auto &t : threadVector) {

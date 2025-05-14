@@ -121,7 +121,6 @@ my_Image &image, std::vector<std::unique_ptr<my_Image>> &images) {
 
 int generateImage(sf::RenderWindow &window, my_Image &image, std::string
     sceneFile) {
-    RayTracer::Camera cam;
     std::vector<std::thread> threadVector;
     std::vector<std::unique_ptr<my_Image>> images;
     int configChanged = 0;
@@ -130,7 +129,8 @@ int generateImage(sf::RenderWindow &window, my_Image &image, std::string
     createListImages(images, image);
     for (float i = 0; i < WIDTH; i++) {
         threadVector.emplace_back(generatePixelColumn, i,
-            std::ref(cam), std::ref(image), std::ref(images));
+            std::ref(RayTracer::Camera::i()),
+            std::ref(image), std::ref(images));
     }
 
     configChanged = displayImage(window, image, sceneFile);

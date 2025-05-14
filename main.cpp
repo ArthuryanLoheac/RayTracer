@@ -16,6 +16,7 @@
 #include "dlLoader/dlLoader.hpp"
 #include "Parsing/Parsing.hpp"
 #include "Scene/Scene.hpp"
+#include "Scene/Camera.hpp"
 #include "DesignPatterns/Factory.hpp"
 
 #include <SFML/Graphics.hpp>
@@ -77,6 +78,7 @@ int testMain(std::string sceneFile) {
 int main(int argc, char **argv) {
     RayTracer::Parsing parser;
     int hasFileChanged = 2;
+    RayTracer::Camera cam;
     srand(time(NULL));
 
     while (hasFileChanged != 0) {
