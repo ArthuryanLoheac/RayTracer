@@ -22,6 +22,8 @@
 #include "Generation/tools.hpp"
 #include "Draw/my_Image.hpp"
 #include "Draw/hit.hpp"
+#include <condition_variable>
+#include <queue>
 
 int sizePixelPreview = 16;
 
@@ -125,17 +127,43 @@ my_Image &image) {
 int generateImagePreview(sf::RenderWindow &window, my_Image &image,
 int pixels) {
     sizePixelPreview = pixels;
-    std::vector<std::thread> threadVector;
     int configChanged = 0;
+    // THREADS DATAS
+    std::vector<std::thread> threadVector;
+    unsigned int numThreads = std::thread::hardware_concurrency();
+    std::vector<std::thread> threadPool;
+    std::queue<float> taskQueue;
+    std::mutex queueMutex;
+    std::condition_variable cv;
+    bool done = false;
 
     showImage(window, image);
     image.image.create(WIDTH, HEIGHT, sf::Color::Black);
-    for (float i = 0; i < WIDTH; i += sizePixelPreview) {
-        threadVector.emplace_back(generatePixelColumn, i,
-            std::ref(RayTracer::Camera::i()), std::ref(image));
+
+    for (float i = 0; i < WIDTH; i += sizePixelPreview)
+        taskQueue.push(i);
+    for (unsigned int t = 0; t < numThreads; ++t) {
+        threadPool.emplace_back([&]() {
+            while (true) {
+                float i;
+                {
+                    std::unique_lock<std::mutex> lock(queueMutex);
+                    cv.wait(lock, [&]() { return !taskQueue.empty() || done; });
+                    if (done && taskQueue.empty()) break;
+                    i = taskQueue.front();
+                    taskQueue.pop();
+                }
+                generatePixelColumn(i, RayTracer::Camera::i(), image);
+            }
+        });
     }
 
-    for (auto &t : threadVector) {
+    {
+        std::unique_lock<std::mutex> lock(queueMutex);
+        done = true;
+    }
+    cv.notify_all();
+    for (auto &t : threadPool) {
         if (t.joinable())
             t.join();
     }
