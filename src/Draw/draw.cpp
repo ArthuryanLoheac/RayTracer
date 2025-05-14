@@ -99,8 +99,8 @@ RayTracer::Camera cam, std::unique_ptr<my_Image> &image) {
         RayTracer::Scene::i->ObjectHead, minRayLength);
 }
 
-static void generatePixelColumn(float i, RayTracer::Camera cam,
-my_Image &image, std::vector<std::unique_ptr<my_Image>> &images) {
+void generatePixelColumn(float i, RayTracer::Camera cam,
+    my_Image &image, std::vector<std::unique_ptr<my_Image>> &images) {
     for (float j = 0; j < HEIGHT; j++) {
         checkHitAt(i, j, 0, 0, cam, images[0]);
         checkHitAt(i, j, 0, -0.5f, cam, images[1]);

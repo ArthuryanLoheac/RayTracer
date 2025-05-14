@@ -58,9 +58,15 @@ static int setupAndRun(sf::RenderWindow &window, my_Image &image,
 }
 
 int testMain(std::string sceneFile) {
-    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Ray Tracer");
     my_Image image;
     image.image.create(WIDTH, HEIGHT, sf::Color::Black);
+
+    bool noWindowMode = true;
+    if (noWindowMode) {
+        return renderImage(image, sceneFile);
+    }
+
+    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Ray Tracer");
 
     try {
          return setupAndRun(window, image, sceneFile);
