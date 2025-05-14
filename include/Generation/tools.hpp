@@ -13,7 +13,7 @@
 
 // Create Image
 int generateImage(sf::RenderWindow &window, my_Image &image, std::string
-    sceneFile);
+    sceneFile, int aa);
 
 // Render image
 int displayImage(sf::RenderWindow &window, my_Image &image, std::string
@@ -34,12 +34,12 @@ void generatePixelColumn(float i, RayTracer::Camera cam,
 std::string getTimestampAsString();
 // ----> Antialiasing
 void createListImages(std::vector<std::unique_ptr<my_Image>> &images,
-    my_Image &image);
+    my_Image &image, int sampleCount);
 void averageAllImages(float i, float j, my_Image &image,
     std::vector<std::unique_ptr<my_Image>> &images);
 
 // Render image without window
-int renderImage(my_Image &image, std::string sceneFile);
+int renderImage(my_Image &image, std::string sceneFile, int aa);
 
 // Random tools
 bool hasFileChanged(std::string sceneFile);

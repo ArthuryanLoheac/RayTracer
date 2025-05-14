@@ -54,16 +54,16 @@ static int setupAndRun(sf::RenderWindow &window, my_Image &image,
 
 
     computeTreeValues(RayTracer::Scene::i->ObjectHead);
-    return generateImage(window, image, sceneFile);
+    return generateImage(window, image, sceneFile, 3);
 }
 
 int testMain(std::string sceneFile) {
     my_Image image;
     image.image.create(WIDTH, HEIGHT, sf::Color::Black);
 
-    bool noWindowMode = true;
+    bool noWindowMode = false;
     if (noWindowMode) {
-        return renderImage(image, sceneFile);
+        return renderImage(image, sceneFile, 3);
     }
 
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Ray Tracer");

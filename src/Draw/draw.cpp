@@ -101,29 +101,36 @@ RayTracer::Camera cam, std::unique_ptr<my_Image> &image) {
 
 void generatePixelColumn(float i, RayTracer::Camera cam,
     my_Image &image, std::vector<std::unique_ptr<my_Image>> &images) {
+
+    int samplesPerSide = static_cast<int>(std::sqrt(images.size()));
+    float stepSize = 1.0f / samplesPerSide;
+
     for (float j = 0; j < HEIGHT; j++) {
-        checkHitAt(i, j, 0, 0, cam, images[0]);
-        checkHitAt(i, j, 0, -0.5f, cam, images[1]);
-        checkHitAt(i, j, 0, 0.5f, cam, images[2]);
-        checkHitAt(i, j, -0.5f, 0, cam, images[3]);
-        checkHitAt(i, j, -0.5f, -0.5f, cam, images[4]);
-        checkHitAt(i, j, -0.5f, 0.5f, cam, images[5]);
-        checkHitAt(i, j, 0.5f, 0, cam, images[6]);
-        checkHitAt(i, j, 0.5f, -0.5f, cam, images[7]);
-        checkHitAt(i, j, 0.5f, 0.5f, cam, images[8]);
+        int sampleIndex = 0;
+        for (int sy = 0; sy < samplesPerSide; sy++) {
+            for (int sx = 0; sx < samplesPerSide; sx++) {
+                float offsetX = (sx * stepSize) - 0.5f + (stepSize / 2.0f);
+                float offsetY = (sy * stepSize) - 0.5f + (stepSize / 2.0f);
+                if (sampleIndex < static_cast<int>(images.size())) {
+                    checkHitAt(i, j, offsetX, offsetY, cam,
+                        images[sampleIndex]);
+                    sampleIndex++;
+                }
+            }
+        }
         averageAllImages(i, j, image, images);
     }
 }
 
 int generateImage(sf::RenderWindow &window, my_Image &image, std::string
-    sceneFile) {
+    sceneFile, int aa) {
     RayTracer::Camera cam;
     std::vector<std::thread> threadVector;
     std::vector<std::unique_ptr<my_Image>> images;
     int configChanged = 0;
 
     showImage(window, image);
-    createListImages(images, image);
+    createListImages(images, image, aa * aa);
     for (float i = 0; i < WIDTH; i++) {
         threadVector.emplace_back(generatePixelColumn, i,
             std::ref(cam), std::ref(image), std::ref(images));

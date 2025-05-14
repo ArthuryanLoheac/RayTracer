@@ -8,6 +8,7 @@ class Parsing {
  private:
      std::string sceneFile;
      bool noWindowMode;
+     int aa;
 
  public:
      void parseArgs(int argc, char **argv);

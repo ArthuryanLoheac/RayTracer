@@ -29,8 +29,8 @@ std::vector<std::unique_ptr<my_Image>> &images) {
 }
 
 void createListImages(std::vector<std::unique_ptr<my_Image>> &images,
-    my_Image &image) {
-    for (int i = 0; i < 9; i++) {
+    my_Image &image, int sampleCount = 9) {
+    for (int i = 0; i < sampleCount; i++) {
         auto imageTmp = std::make_unique<my_Image>(image.getSizeX(),
             image.getSizeY(), image.getPixel(0, 0));
         images.push_back(std::move(imageTmp));

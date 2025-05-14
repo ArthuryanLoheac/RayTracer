@@ -15,7 +15,7 @@
 #include "Scene/Scene.hpp"
 #include "DesignPatterns/Factory.hpp"
 
-int renderImage(my_Image &image, std::string sceneFile) {
+int renderImage(my_Image &image, std::string sceneFile, int aa) {
     // ! TO DELETE AFTER CONFIG FILE HANDLING
 
     RayTracer::Scene::i->ObjectHead = Factory<Prim>::i().create("none");
@@ -47,7 +47,7 @@ int renderImage(my_Image &image, std::string sceneFile) {
 
     (void)sceneFile;
 
-    createListImages(images, image);
+    createListImages(images, image, aa * aa);
     for (float i = 0; i < WIDTH; i++) {
         threadVector.emplace_back(generatePixelColumn, i,
             std::ref(cam), std::ref(image), std::ref(images));
