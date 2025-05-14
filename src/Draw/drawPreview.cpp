@@ -8,6 +8,8 @@
 #include <thread>
 #include <mutex>
 #include <vector>
+#include <condition_variable>
+#include <queue>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -22,8 +24,6 @@
 #include "Generation/tools.hpp"
 #include "Draw/my_Image.hpp"
 #include "Draw/hit.hpp"
-#include <condition_variable>
-#include <queue>
 
 int sizePixelPreview = 16;
 
