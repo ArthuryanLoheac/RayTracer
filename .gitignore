@@ -21,3 +21,4 @@ vgcore*
 *.log
 *cfg
 *.ppm
+.DS_Store

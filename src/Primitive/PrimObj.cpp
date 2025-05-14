@@ -25,7 +25,7 @@ void PrimObj::Init() {
     rotation = RayTracer::Vector3D(0, M_PI, 0);
     scale = RayTracer::Point3D(0.25, 0.25, 0.25);
 
-    filename = "assets/shrek.obj";
+    filename = "tests/obj_file/shrek.obj";
 
     try {
         loadObjFile(filename);
