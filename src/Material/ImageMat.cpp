@@ -8,17 +8,12 @@ extern "C" std::unique_ptr<RayTracer::I_Material> getMaterial() {
 }
 
 ImageMat::ImageMat() {
-    Init();
 }
 
-void ImageMat::Init() {
-    scale = RayTracer::Vector3D(1, 1, 0);
-    rotation = RayTracer::Vector3D(0.5f, 0, 0);
-    img = sf::Image();
-    if (!img.loadFromFile("assets/images.jpeg")) {
-        std::cerr << "Error loading image" << std::endl;
-        img.create(100, 100, sf::Color(234, 58, 247));
-    }
+void ImageMat::Init(std::unordered_map<std::string, std::any> &settings) {
+    scale = std::any_cast<RayTracer::Vector3D>(settings["scale"]);
+    rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
+    img = std::any_cast<sf::Image>(settings["image"]);
 }
 
 sf::Color ImageMat::getColorAt(float u, float v) {
