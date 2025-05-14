@@ -16,6 +16,8 @@ class Parsing {
      void parsePrimitives(const libconfig::Setting &primitives);
      void parsePrimitive(const libconfig::Setting &primitive,
         const std::string &type);
+     std::shared_ptr<I_Material> parseMaterial(
+        const libconfig::Setting &material);
     //  void parseLights(const libconfig::Setting &lights);
 
      class ParsingError : public std::exception {
