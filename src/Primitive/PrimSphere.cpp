@@ -56,10 +56,4 @@ void PrimSphere::Init() {
         material = Factory<Mat>::i().create("image");
     }
     j++;
-
-    //try {
-    //    material = Factory<Mat>::i().create("chess");
-    //} catch (std::exception &e) {
-    //    material = nullptr;
-    //}
 }

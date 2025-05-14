@@ -8,6 +8,8 @@
 #include <thread>
 #include <mutex>
 #include <vector>
+#include <condition_variable>
+#include <queue>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -23,6 +25,8 @@
 #include "Draw/my_Image.hpp"
 #include "Draw/hit.hpp"
 
+int sizePixelPreview = 16;
+
 static void editColor(sf::Color &c, sf::Vector3f &cLight,
     sf::Color &origin) {
     // Edit color with luminescence values
@@ -37,7 +41,7 @@ static void editColor(sf::Color &c, sf::Vector3f &cLight,
     float percentA = c.a / 255.f;
     c = sf::Color(r * percentA + (origin.r * (1 - percentA)),
         g * percentA + (origin.g * (1 - percentA)),
-        b * percentA + (origin.b * (1 - percentA)));
+        b * percentA + (origin.b * (1 - percentA)), 100);
 }
 
 static void computeLuminescence(RayTracer::Point3D &intersection,
@@ -51,11 +55,21 @@ std::shared_ptr<Prim> &s, sf::Vector3f &cLight) {
     }
 }
 
-static void hit(std::unique_ptr<my_Image> &image, int i, int j,
+static void setPixels(my_Image &image, int i, int j, sf::Color c) {
+    for (int x = 0; x < sizePixelPreview; ++x) {
+        for (int y = 0; y < sizePixelPreview; ++y) {
+            if (i + x >= WIDTH || j + y >= HEIGHT)
+                continue;
+            image.setPixel(i + x, j + y, c);
+        }
+    }
+}
+
+static void hit(my_Image &image, int i, int j,
 hitDatas &datas) {
     try {
         // Get base colors
-        sf::Color origin = image->getPixel(i, j);
+        sf::Color origin = image.getPixel(i, j);
         RayTracer::Vector3D uv = datas.obj->getUV(datas.intersection);
         sf::Color c = datas.obj->getMaterial()->getColorAt(uv.x, uv.y);
         sf::Vector3f cLight = sf::Vector3f(0, 0, 0);
@@ -63,16 +77,16 @@ hitDatas &datas) {
         computeLuminescence(datas.intersection, datas.obj, cLight);
 
         editColor(c, cLight, origin);
-        image->setPixel(i, j, c);
+        setPixels(image, i, j, c);
     } catch (std::exception &e) {
-        image->setPixel(i, j,
+        setPixels(image, i, j,
             sf::Color(234, 58, 247));  // error pink
         return;
     }
 }
 
 static void checkHitsAtPixel(double i, double j, RayTracer::Ray r,
-std::unique_ptr<my_Image> &image, std::shared_ptr<Prim> &obj,
+my_Image &image, std::shared_ptr<Prim> &obj,
 std::vector<hitDatas> &lst) {
     RayTracer::Point3D intersection;
     if (obj->hits(r, intersection)) {
@@ -87,7 +101,7 @@ std::vector<hitDatas> &lst) {
 }
 
 static void checkHitAt(float i, float j, float iplus, float jplus,
-RayTracer::Camera cam, std::unique_ptr<my_Image> &image) {
+RayTracer::Camera cam, my_Image &image) {
     RayTracer::Ray r = cam.ray((i + iplus) / WIDTH, (j + jplus) / HEIGHT);
     std::vector<hitDatas> lst;
 
@@ -104,40 +118,55 @@ RayTracer::Camera cam, std::unique_ptr<my_Image> &image) {
 }
 
 static void generatePixelColumn(float i, RayTracer::Camera cam,
-my_Image &image, std::vector<std::unique_ptr<my_Image>> &images) {
-    for (float j = 0; j < HEIGHT; j++) {
-        checkHitAt(i, j, 0, 0, cam, images[0]);
-        checkHitAt(i, j, 0, -0.5f, cam, images[1]);
-        checkHitAt(i, j, 0, 0.5f, cam, images[2]);
-        checkHitAt(i, j, -0.5f, 0, cam, images[3]);
-        checkHitAt(i, j, -0.5f, -0.5f, cam, images[4]);
-        checkHitAt(i, j, -0.5f, 0.5f, cam, images[5]);
-        checkHitAt(i, j, 0.5f, 0, cam, images[6]);
-        checkHitAt(i, j, 0.5f, -0.5f, cam, images[7]);
-        checkHitAt(i, j, 0.5f, 0.5f, cam, images[8]);
-        averageAllImages(i, j, image, images);
+my_Image &image) {
+    for (float j = 0; j < HEIGHT; j += sizePixelPreview) {
+        checkHitAt(i, j, 0, 0, cam, image);
     }
 }
 
-int generateImage(sf::RenderWindow &window, my_Image &image, std::string
-    sceneFile) {
-    std::vector<std::thread> threadVector;
-    std::vector<std::unique_ptr<my_Image>> images;
+int generateImagePreview(sf::RenderWindow &window, my_Image &image,
+int pixels) {
+    sizePixelPreview = pixels;
     int configChanged = 0;
+    // THREADS DATAS
+    std::vector<std::thread> threadVector;
+    unsigned int numThreads = std::thread::hardware_concurrency();
+    std::vector<std::thread> threadPool;
+    std::queue<float> taskQueue;
+    std::mutex queueMutex;
+    std::condition_variable cv;
+    bool done = false;
 
     showImage(window, image);
-    createListImages(images, image);
-    for (float i = 0; i < WIDTH; i++) {
-        threadVector.emplace_back(generatePixelColumn, i,
-            std::ref(RayTracer::Camera::i()),
-            std::ref(image), std::ref(images));
+    image.image.create(WIDTH, HEIGHT, sf::Color::Black);
+
+    for (float i = 0; i < WIDTH; i += sizePixelPreview)
+        taskQueue.push(i);
+    for (unsigned int t = 0; t < numThreads; ++t) {
+        threadPool.emplace_back([&]() {
+            while (true) {
+                float i;
+                {
+                    std::unique_lock<std::mutex> lock(queueMutex);
+                    cv.wait(lock, [&]() { return !taskQueue.empty() || done; });
+                    if (done && taskQueue.empty()) break;
+                    i = taskQueue.front();
+                    taskQueue.pop();
+                }
+                generatePixelColumn(i, RayTracer::Camera::i(), image);
+            }
+        });
     }
 
-    configChanged = displayImage(window, image, sceneFile);
-
-    for (auto &t : threadVector) {
+    {
+        std::unique_lock<std::mutex> lock(queueMutex);
+        done = true;
+    }
+    cv.notify_all();
+    for (auto &t : threadPool) {
         if (t.joinable())
             t.join();
     }
+    showImage(window, image);
     return configChanged;
 }

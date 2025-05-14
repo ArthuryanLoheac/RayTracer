@@ -13,6 +13,7 @@
 // Create Image
 int generateImage(sf::RenderWindow &window, my_Image &image, std::string
     sceneFile);
+int generateImagePreview(sf::RenderWindow &window, my_Image &image, int pixels);
 
 // Render image
 int displayImage(sf::RenderWindow &window, my_Image &image, std::string

@@ -16,6 +16,7 @@
 #include "dlLoader/dlLoader.hpp"
 #include "Parsing/Parsing.hpp"
 #include "Scene/Scene.hpp"
+#include "Scene/Camera.hpp"
 #include "DesignPatterns/Factory.hpp"
 
 #include <SFML/Graphics.hpp>
@@ -55,6 +56,8 @@ static int setupAndRun(sf::RenderWindow &window, my_Image &image,
         create("sphere"));
 
     computeTreeValues(RayTracer::Scene::i->ObjectHead);
+    for (int i = WIDTH /2; i >= 8; i /= 2)
+        generateImagePreview(window, image, i);
     return generateImage(window, image, sceneFile);
 }
 
@@ -74,6 +77,7 @@ int testMain(std::string sceneFile) {
 int main(int argc, char **argv) {
     RayTracer::Parsing parser;
     int hasFileChanged = 2;
+    RayTracer::Camera cam;
     srand(time(NULL));
 
     while (hasFileChanged != 0) {
