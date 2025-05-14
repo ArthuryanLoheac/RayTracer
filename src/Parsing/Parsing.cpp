@@ -29,9 +29,9 @@ void Parsing::parseSceneFile() {
         cfg.readFile(sceneFile.c_str());
         const libconfig::Setting &raytracer = cfg.lookup("raytracer");
             Scene::i->ObjectHead = Factory<Prim>::i().create("none");
-        // parseCamera(raytracer);
-        parsePrimitive(raytracer);
-        // parseLights(raytracer);
+        // parseCamera(raytracer.lookup("camera"));
+        parsePrimitives(raytracer.lookup("primitives"));
+        // parseLights(raytracer.lookup("lights"));
     } catch (const libconfig::FileIOException &fioex) {
         throw ParsingError("I/O error while reading file.");
     } catch (const libconfig::ConfigException &ex) {
