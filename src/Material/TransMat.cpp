@@ -7,6 +7,7 @@ extern "C" std::unique_ptr<RayTracer::I_Material> getMaterial() {
 }
 
 void TransMat::Init(std::unordered_map<std::string, std::any> &settings) {
+    (void)settings;
 }
 
 sf::Color TransMat::getColorAt(float x, float y) {
