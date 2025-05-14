@@ -3,6 +3,7 @@
 #include <cmath>
 #include <utility>
 #include <limits>
+#include <string>
 
 #include "Primitive/PrimLimCylinder.hpp"
 #include "dlLoader/dlLoader.hpp"
