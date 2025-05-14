@@ -11,7 +11,6 @@ extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
 }
 
 PrimSphere::PrimSphere() {
-    Init();
 }
 
 bool PrimSphere::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
@@ -42,23 +41,9 @@ RayTracer::Vector3D PrimSphere::getUV(RayTracer::Point3D point) {
     return RayTracer::Vector3D(u, v, 0);
 }
 
-void PrimSphere::Init() {
-    Factory factory;
-    static int i = 0;
-
-    rotation = RayTracer::Vector3D(2, 0, 0);
-    if (i == 0) {
-        position = RayTracer::Point3D(0, 0, 5);
-        radius = 2.f;
-    } else {
-        position = RayTracer::Point3D(0, .1f, 5);
-        radius = 0.2f;
-    }
-    i++;
-
-    try {
-        material = factory.createMaterial("trans");
-    } catch (std::exception &e) {
-        material = nullptr;
-    }
+void PrimSphere::Init(std::unordered_map<std::string, std::any> &settings) {
+    rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
+    position = std::any_cast<RayTracer::Point3D>(settings["position"]);
+    radius = std::any_cast<float>(settings["radius"]);
+    material = std::any_cast<std::shared_ptr<RayTracer::I_Material>>(settings["material"]);
 }
