@@ -22,7 +22,7 @@ PrimObj::PrimObj() {
 
 void PrimObj::Init() {
     position = RayTracer::Point3D(0, 0, 5);
-    rotation = RayTracer::Vector3D(0, 0, 0);
+    rotation = RayTracer::Vector3D(0, M_PI, 0);
     scale = RayTracer::Point3D(0.25, 0.25, 0.25);
 
     filename = "assets/shrek.obj";
@@ -135,6 +135,22 @@ bool PrimObj::rayTriangleIntersect(const Triangle& triangle,
     RayTracer::Point3D v1 = triangle.v1;
     RayTracer::Point3D v2 = triangle.v2;
 
+    if (rotation.y != 0) {
+        float cosY = cos(rotation.y);
+        float sinY = sin(rotation.y);
+        float newX0 = v0.x * cosY + v0.z * sinY;
+        float newZ0 = -v0.x * sinY + v0.z * cosY;
+        v0.x = newX0;
+        v0.z = newZ0;
+        float newX1 = v1.x * cosY + v1.z * sinY;
+        float newZ1 = -v1.x * sinY + v1.z * cosY;
+        v1.x = newX1;
+        v1.z = newZ1;
+        float newX2 = v2.x * cosY + v2.z * sinY;
+        float newZ2 = -v2.x * sinY + v2.z * cosY;
+        v2.x = newX2;
+        v2.z = newZ2;
+    }
     RayTracer::Vector3D scaleVec(scale.x, scale.y, scale.z);
     v0 = RayTracer::Point3D(v0.x * scaleVec.x, v0.y * scaleVec.y, v0.z *
         scaleVec.z) + position;
@@ -212,6 +228,23 @@ RayTracer::Vector3D PrimObj::getNormalAt(RayTracer::Point3D point) {
         RayTracer::Point3D v1 = triangle.v1;
         RayTracer::Point3D v2 = triangle.v2;
 
+        if (rotation.y != 0) {
+            float cosY = cos(rotation.y);
+            float sinY = sin(rotation.y);
+            float newX0 = v0.x * cosY + v0.z * sinY;
+            float newZ0 = -v0.x * sinY + v0.z * cosY;
+            v0.x = newX0;
+            v0.z = newZ0;
+            float newX1 = v1.x * cosY + v1.z * sinY;
+            float newZ1 = -v1.x * sinY + v1.z * cosY;
+            v1.x = newX1;
+            v1.z = newZ1;
+            float newX2 = v2.x * cosY + v2.z * sinY;
+            float newZ2 = -v2.x * sinY + v2.z * cosY;
+            v2.x = newX2;
+            v2.z = newZ2;
+        }
+
         RayTracer::Vector3D scaleVec(scale.x, scale.y, scale.z);
         v0 = RayTracer::Point3D(v0.x * scaleVec.x, v0.y * scaleVec.y, v0.z *
             scaleVec.z) + position;
@@ -229,7 +262,16 @@ RayTracer::Vector3D PrimObj::getNormalAt(RayTracer::Point3D point) {
 
         if (dist < minDist) {
             minDist = dist;
-            normal = triangle.normal;
+            RayTracer::Vector3D rotNormal = triangle.normal;
+            if (rotation.y != 0) {
+                float cosY = cos(rotation.y);
+                float sinY = sin(rotation.y);
+                float newNormalX = rotNormal.x * cosY + rotNormal.z * sinY;
+                float newNormalZ = -rotNormal.x * sinY + rotNormal.z * cosY;
+                rotNormal.x = newNormalX;
+                rotNormal.z = newNormalZ;
+            }
+            normal = rotNormal;
         }
     }
     return normal.normalize();
