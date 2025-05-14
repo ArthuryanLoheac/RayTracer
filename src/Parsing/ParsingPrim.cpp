@@ -28,6 +28,22 @@ static Vector3D parseRotation(const libconfig::Setting &rotation) {
     return Vector3D(rot[0], rot[1], rot[2]);
 }
 
+static std::shared_ptr<I_Material> parseMaterial(const libconfig::Setting &material) {
+    std::unordered_map<std::string, std::any> settings;
+    const libconfig::Setting &color = material.lookup("color");
+    std::string materialName;
+    int rgb[3] = {0, 0, 0};
+
+    material.lookupValue("name", materialName);
+    color.lookupValue("r", rgb[0]);
+    color.lookupValue("g", rgb[1]);
+    color.lookupValue("b", rgb[2]);
+    settings["color"] = parseColor(material.lookup("color"));
+    std::shared_ptr<I_Material> mat = Factory::i().createMaterial(materialName);
+    mat->Init(settings);
+    return mat;
+}
+
 void parseSphere(const libconfig::Setting &sphere) {
     std::shared_ptr<I_Primitive> sphereObj = Factory::i().create("sphere");
     std::unordered_map<std::string, std::any> settings;
