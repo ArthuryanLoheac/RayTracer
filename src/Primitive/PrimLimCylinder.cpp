@@ -93,30 +93,49 @@ bool PrimLimCylinder::hits
 }
 
 RayTracer::Vector3D PrimLimCylinder::getNormalAt(RayTracer::Point3D point) {
-    RayTracer::Point3D posUpdated = position;
-    posUpdated.y = point.y;
-    return (point - posUpdated).normalize();
+    RayTracer::Vector3D baseToPoint = point - position;
+
+    float proj = baseToPoint.dot(rotation);
+
+    const float height = this->height;
+
+    if (proj <= 1e-4f)
+        return -rotation;
+
+    if (proj >= height - 1e-4f)
+        return rotation;
+
+    RayTracer::Point3D projected = position + rotation * proj;
+    return (point - projected).normalize();
 }
 
 void PrimLimCylinder::Init() {
     rotation = RayTracer::Vector3D(0, 1, 0);
-    position = RayTracer::Point3D(0, -2, 4);
+    position = RayTracer::Point3D(0, -2, 5);
     height = 1;
     radius = 1.f;
 
     try {
-        material = Factory<Mat>::i().create("perlin");
+        material = Factory<Mat>::i().create("image");
     } catch (std::exception &e) {
         material = nullptr;
     }
 }
 
 RayTracer::Vector3D PrimLimCylinder::getUV(RayTracer::Point3D point) {
-    float theta = std::atan2(point.x, point.z);
-    float raw_u = theta / (2 * M_PI);
-    float u = 1 - (raw_u + 0.5);
+    RayTracer::Vector3D local = point - position;
 
-    float v = point.y;
+    float v = local.dot(rotation) / height;
+
+    RayTracer::Vector3D axisX = rotation.orthogonal();
+    RayTracer::Vector3D axisZ = rotation.cross(axisX);
+
+    RayTracer::Vector3D radial = local - rotation * local.dot(rotation);
+
+    float x = radial.dot(axisX);
+    float z = radial.dot(axisZ);
+    float theta = std::atan2(z, x);
+    float u = (theta + M_PI) / (2 * M_PI);
 
     return RayTracer::Vector3D(u, v, 0);
 }
