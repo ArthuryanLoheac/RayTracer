@@ -60,6 +60,13 @@ static sf::Image parseImage(const libconfig::Setting &image) {
     return img;
 }
 
+void parseChess(const libconfig::Setting &chess,
+std::unordered_map<std::string, std::any> &settings) {
+    settings["color1"] = parseColor(chess.lookup("color1"));
+    settings["color2"] = parseColor(chess.lookup("color2"));
+    settings["scale"] = parseScale(chess.lookup("scale"));
+}
+
 std::shared_ptr<I_Material> Parsing::parseMaterial(
 const libconfig::Setting &material) {
     std::unordered_map<std::string, std::any> settings;
