@@ -23,9 +23,9 @@ PrimObj::PrimObj() {
 void PrimObj::Init() {
     position = RayTracer::Point3D(0, 0, 5);
     rotation = RayTracer::Vector3D(0, 0, 0);
-    scale = RayTracer::Point3D(10, 10, 10);
+    scale = RayTracer::Point3D(0.25, 0.25, 0.25);
 
-    filename = "assets/gun.obj";
+    filename = "assets/shrek.obj";
 
     try {
         loadObjFile(filename);
@@ -37,13 +37,57 @@ void PrimObj::Init() {
     }
 }
 
+void PrimObj::faceCreation(std::istringstream &iss) {
+    std::string vertex;
+    std::vector<int> vertexIndices;
+    std::vector<int> textureIndices;
+    std::vector<int> normalIndices;
+
+    while (iss >> vertex) {
+        std::istringstream vertexIss(vertex);
+        std::string indexStr;
+        std::getline(vertexIss, indexStr, '/');
+        if (!indexStr.empty()) {
+            vertexIndices.push_back(std::stoi(indexStr));
+        }
+        std::getline(vertexIss, indexStr, '/');
+        if (!indexStr.empty()) {
+            textureIndices.push_back(std::stoi(indexStr));
+        }
+        std::getline(vertexIss, indexStr, '/');
+        if (!indexStr.empty()) {
+            normalIndices.push_back(std::stoi(indexStr));
+        }
+    }
+
+    if (vertexIndices.size() >= 3) {
+        for (size_t i = 0; i < vertexIndices.size() - 2; ++i) {
+            Triangle triangle;
+            triangle.v0 = vertices[vertexIndices[0]];
+            triangle.v1 = vertices[vertexIndices[i+1]];
+            triangle.v2 = vertices[vertexIndices[i+2]];
+            if (normalIndices.empty()) {
+                RayTracer::Vector3D edge1 = triangle.v1 - triangle.v0;
+                RayTracer::Vector3D edge2 = triangle.v2 - triangle.v0;
+                triangle.normal = RayTracer::Vector3D(
+                    edge1.y * edge2.z - edge1.z * edge2.y,
+                    edge1.z * edge2.x - edge1.x * edge2.z,
+                    edge1.x * edge2.y - edge1.y * edge2.x)
+                .normalize();
+            } else {
+                triangle.normal = normals[normalIndices[0]];
+            }
+            triangles.push_back(triangle);
+        }
+    }
+}
+
 bool PrimObj::loadObjFile(const std::string& path) {
     std::ifstream file(path);
     if (!file.is_open()) {
         std::cerr << "Failed to open OBJ file: " << path << std::endl;
         return false;
     }
-
     vertices.clear();
     normals.clear();
     textureCoords.clear();
@@ -73,46 +117,7 @@ bool PrimObj::loadObjFile(const std::string& path) {
             iss >> u >> v;
             textureCoords.push_back(RayTracer::Vector3D(u, v, 0));
         } else if (type == "f") {
-            std::string vertex;
-            std::vector<int> vertexIndices;
-            std::vector<int> textureIndices;
-            std::vector<int> normalIndices;
-            while (iss >> vertex) {
-                std::istringstream vertexIss(vertex);
-                std::string indexStr;
-                std::getline(vertexIss, indexStr, '/');
-                if (!indexStr.empty()) {
-                    vertexIndices.push_back(std::stoi(indexStr));
-                }
-                std::getline(vertexIss, indexStr, '/');
-                if (!indexStr.empty()) {
-                    textureIndices.push_back(std::stoi(indexStr));
-                }
-                std::getline(vertexIss, indexStr, '/');
-                if (!indexStr.empty()) {
-                    normalIndices.push_back(std::stoi(indexStr));
-                }
-            }
-            if (vertexIndices.size() >= 3) {
-                for (size_t i = 0; i < vertexIndices.size() - 2; ++i) {
-                    Triangle triangle;
-                    triangle.v0 = vertices[vertexIndices[0]];
-                    triangle.v1 = vertices[vertexIndices[i+1]];
-                    triangle.v2 = vertices[vertexIndices[i+2]];
-                    if (normalIndices.empty()) {
-                        RayTracer::Vector3D edge1 = triangle.v1 - triangle.v0;
-                        RayTracer::Vector3D edge2 = triangle.v2 - triangle.v0;
-                        triangle.normal = RayTracer::Vector3D(
-                            edge1.y * edge2.z - edge1.z * edge2.y,
-                            edge1.z * edge2.x - edge1.x * edge2.z,
-                            edge1.x * edge2.y - edge1.y * edge2.x)
-                        .normalize();
-                    } else {
-                        triangle.normal = normals[normalIndices[0]];
-                    }
-                    triangles.push_back(triangle);
-                }
-            }
+            faceCreation(iss);
         }
     }
     return true;

@@ -20,6 +20,7 @@ class PrimObj : public RayTracer::A_Primitive {
     std::vector<RayTracer::Vector3D> textureCoords;
     std::vector<Triangle> triangles;
     bool loadObjFile(const std::string& path);
+    void faceCreation(std::istringstream &iss);
     bool rayTriangleIntersect(const Triangle& triangle,
         const RayTracer::Ray& ray, RayTracer::Point3D& intersection, float& t);
 
