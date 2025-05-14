@@ -40,7 +40,7 @@ static Point3D parseScale(const libconfig::Setting &scale) {
 }
 
 void Parsing::parsePrimitive(const libconfig::Setting &primitive,
-    const std::string &type) {
+const std::string &type) {
     std::shared_ptr<I_Primitive> primObj =
         Factory<Prim>::i().create(type);
     std::unordered_map<std::string, std::any> settings;
