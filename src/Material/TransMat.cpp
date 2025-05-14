@@ -12,7 +12,5 @@ void TransMat::Init() {
 sf::Color TransMat::getColorAt(float x, float y) {
     (void)x;
     (void)y;
-    sf::Color color(255, 255, 255);
-    color.a = 125;
-    return (color);
+    return sf::Color(255, 255, 255, 125);
 }

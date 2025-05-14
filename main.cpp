@@ -46,12 +46,9 @@ static int setupAndRun(sf::RenderWindow &window, my_Image &image,
     RayTracer::Scene::i->ObjectHead->AddChildren(Factory<Prim>::i().
         create("sphere"));
     RayTracer::Scene::i->ObjectHead->AddChildren(Factory<Prim>::i().
-        create("plane"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(Factory<Prim>::i().
         create("cone"));
     RayTracer::Scene::i->ObjectHead->AddChildren(Factory<Prim>::i().
-        create("cylinder"));
-
+        create("plane"));
 
     computeTreeValues(RayTracer::Scene::i->ObjectHead);
     return generateImage(window, image, sceneFile);
