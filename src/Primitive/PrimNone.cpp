@@ -10,7 +10,8 @@ extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
 }
 
 PrimNone::PrimNone() {
-    Init();
+    std::unordered_map<std::string, std::any> settings;
+    Init(settings);
 }
 
 bool PrimNone::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
@@ -24,7 +25,8 @@ RayTracer::Vector3D PrimNone::getNormalAt(RayTracer::Point3D point) {
     return RayTracer::Vector3D(0, 0, 0);
 }
 
-void PrimNone::Init() {
+void PrimNone::Init(std::unordered_map<std::string, std::any> &settings) {
+    (void)settings;
     position = RayTracer::Point3D(0, 0, 0);
     radius = 0.f;
     material = nullptr;
