@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-
+#include <string>
 
 #include "Interfaces/Material/I_Material.hpp"
 #include "3dDatas/Point3D.hpp"
@@ -27,6 +27,6 @@ class PerlinMat : public RayTracer::I_Material {
     PerlinMat();
     ~PerlinMat() override = default;
 
-    void Init() override;
+    void Init(std::unordered_map<std::string, std::any> &settings) override;
     sf::Color getColorAt(float u, float v) override;
 };

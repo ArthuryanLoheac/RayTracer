@@ -1,6 +1,7 @@
 #include <memory>
 #include <vector>
 #include <utility>
+#include <string>
 
 #include "Material/PerlinMat.hpp"
 
@@ -9,7 +10,6 @@ extern "C" std::unique_ptr<RayTracer::I_Material> getMaterial() {
 }
 
 PerlinMat::PerlinMat() {
-    Init();
 }
 
 float PerlinMat::Fade(float t) {
@@ -86,14 +86,14 @@ float PerlinMat::Noise2D(float x, float y) {
         Lerp(v, dotBottomRight, dotTopRight));
 }
 
-void PerlinMat::Init() {
-    scale = RayTracer::Vector3D(1, 1, 0);
-    rotation = RayTracer::Vector3D(50, 50, 0);
+void PerlinMat::Init(std::unordered_map<std::string, std::any> &settings) {
+    scale = std::any_cast<RayTracer::Vector3D>(settings["scale"]);
+    rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
+    c1 = std::any_cast<sf::Color>(settings["color1"]);
+    c2 = std::any_cast<sf::Color>(settings["color2"]);
+    repeatX = std::any_cast<int>(settings["repeatX"]);
+    repeatY = std::any_cast<int>(settings["repeatY"]);
     Permutation = MakePermutation();
-    c1 = sf::Color(66, 66, 66);
-    c2 = sf::Color(231, 25, 25);
-    repeatX = 64;
-    repeatY = 64;
 }
 
 sf::Color PerlinMat::getColorAt(float u, float v) {
