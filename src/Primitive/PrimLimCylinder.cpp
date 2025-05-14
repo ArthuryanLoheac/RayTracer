@@ -14,7 +14,6 @@ extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
 }
 
 PrimLimCylinder::PrimLimCylinder() {
-    Init();
 }
 
 static bool returnCollisionLimCyl
@@ -109,17 +108,13 @@ RayTracer::Vector3D PrimLimCylinder::getNormalAt(RayTracer::Point3D point) {
     return (point - projected).normalize();
 }
 
-void PrimLimCylinder::Init() {
-    rotation = RayTracer::Vector3D(0, 1, 0);
-    position = RayTracer::Point3D(0, -2, 5);
-    height = 1;
-    radius = 1.f;
-
-    try {
-        material = Factory<Mat>::i().create("image");
-    } catch (std::exception &e) {
-        material = nullptr;
-    }
+void PrimLimCylinder::Init
+    (std::unordered_map<std::string, std::any> &settings) {
+    rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
+    position = std::any_cast<RayTracer::Point3D>(settings["position"]);
+    radius = std::any_cast<float>(settings["radius"]);
+    material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
+    height = std::any_cast<float>(settings["height"]);
 }
 
 RayTracer::Vector3D PrimLimCylinder::getUV(RayTracer::Point3D point) {
