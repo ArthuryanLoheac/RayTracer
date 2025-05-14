@@ -143,9 +143,23 @@ RayTracer::Vector3D &RayTracer::Vector3D::operator=(Point3D other) {
     return *this;
 }
 
+RayTracer::Vector3D RayTracer::Vector3D::operator-() const {
+    return (RayTracer::Vector3D(-x, -y, -z));
+}
+
 std::ostream &operator<<(std::ostream &os, const RayTracer::Vector3D &vec) {
     os << "V(" << vec.x << ", " << vec.y << ", " << vec.z << ")";
     return os;
 }
 
 #pragma endregion OPERATORS
+
+float RayTracer::Vector3D::lengthSquared() {
+    return (x*x+y*y+z*z);
+}
+
+RayTracer::Vector3D RayTracer::Vector3D::orthogonal() {
+    return (std::abs(x) > std::abs(z)) ?
+        Vector3D(-y, x, 0) :
+        Vector3D(0, -z, y);
+}
