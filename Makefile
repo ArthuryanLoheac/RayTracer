@@ -101,27 +101,27 @@ $(NAME_LIB): $(OBJ)
 
 sphere:
 	@mkdir -p libs
-	$(COMPILER) -oplugins/primitive_sphere.so -shared -fPIC $(SRC_PRIMITIVE) \
+	$(COMPILER) -o plugins/primitive_sphere.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimSphere.cpp $(FLAGS_SO)
 
 cone:
 	@mkdir -p libs
-	$(COMPILER) -oplugins/primitive_cone.so -shared -fPIC $(SRC_PRIMITIVE) \
+	$(COMPILER) -o plugins/primitive_cone.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimCone.cpp $(FLAGS_SO)
 
 cylinder:
 	@mkdir -p libs
-	$(COMPILER) -oplugins/primitive_cylinder.so -shared -fPIC $(SRC_PRIMITIVE) \
-		src/Primitive/PrimCylinder.cpp $(FLAGS_SO)
+	$(COMPILER) -o plugins/primitive_cylinder.so -shared -fPIC \
+		$(SRC_PRIMITIVE) src/Primitive/PrimCylinder.cpp $(FLAGS_SO)
 
 plane:
 	@mkdir -p libs
-	$(COMPILER) -oplugins/primitive_plane.so -shared -fPIC $(SRC_PRIMITIVE) \
+	$(COMPILER) -o plugins/primitive_plane.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimPlane.cpp $(FLAGS_SO)
 
 none:
 	@mkdir -p libs
-	$(COMPILER) -oplugins/primitive_none.so -shared -fPIC $(SRC_PRIMITIVE) \
+	$(COMPILER) -o plugins/primitive_none.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimNone.cpp $(FLAGS_SO)
 
 primitive: sphere plane none cylinder cone
