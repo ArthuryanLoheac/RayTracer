@@ -4,6 +4,7 @@
 #include "Primitive/PrimSphere.hpp"
 #include "dlLoader/dlLoader.hpp"
 #include "Consts/const.hpp"
+#include "DesignPatterns/Factory.hpp"
 
 extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
     return std::make_unique<PrimSphere>();
@@ -46,8 +47,8 @@ void PrimSphere::Init() {
 
     rotation = RayTracer::Vector3D(2, 0, 0);
     if (i == 0) {
-        position = RayTracer::Point3D(0, -1, 5);
-        radius = 1.f;
+        position = RayTracer::Point3D(0, 0, 5);
+        radius = 2.f;
     } else {
         position = RayTracer::Point3D(3, 0, 10);
         radius = 1.f;
@@ -55,7 +56,7 @@ void PrimSphere::Init() {
     i++;
 
     try {
-        material = dlLoader<Mat>::getLib("plugins/mat_image.so", "getMaterial");
+        material = Factory<Mat>::i().create("trans");
     } catch (std::exception &e) {
         material = nullptr;
     }

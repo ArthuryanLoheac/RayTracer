@@ -40,7 +40,7 @@ FLAGS_LINTER =	\
 	--repository=. \
 	--quiet \
 	--output=vs7	\
-	--filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references\
+	--filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references \
 	--recursive \
 	--exclude=tests/ \
 
@@ -136,6 +136,11 @@ chess_mat:
 	$(COMPILER) -o plugins/mat_chess.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/ChessboardMat.cpp $(FLAGS_SO)
 
+trans_mat:
+	@mkdir -p libs
+	$(COMPILER) -o libs/mat_trans.so -shared -fPIC $(SRC_MATERIAL) \
+		src/Material/TransMat.cpp $(FLAGS_SO)
+
 perlin_mat:
 	@mkdir -p plugins
 	$(COMPILER) -o plugins/mat_perlin.so -shared -fPIC $(SRC_MATERIAL) \
@@ -146,7 +151,7 @@ image_mat:
 	$(COMPILER) -o plugins/mat_image.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/ImageMat.cpp $(FLAGS_SO)
 
-material: flat_mat chess_mat perlin_mat image_mat
+material: flat_mat chess_mat perlin_mat image_mat trans_mat
 
 ambient_light:
 	@mkdir -p plugins

@@ -5,6 +5,7 @@
 #include "Primitive/PrimCylinder.hpp"
 #include "dlLoader/dlLoader.hpp"
 #include "Consts/const.hpp"
+#include "DesignPatterns/Factory.hpp"
 
 extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
     return std::make_unique<PrimCylinder>();
@@ -47,7 +48,7 @@ void PrimCylinder::Init() {
     i++;
 
     try {
-        material = dlLoader<Mat>::getLib("plugins/mat_chess.so", "getMaterial");
+        material = Factory<Mat>::i().create("chess");
     } catch (std::exception &e) {
         material = nullptr;
     }

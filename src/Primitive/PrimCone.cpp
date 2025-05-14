@@ -49,7 +49,7 @@ RayTracer::Vector3D PrimCone::getNormalAt(RayTracer::Point3D point) {
 void PrimCone::Init() {
     static int i = 0;
 
-    rotation = RayTracer::Vector3D(0, -1, 0);
+    rotation = RayTracer::Vector3D(0, 1.2f, 0.1f);
     if (i == 0) {
         position = RayTracer::Point3D(1, 1.5f, 5);
         angle = 30;
