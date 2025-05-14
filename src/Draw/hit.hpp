@@ -9,5 +9,7 @@ class hitDatas {
     hitDatas() {}
     float len;
     RayTracer::Point3D intersection;
+    RayTracer::Point3D origin;
+    RayTracer::Vector3D direction;
     std::shared_ptr<RayTracer::I_Primitive> obj;
 };

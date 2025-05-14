@@ -51,13 +51,44 @@ std::shared_ptr<Prim> &s, sf::Vector3f &cLight) {
     }
 }
 
+static sf::Color checkHit(std::shared_ptr<Prim> &head, RayTracer::Ray r) {
+    RayTracer::Point3D inter;
+    if (head->hits(r, inter)) {
+        RayTracer::Vector3D uv = head->getUV(inter);
+        sf::Color c = head->getMaterial()->getColorAt(uv.x, uv.y);
+        return c;
+    }
+    for (std::shared_ptr<Prim> &o : head->getChildrens()) {
+        sf::Color c = checkHit(o, r);
+        if (c != sf::Color(0, 0, 0))
+            return c;
+    }
+    return sf::Color(0, 0, 0); // skye
+}
+
+static sf::Color getColorReflected(hitDatas &datas, RayTracer::Vector3D uv)
+{
+    sf::Color c(0);
+    if (datas.obj->getMaterial()->isReflective()) {
+        c = sf::Color(255, 255, 255);
+        RayTracer::Vector3D normal = datas.obj->getNormalAt(datas.intersection);
+        RayTracer::Vector3D reflected(datas.direction - normal *
+            2*(datas.direction.normalized().dot(normal)));
+        RayTracer::Ray r(datas.intersection, reflected);
+        c = checkHit(RayTracer::Scene::i->ObjectHead, r);
+    } else {
+        c = datas.obj->getMaterial()->getColorAt(uv.x, uv.y);
+    }
+    return c;
+}
+
 static void hit(std::unique_ptr<my_Image> &image, int i, int j,
 hitDatas &datas) {
     try {
         // Get base colors
         sf::Color origin = image->getPixel(i, j);
         RayTracer::Vector3D uv = datas.obj->getUV(datas.intersection);
-        sf::Color c = datas.obj->getMaterial()->getColorAt(uv.x, uv.y);
+        sf::Color c = getColorReflected(datas, uv);
         sf::Vector3f cLight = sf::Vector3f(0, 0, 0);
 
         computeLuminescence(datas.intersection, datas.obj, cLight);
@@ -78,6 +109,8 @@ std::vector<hitDatas> &lst) {
     if (obj->hits(r, intersection)) {
         hitDatas h;
         h.intersection = intersection;
+        h.origin = r.origin;
+        h.direction = r.direction;
         h.len = r.origin.distance(intersection);
         h.obj = obj;
         lst.push_back(h);
@@ -86,9 +119,8 @@ std::vector<hitDatas> &lst) {
         checkHitsAtPixel(i, j, r, image, o, lst);
 }
 
-static void checkHitAt(float i, float j, float iplus, float jplus,
-RayTracer::Camera cam, std::unique_ptr<my_Image> &image) {
-    RayTracer::Ray r = cam.ray((i + iplus) / WIDTH, (j + jplus) / HEIGHT);
+static sf::Color checkHitAt(float i, float j,
+std::unique_ptr<my_Image> &image, RayTracer::Ray r) {
     std::vector<hitDatas> lst;
 
     checkHitsAtPixel(i, j, r, image,
@@ -101,20 +133,27 @@ RayTracer::Camera cam, std::unique_ptr<my_Image> &image) {
     for (hitDatas &h : lst) {
         hit(image, static_cast<int>(i), static_cast<int>(j), h);
     }
+    return image.get()->getPixel(i, j);
+}
+
+static void checkHitAtRay(float i, float j, float iplus, float jplus,
+    RayTracer::Camera cam, std::unique_ptr<my_Image> &image) {
+    RayTracer::Ray r = cam.ray((i + iplus) / WIDTH, (j + jplus) / HEIGHT);
+    checkHitAt(i, j, image, r);
 }
 
 static void generatePixelColumn(float i, RayTracer::Camera cam,
 my_Image &image, std::vector<std::unique_ptr<my_Image>> &images) {
     for (float j = 0; j < HEIGHT; j++) {
-        checkHitAt(i, j, 0, 0, cam, images[0]);
-        checkHitAt(i, j, 0, -0.5f, cam, images[1]);
-        checkHitAt(i, j, 0, 0.5f, cam, images[2]);
-        checkHitAt(i, j, -0.5f, 0, cam, images[3]);
-        checkHitAt(i, j, -0.5f, -0.5f, cam, images[4]);
-        checkHitAt(i, j, -0.5f, 0.5f, cam, images[5]);
-        checkHitAt(i, j, 0.5f, 0, cam, images[6]);
-        checkHitAt(i, j, 0.5f, -0.5f, cam, images[7]);
-        checkHitAt(i, j, 0.5f, 0.5f, cam, images[8]);
+        checkHitAtRay(i, j, 0, 0, cam, images[0]);
+        checkHitAtRay(i, j, 0, -0.5f, cam, images[1]);
+        checkHitAtRay(i, j, 0, 0.5f, cam, images[2]);
+        checkHitAtRay(i, j, -0.5f, 0, cam, images[3]);
+        checkHitAtRay(i, j, -0.5f, -0.5f, cam, images[4]);
+        checkHitAtRay(i, j, -0.5f, 0.5f, cam, images[5]);
+        checkHitAtRay(i, j, 0.5f, 0, cam, images[6]);
+        checkHitAtRay(i, j, 0.5f, -0.5f, cam, images[7]);
+        checkHitAtRay(i, j, 0.5f, 0.5f, cam, images[8]);
         averageAllImages(i, j, image, images);
     }
 }
