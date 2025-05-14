@@ -28,7 +28,7 @@ void Parsing::parseSceneFile() {
     try {
         cfg.readFile(sceneFile.c_str());
         const libconfig::Setting &raytracer = cfg.lookup("raytracer");
-            Scene::i->ObjectHead = Factory<RayTracer::I_Primitive>::i().create("none");
+            Scene::i->ObjectHead = Factory<Prim>::i().create("none");
         // parseCamera(raytracer);
         parsePrimitive(raytracer);
         // parseLights(raytracer);
