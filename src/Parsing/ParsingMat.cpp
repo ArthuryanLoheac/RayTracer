@@ -49,6 +49,17 @@ static Vector3D parseScale(const libconfig::Setting &scale) {
     return Vector3D(sc[0], sc[1], sc[2]);
 }
 
+static sf::Image parseImage(const libconfig::Setting &image) {
+    std::string path;
+    sf::Image img;
+
+    image.lookupValue("path", path);
+    if (!img.loadFromFile(path)) {
+        img.create(100, 100, sf::Color(234, 58, 247));
+    }
+    return img;
+}
+
 std::shared_ptr<I_Material> Parsing::parseMaterial(
 const libconfig::Setting &material) {
     std::unordered_map<std::string, std::any> settings;
