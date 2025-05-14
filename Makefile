@@ -100,61 +100,61 @@ $(NAME_LIB): $(OBJ)
 	ar rc $(NAME_LIB) $(OBJ)
 
 sphere:
-	@mkdir -p libs
+	@mkdir -p plugins
 	$(COMPILER) -o plugins/primitive_sphere.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimSphere.cpp $(FLAGS_SO)
 
 cone:
-	@mkdir -p libs
+	@mkdir -p plugins
 	$(COMPILER) -o plugins/primitive_cone.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimCone.cpp $(FLAGS_SO)
 
 cylinder:
-	@mkdir -p libs
+	@mkdir -p plugins
 	$(COMPILER) -o plugins/primitive_cylinder.so -shared -fPIC \
 		$(SRC_PRIMITIVE) src/Primitive/PrimCylinder.cpp $(FLAGS_SO)
 
 plane:
-	@mkdir -p libs
+	@mkdir -p plugins
 	$(COMPILER) -o plugins/primitive_plane.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimPlane.cpp $(FLAGS_SO)
 
 none:
-	@mkdir -p libs
+	@mkdir -p plugins
 	$(COMPILER) -o plugins/primitive_none.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimNone.cpp $(FLAGS_SO)
 
 primitive: sphere plane none cylinder cone
 
 flat_mat:
-	@mkdir -p libs
+	@mkdir -p plugins
 	$(COMPILER) -o plugins/mat_flat.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/FlatMat.cpp $(FLAGS_SO)
 
 chess_mat:
-	@mkdir -p libs
+	@mkdir -p plugins
 	$(COMPILER) -o plugins/mat_chess.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/ChessboardMat.cpp $(FLAGS_SO)
 
 perlin_mat:
-	@mkdir -p libs
+	@mkdir -p plugins
 	$(COMPILER) -o plugins/mat_perlin.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/PerlinMat.cpp $(FLAGS_SO)
 
 image_mat:
-	@mkdir -p libs
+	@mkdir -p plugins
 	$(COMPILER) -o plugins/mat_image.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/ImageMat.cpp $(FLAGS_SO)
 
 material: flat_mat chess_mat perlin_mat image_mat
 
 ambient_light:
-	@mkdir -p libs
+	@mkdir -p plugins
 	$(COMPILER) -o plugins/light_ambient.so -shared -fPIC $(SRC_LIGHT) \
 		src/Lights/Ambient.cpp $(FLAGS_SO)
 
 spot_light:
-	@mkdir -p libs
+	@mkdir -p plugins
 	$(COMPILER) -o plugins/light_spot.so -shared -fPIC $(SRC_LIGHT) \
 		src/Lights/Spot.cpp $(FLAGS_SO)
 
@@ -170,7 +170,7 @@ clean:
 	rm -f *.gcda *.gcno
 
 fclean: clean
-	rm -rf libs
+	rm -rf plugins
 	rm -f $(NAME) $(NAME_LIB) unit_tests
 
 screenshot:
