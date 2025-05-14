@@ -51,16 +51,15 @@ std::shared_ptr<Prim> &s, sf::Vector3f &cLight) {
     }
 }
 
-static void hit(std::unique_ptr<my_Image> &image, int i, int j,
-std::shared_ptr<Prim> &s, hitDatas &datas) {
+static void hit(std::unique_ptr<my_Image> &image, int i, int j, hitDatas &datas) {
     try {
         // Get base colors
         sf::Color origin = image->getPixel(i, j);
-        RayTracer::Vector3D uv = s->getUV(datas.intersection);
-        sf::Color c = s->getMaterial()->getColorAt(uv.x, uv.y);
+        RayTracer::Vector3D uv = datas.obj->getUV(datas.intersection);
+        sf::Color c = datas.obj->getMaterial()->getColorAt(uv.x, uv.y);
         sf::Vector3f cLight = sf::Vector3f(0, 0, 0);
 
-        computeLuminescence(datas.intersection, s, cLight);
+        computeLuminescence(datas.intersection, datas.obj, cLight);
 
         editColor(c, cLight, origin);
         image->setPixel(i, j, c);
@@ -99,8 +98,7 @@ RayTracer::Camera cam, std::unique_ptr<my_Image> &image) {
             return a.len > b.len;
         });
     for (hitDatas &h : lst) {
-        hit(image, static_cast<int>(i), static_cast<int>(j),
-           h.obj, h);
+        hit(image, static_cast<int>(i), static_cast<int>(j), h);
     }
 }
 
