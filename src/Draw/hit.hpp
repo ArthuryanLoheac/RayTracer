@@ -7,7 +7,7 @@
 class hitDatas {
  public:
     hitDatas() {};
-    int len;
+    float len;
     RayTracer::Point3D intersection;
     std::shared_ptr<RayTracer::I_Primitive> obj;
 };
