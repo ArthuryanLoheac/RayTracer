@@ -7,11 +7,10 @@ extern "C" std::unique_ptr<RayTracer::I_Material> getMaterial() {
 }
 
 FlatMat::FlatMat() {
-    Init();
 }
 
-void FlatMat::Init() {
-    col = sf::Color(255, 255, 255);
+void FlatMat::Init(std::unordered_map<std::string, std::any> &settings) {
+    col = std::any_cast<sf::Color>(settings["color"]);
 }
 
 sf::Color FlatMat::getColorAt(float u, float v) {

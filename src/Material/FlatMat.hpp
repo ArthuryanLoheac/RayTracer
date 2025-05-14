@@ -12,6 +12,6 @@ class FlatMat : public RayTracer::I_Material {
     FlatMat();
     ~FlatMat() override = default;
 
-    void Init() override;
+    void Init(std::unordered_map<std::string, std::any> &settings) override;
     sf::Color getColorAt(float u, float v) override;
 };
