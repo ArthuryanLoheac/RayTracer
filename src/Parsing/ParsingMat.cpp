@@ -31,6 +31,15 @@ static sf::Color parseTransparentColor(const libconfig::Setting &color) {
     return sf::Color(rgb[0], rgb[1], rgb[2], rgb[3]);
 }
 
+static Vector3D parseRotation(const libconfig::Setting &rotation) {
+    float rot[3] = {0.0f, 0.0f, 0.0f};
+
+    rotation.lookupValue("x", rot[0]);
+    rotation.lookupValue("y", rot[1]);
+    rotation.lookupValue("z", rot[2]);
+    return Vector3D(rot[0], rot[1], rot[2]);
+}
+
 std::shared_ptr<I_Material> Parsing::parseMaterial(
 const libconfig::Setting &material) {
     std::unordered_map<std::string, std::any> settings;
