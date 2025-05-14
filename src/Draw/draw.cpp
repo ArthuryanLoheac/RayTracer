@@ -62,7 +62,6 @@ static sf::Color getColorReflected(hitDatas &datas, RayTracer::Vector3D uv)
             2*(datas.direction.normalized().dot(normal)));
         RayTracer::Ray r(datas.intersection, reflected);
         c = checkHitAt(r);
-        printf("Reflected color: %d %d %d %d\n", c.r, c.g, c.b, c.a);
     } else {
         c = datas.obj->getMaterial()->getColorAt(uv.x, uv.y);
     }
@@ -78,9 +77,11 @@ hitDatas &datas, sf::Color &color) {
         sf::Color c = getColorReflected(datas, uv);
         sf::Vector3f cLight = sf::Vector3f(0, 0, 0);
 
-        computeLuminescence(datas.intersection, datas.obj, cLight);
+        if (!datas.obj->getMaterial()->isReflective()) {
+            computeLuminescence(datas.intersection, datas.obj, cLight);
 
-        editColor(c, cLight, origin);
+            editColor(c, cLight, origin);
+        }
         color = c;
     } catch (std::exception &e) {
         color = sf::Color(234, 58, 247);

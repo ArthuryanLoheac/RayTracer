@@ -48,11 +48,11 @@ void Parsing::parseSceneFile() {
         std::shared_ptr<Prim> spot =
             Factory<Prim>::i().create("spot");
         std::unordered_map<std::string, std::any> spotSettings;
-        spotSettings["intensity"] = std::make_any<float>(3);
+        spotSettings["intensity"] = std::make_any<float>(6);
         spotSettings["color"] = std::make_any<sf::Color>(sf::Color(
-            255, 255, 255));
+            255, 0, 0));
         spotSettings["angle"] = std::make_any<float>(180.0);
-        spotSettings["position"] = std::make_any<Point3D>(Point3D(0, 5, 2));
+        spotSettings["position"] = std::make_any<Point3D>(Point3D(0, 2, 2));
         spotSettings["rotation"] = std::make_any<Vector3D>(Vector3D(0, 0, 0));
         spot->Init(spotSettings);
         Scene::i->ObjectHead->AddChildren(spot);
