@@ -38,7 +38,10 @@ class Vector3D {
 
     Vector3D &operator=(Point3D other);
 
+    Vector3D operator-() const;
+
     float lengthSquared();
+    Vector3D orthogonal();
 };
 }  // namespace RayTracer
 
