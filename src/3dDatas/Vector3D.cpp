@@ -149,3 +149,7 @@ std::ostream &operator<<(std::ostream &os, const RayTracer::Vector3D &vec) {
 }
 
 #pragma endregion OPERATORS
+
+float RayTracer::Vector3D::lengthSquared() {
+    return (x*x+y*y+z*z);
+}

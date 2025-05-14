@@ -37,6 +37,8 @@ class Vector3D {
     Vector3D &operator/=(double other);
 
     Vector3D &operator=(Point3D other);
+
+    float lengthSquared();
 };
 }  // namespace RayTracer
 
