@@ -37,6 +37,8 @@ Factory<T>::Factory() {
     _arg_list.insert({"sphere", {"plugins/primitive_sphere.so", prim}});
     _arg_list.insert({"none", {"plugins/primitive_none.so", prim}});
     _arg_list.insert({"cylinder", {"plugins/primitive_cylinder.so", prim}});
+    _arg_list.insert({"limcylinder",
+        {"plugins/primitive_limcylinder.so", prim}});
     _arg_list.insert({"cone", {"plugins/primitive_cone.so", prim}});
     _arg_list.insert({"plane", {"plugins/primitive_plane.so", prim}});
     _arg_list.insert({"ambient", {"plugins/light_ambient.so", light}});
