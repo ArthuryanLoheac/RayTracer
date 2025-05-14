@@ -11,10 +11,10 @@ class Parsing {
 
  public:
      void parseArgs(int argc, char **argv);
-     Scene parseSceneFile();
-    //  void parseCamera(const libconfig::Setting &setting, Scene &scene);
-     void parsePrimitive(const libconfig::Setting &setting, Scene &scene);
-    //  void parseLights(const libconfig::Setting &setting, Scene &scene);
+     void parseSceneFile();
+    //  void parseCamera(const libconfig::Setting &setting);
+     void parsePrimitive(const libconfig::Setting &setting);
+    //  void parseLights(const libconfig::Setting &setting);
 
      class ParsingError : public std::exception {
       private:
