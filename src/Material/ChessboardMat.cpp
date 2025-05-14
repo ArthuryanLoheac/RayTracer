@@ -7,13 +7,12 @@ extern "C" std::unique_ptr<RayTracer::I_Material> getMaterial() {
 }
 
 ChessboardMat::ChessboardMat() {
-    Init();
 }
 
-void ChessboardMat::Init() {
-    scale = RayTracer::Vector3D(20, 6, 0);
-    col1 = sf::Color(255, 255, 255);
-    col2 = sf::Color(0, 0, 0);
+void ChessboardMat::Init(std::unordered_map<std::string, std::any> &settings) {
+    scale = std::any_cast<RayTracer::Vector3D>(settings["scale"]);
+    col1 = std::any_cast<sf::Color>(settings["col1"]);
+    col2 = std::any_cast<sf::Color>(settings["col2"]);
 }
 
 sf::Color ChessboardMat::getColorAt(float u, float v) {
