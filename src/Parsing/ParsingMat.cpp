@@ -21,6 +21,16 @@ static sf::Color parseColor(const libconfig::Setting &color) {
     return sf::Color(rgb[0], rgb[1], rgb[2]);
 }
 
+static sf::Color parseTransparentColor(const libconfig::Setting &color) {
+    float rgb[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+
+    color.lookupValue("r", rgb[0]);
+    color.lookupValue("g", rgb[1]);
+    color.lookupValue("b", rgb[2]);
+    color.lookupValue("a", rgb[3]);
+    return sf::Color(rgb[0], rgb[1], rgb[2], rgb[3]);
+}
+
 std::shared_ptr<I_Material> Parsing::parseMaterial(
 const libconfig::Setting &material) {
     std::unordered_map<std::string, std::any> settings;
