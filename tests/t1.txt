@@ -64,9 +64,10 @@ raytracer : {
                     name = "reflect";
                     color : {
                         r = 255;
-                        g = 0;
+                        g = 255;
                         b = 0;
                     };
+                    reflectivity = 255.0;
                 }
                 radius = 1.5;
             }

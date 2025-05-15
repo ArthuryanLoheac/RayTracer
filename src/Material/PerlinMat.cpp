@@ -131,6 +131,6 @@ sf::Color PerlinMat::getColorAt(float u, float v) {
     return c;
 }
 
-bool PerlinMat::isReflective() const {
-    return false;
+float PerlinMat::getReflective() const {
+    return 0.0f;
 }

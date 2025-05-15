@@ -46,7 +46,7 @@ void Parsing::parseSceneFile() {
         std::shared_ptr<Prim> ambient =
             Factory<Prim>::i().create("ambient");
         std::unordered_map<std::string, std::any> ambientSettings;
-        ambientSettings["intensity"] = std::make_any<float>(0.2);
+        ambientSettings["intensity"] = std::make_any<float>(0.1);
         ambientSettings["color"] = std::make_any<sf::Color>(
             sf::Color(255, 255, 255));
         ambientSettings["angle"] = std::make_any<float>(0.0);
@@ -58,7 +58,7 @@ void Parsing::parseSceneFile() {
         std::shared_ptr<Prim> spot =
             Factory<Prim>::i().create("spot");
         std::unordered_map<std::string, std::any> spotSettings;
-        spotSettings["intensity"] = std::make_any<float>(3);
+        spotSettings["intensity"] = std::make_any<float>(4);
         spotSettings["color"] = std::make_any<sf::Color>(sf::Color(
             255, 255, 255));
         spotSettings["angle"] = std::make_any<float>(180.0);

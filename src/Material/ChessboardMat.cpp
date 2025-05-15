@@ -26,6 +26,6 @@ sf::Color ChessboardMat::getColorAt(float u, float v) {
         return col2;
 }
 
-bool ChessboardMat::isReflective() const {
-    return false;
+float ChessboardMat::getReflective() const {
+    return 0.0f;
 }

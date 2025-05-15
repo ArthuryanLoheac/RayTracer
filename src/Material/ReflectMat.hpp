@@ -10,8 +10,10 @@ class ReflectMat : public RayTracer::I_Material {
  public:
     ReflectMat() = default;
     ~ReflectMat() override = default;
+    sf::Color color;
+    float Reflectivity = 1.0f;
 
     void Init(std::unordered_map<std::string, std::any> &settings) override;
     sf::Color getColorAt(float x, float y) override;
-    bool isReflective() const override;
+    float getReflective() const override;
 };

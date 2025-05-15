@@ -20,6 +20,6 @@ sf::Color FlatMat::getColorAt(float u, float v) {
     return col;
 }
 
-bool FlatMat::isReflective() const {
-    return false;
+float FlatMat::getReflective() const {
+    return 0.0f;
 }

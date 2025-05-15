@@ -34,6 +34,6 @@ sf::Color ImageMat::getColorAt(float u, float v) {
     return img.getPixel(pixX, pixY);
 }
 
-bool ImageMat::isReflective() const {
-    return false;
+float ImageMat::getReflective() const {
+    return 0.0f;
 }

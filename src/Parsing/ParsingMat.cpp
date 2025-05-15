@@ -59,6 +59,14 @@ static sf::Image parseImage(const libconfig::Setting &image) {
     return img;
 }
 
+void parseReflect(const libconfig::Setting &reflect,
+std::unordered_map<std::string, std::any> &settings) {
+    float reflectivity = 0.0f;
+    reflect.lookupValue("reflectivity", reflectivity);
+    settings["reflectivity"] = reflectivity;
+    settings["color"] = parseColor(reflect.lookup("color"));
+}
+
 void parseChess(const libconfig::Setting &chess,
 std::unordered_map<std::string, std::any> &settings) {
     settings["color1"] = parseColor(chess.lookup("color1"));
@@ -95,6 +103,8 @@ const libconfig::Setting &material) {
         settings["color"] = parseColor(material.lookup("color"));
     if (materialName == "trans")
         settings["color"] = parseTransparentColor(material.lookup("color"));
+    if (materialName == "reflect")
+        parseReflect(material, settings);
     if (materialName == "chess")
         parseChess(material, settings);
     if (materialName == "perlin")

@@ -43,6 +43,31 @@ static void editColor(sf::Color &c, sf::Vector3f &cLight,
         b * percentA + (origin.b * (1 - percentA)));
 }
 
+static void editColorReflect(sf::Color &c, sf::Vector3f &cLight, float reflect) {
+    float ref = reflect;
+    printf("ref: %f\n", ref);
+    // Edit color with luminescence values
+    int r = std::min(255, static_cast<int>(
+        (c.r)));
+    int g = std::min(255, static_cast<int>(
+        (c.g)));
+    int b = std::min(255, static_cast<int>(
+        (c.b)));
+
+    int r2 = std::min(255, static_cast<int>(
+        (c.r * cLight.x)));
+    int g2 = std::min(255, static_cast<int>(
+        (c.g * cLight.y)));
+    int b2 = std::min(255, static_cast<int>(
+        (c.b * cLight.z)));
+
+    // Edit color with transparency values
+    c = sf::Color(
+        (r * ref) + (r2 * (1 - ref)),
+        (g * ref) + (g2 * (1 - ref)),
+        (b * ref) + (b2 * (1 - ref)));
+}
+
 static void computeLuminescence(RayTracer::Point3D &intersection,
 std::shared_ptr<Prim> &s, sf::Vector3f &cLight) {
     for (std::shared_ptr<Light> Light : RayTracer::Scene::i->Lights) {
@@ -56,13 +81,22 @@ std::shared_ptr<Prim> &s, sf::Vector3f &cLight) {
 
 static sf::Color getColorReflected(hitDatas &datas, RayTracer::Vector3D uv, int &nbBounce) {
     sf::Color c(0, 0, 0);
-    if (datas.obj->getMaterial()->isReflective() && nbBounce < 6) {
+    if (datas.obj->getMaterial()->getReflective() > 0 && nbBounce < 6) {
         RayTracer::Vector3D normal = datas.obj->getNormalAt(datas.intersection);
         RayTracer::Vector3D reflected(datas.direction - normal *
             2*(datas.direction.normalized().dot(normal)));
         RayTracer::Ray r(datas.intersection, reflected);
         nbBounce++;
-        c = checkHitAt(r, nbBounce);
+
+        //sf::Vector3f cLight = sf::Vector3f(0, 0, 0);
+        sf::Color newC = checkHitAt(r, nbBounce);
+        sf::Color Origin = datas.obj->getMaterial()->getColorAt(uv.x, uv.y);
+        float reflected_percent = (Origin.a / 255.f);
+        c = sf::Color(
+            (newC.r * reflected_percent) + (Origin.r * (1 -reflected_percent)),
+            (newC.g * reflected_percent) + (Origin.g * (1 -reflected_percent)),
+            (newC.b * reflected_percent) + (Origin.b * (1 -reflected_percent)),
+            Origin.a);
     } else {
         c = datas.obj->getMaterial()->getColorAt(uv.x, uv.y);
     }
@@ -78,10 +112,11 @@ hitDatas &datas, sf::Color &color, int &nbBounce) {
         sf::Color c = getColorReflected(datas, uv, nbBounce);
         sf::Vector3f cLight = sf::Vector3f(0, 0, 0);
 
-        if (!datas.obj->getMaterial()->isReflective()) {
-            computeLuminescence(datas.intersection, datas.obj, cLight);
-
+        computeLuminescence(datas.intersection, datas.obj, cLight);
+        if (datas.obj->getMaterial()->getReflective() == 0) {
             editColor(c, cLight, origin);
+        } else {
+            editColorReflect(c, cLight, datas.obj->getMaterial()->getReflective());
         }
         color = c;
     } catch (std::exception &e) {

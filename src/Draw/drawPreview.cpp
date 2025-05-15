@@ -59,7 +59,7 @@ std::shared_ptr<Prim> &s, sf::Vector3f &cLight) {
 
 static sf::Color getColorReflected(hitDatas &datas, RayTracer::Vector3D uv) {
     sf::Color c(0, 0, 0);
-    if (datas.obj->getMaterial()->isReflective()) {
+    if (datas.obj->getMaterial()->getReflective() > 0) {
         RayTracer::Vector3D normal = datas.obj->getNormalAt(datas.intersection);
         RayTracer::Vector3D reflected(datas.direction - normal *
             2*(datas.direction.normalized().dot(normal)));
@@ -80,7 +80,7 @@ hitDatas &datas, sf::Color &color) {
         sf::Color c = getColorReflected(datas, uv);
         sf::Vector3f cLight = sf::Vector3f(0, 0, 0);
 
-        if (!datas.obj->getMaterial()->isReflective()) {
+        if (!datas.obj->getMaterial()->getReflective() == 0) {
             computeLuminescence(datas.intersection, datas.obj, cLight);
 
             editColor(c, cLight, origin);
