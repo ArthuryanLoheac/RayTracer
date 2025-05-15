@@ -53,7 +53,7 @@ RayTracer::Vector3D PerlinMat::GetConstantVector(int v) {
 }
 
 float PerlinMat::Noise2D(float x, float y) {
-    int xi = (static_cast<int>(floor(x))) % repeatX;
+    int xi = (static_cast<int>(floor(x - 10000))) % repeatX;
     int yi = (static_cast<int>(floor(y))) % repeatY;
 
     if (xi < 0) xi += repeatX;
