@@ -108,6 +108,12 @@ cone:
 	$(COMPILER) -o plugins/primitive_cone.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimCone.cpp $(FLAGS_SO)
 
+limcone:
+	@mkdir -p plugins
+	$(COMPILER) -o plugins/primitive_limcone.so \
+		-shared -fPIC $(SRC_PRIMITIVE) \
+		src/Primitive/PrimLimCone.cpp $(FLAGS_SO)
+
 cylinder:
 	@mkdir -p plugins
 	$(COMPILER) -o plugins/primitive_cylinder.so -shared -fPIC \
@@ -133,7 +139,7 @@ none:
 	$(COMPILER) -o plugins/primitive_none.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimNone.cpp $(FLAGS_SO)
 
-primitive: sphere plane none cylinder cone limcylinder obj_prim
+primitive: sphere plane none cylinder cone limcylinder obj_prim limcone
 
 flat_mat:
 	@mkdir -p plugins
