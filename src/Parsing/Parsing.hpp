@@ -11,6 +11,7 @@ class Parsing {
      std::string sceneFile;
 
  public:
+     bool noWindowMode = false;
      void parseArgs(int argc, char **argv);
      void parseSceneFile();
     //  void parseCamera(const libconfig::Setting &camera);
@@ -19,7 +20,6 @@ class Parsing {
         const std::string &type);
      std::shared_ptr<I_Material> parseMaterial(
         const libconfig::Setting &material);
-    //  void parseLights(const libconfig::Setting &lights);
 
      class ParsingError : public std::exception {
       private:

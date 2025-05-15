@@ -22,6 +22,7 @@
 #include "Generation/tools.hpp"
 #include "Draw/my_Image.hpp"
 #include "Draw/hit.hpp"
+#include "Draw/skybox.hpp"
 
 static sf::Color checkHitAt(RayTracer::Ray r);
 
@@ -106,7 +107,7 @@ std::vector<hitDatas> &lst) {
 
 static sf::Color checkHitAt(RayTracer::Ray r) {
     std::vector<hitDatas> lst;
-    sf::Color c(0, 0, 0);
+    sf::Color c = skybox::i().getColorAt(skybox::i().getAngle(r));
 
     checkHitsAtPixel(r,
         RayTracer::Scene::i->ObjectHead, lst);
@@ -164,4 +165,22 @@ int generateImage(sf::RenderWindow &window, my_Image &image, std::string
             t.join();
     }
     return configChanged;
+}
+
+int renderImage(my_Image &image) {
+    std::vector<std::thread> threadVector;
+
+    for (float i = 0; i < WIDTH; i++) {
+        threadVector.emplace_back(generatePixelColumn, i,
+            std::ref(RayTracer::Camera::i()),
+            std::ref(image));
+    }
+
+    for (auto &t : threadVector) {
+        if (t.joinable())
+            t.join();
+    }
+    createPPMFile(image.image, "renders/render-" +
+        getTimestampAsString() + ".ppm");
+    return 0;
 }

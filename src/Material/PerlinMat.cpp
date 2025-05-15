@@ -5,6 +5,8 @@
 
 #include "Material/PerlinMat.hpp"
 
+#include "Consts/const.hpp"
+
 extern "C" std::unique_ptr<RayTracer::I_Material> getMaterial() {
     return std::make_unique<PerlinMat>();
 }
@@ -51,7 +53,7 @@ RayTracer::Vector3D PerlinMat::GetConstantVector(int v) {
 }
 
 float PerlinMat::Noise2D(float x, float y) {
-    int xi = (static_cast<int>(floor(x))) % 64;
+    int xi = (static_cast<int>(floor(x - 10000))) % 64;
     int yi = (static_cast<int>(floor(y))) % 64;
 
     if (xi < 0) xi += 64;
@@ -97,7 +99,7 @@ void PerlinMat::Init(std::unordered_map<std::string, std::any> &settings) {
 
 sf::Color PerlinMat::getColorAt(float u, float v) {
     if (scale.x == 0 || scale.y == 0)
-        return sf::Color(234, 58, 247);  // error pink
+        return PINK_ERROR;  // error pink
     u /= scale.x;
     v /= -scale.y;
     u += rotation.x;
