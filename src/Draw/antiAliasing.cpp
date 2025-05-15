@@ -9,7 +9,7 @@
 #include "Draw/my_Image.hpp"
 
 void averageAllImages(float i, float j, my_Image &image,
-std::vector<sf::Color> &colors) {
+std::vector<sf::Color> &colors, bool isPreview) {
     float r = 0;
     float g = 0;
     float b = 0;
@@ -25,5 +25,7 @@ std::vector<sf::Color> &colors) {
     g /= colors.size();
     b /= colors.size();
     a /= colors.size();
+    if (isPreview)
+        a /= 2;
     image.setPixel(i, j, sf::Color(r, g, b, a));
 }

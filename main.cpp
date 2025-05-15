@@ -18,6 +18,7 @@
 #include "Scene/Scene.hpp"
 #include "Scene/Camera.hpp"
 #include "DesignPatterns/Factory.hpp"
+#include "Draw/skybox.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -58,6 +59,7 @@ int main(int argc, char **argv) {
     RayTracer::Scene scene;
     int hasFileChanged = 2;
     RayTracer::Camera cam;
+    skybox::i().setImage("assets/skybox.jpg");
     srand(time(NULL));
 
     while (hasFileChanged != 0) {
