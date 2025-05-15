@@ -7,6 +7,8 @@
 #include <SFML/Window.hpp>
 
 class TransMat : public RayTracer::I_Material {
+ private:
+    sf::Color col;
  public:
     TransMat() = default;
     ~TransMat() override = default;
