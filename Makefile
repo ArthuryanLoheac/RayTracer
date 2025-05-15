@@ -110,7 +110,8 @@ cone:
 
 limcone:
 	@mkdir -p plugins
-	$(COMPILER) -o plugins/primitive_limcone.so -shared -fPIC $(SRC_PRIMITIVE) \
+	$(COMPILER) -o plugins/primitive_limcone.so \
+		-shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimLimCone.cpp $(FLAGS_SO)
 
 cylinder:
