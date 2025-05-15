@@ -27,12 +27,3 @@ std::vector<sf::Color> &colors) {
     a /= colors.size();
     image.setPixel(i, j, sf::Color(r, g, b, a));
 }
-
-void createListImages(std::vector<std::unique_ptr<my_Image>> &images,
-    my_Image &image) {
-    for (int i = 0; i < 9; i++) {
-        auto imageTmp = std::make_unique<my_Image>(image.getSizeX(),
-            image.getSizeY(), image.getPixel(0, 0));
-        images.push_back(std::move(imageTmp));
-    }
-}
