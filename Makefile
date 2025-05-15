@@ -75,7 +75,6 @@ SRC_TESTS	= 	\
 	tests/test_LoadSo.cpp \
 	tests/test_A_Primitive.cpp \
 	tests/test_A_Light.cpp \
-	tests/test_antiAliasing.cpp \
 
 COMMON_SRC = src/3dDatas/Point3D.cpp \
 			src/3dDatas/Vector3D.cpp \
@@ -124,12 +123,17 @@ plane:
 	$(COMPILER) -o plugins/primitive_plane.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimPlane.cpp $(FLAGS_SO)
 
+obj_prim:
+	@mkdir -p libs
+	$(COMPILER) -o plugins/primitive_obj.so -shared -fPIC $(SRC_PRIMITIVE) \
+		src/Primitive/PrimObj.cpp $(FLAGS_SO)
+
 none:
-	@mkdir -p plugins
+	@mkdir -p libs
 	$(COMPILER) -o plugins/primitive_none.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimNone.cpp $(FLAGS_SO)
 
-primitive: sphere plane none cylinder cone limcylinder
+primitive: sphere plane none cylinder cone limcylinder obj_prim
 
 flat_mat:
 	@mkdir -p plugins
@@ -156,7 +160,12 @@ image_mat:
 	$(COMPILER) -o plugins/mat_image.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/ImageMat.cpp $(FLAGS_SO)
 
-material: flat_mat chess_mat perlin_mat image_mat trans_mat
+reflect_mat:
+	@mkdir -p plugins
+	$(COMPILER) -o plugins/mat_reflect.so -shared -fPIC $(SRC_MATERIAL) \
+		src/Material/ReflectMat.cpp $(FLAGS_SO)
+
+material: flat_mat chess_mat perlin_mat image_mat trans_mat reflect_mat
 
 ambient_light:
 	@mkdir -p plugins

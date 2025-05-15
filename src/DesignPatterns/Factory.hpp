@@ -22,7 +22,7 @@ class Factory {
     Factory();
     ~Factory();
 
-    std::unique_ptr<T> create(std::string primitive);
+    std::shared_ptr<T> create(std::string primitive);
  private:
     std::unordered_map<std::string,
         std::pair<std::string, std::string>> _arg_list;
@@ -35,6 +35,7 @@ Factory<T>::Factory() {
     std::string light = "getLight";
 
     _arg_list.insert({"sphere", {"plugins/primitive_sphere.so", prim}});
+    _arg_list.insert({"obj", {"plugins/primitive_obj.so", prim}});
     _arg_list.insert({"none", {"plugins/primitive_none.so", prim}});
     _arg_list.insert({"cylinder", {"plugins/primitive_cylinder.so", prim}});
     _arg_list.insert({"limcylinder",
@@ -48,6 +49,7 @@ Factory<T>::Factory() {
     _arg_list.insert({"perlin", {"plugins/mat_perlin.so", mat}});
     _arg_list.insert({"image", {"plugins/mat_image.so", mat}});
     _arg_list.insert({"trans", {"plugins/mat_trans.so", mat}});
+    _arg_list.insert({"reflect", {"plugins/mat_reflect.so", mat}});
 }
 
 template <typename T>
@@ -55,7 +57,7 @@ Factory<T>::~Factory() {
 }
 
 template <typename T>
-std::unique_ptr<T> Factory<T>::create
+std::shared_ptr<T> Factory<T>::create
     (std::string primitive) {
     try {
         std::pair<std::string, std::string> args = _arg_list.at(primitive);

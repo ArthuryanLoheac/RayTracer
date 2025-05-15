@@ -23,6 +23,8 @@
 #include "Draw/my_Image.hpp"
 #include "Draw/hit.hpp"
 
+static sf::Color checkHitAt(RayTracer::Ray r);
+
 static void editColor(sf::Color &c, sf::Vector3f &cLight,
     sf::Color &origin) {
     // Edit color with luminescence values
@@ -51,47 +53,62 @@ std::shared_ptr<Prim> &s, sf::Vector3f &cLight) {
     }
 }
 
-static void hit(std::unique_ptr<my_Image> &image, int i, int j,
-hitDatas &datas) {
+static sf::Color getColorReflected(hitDatas &datas, RayTracer::Vector3D uv) {
+    sf::Color c(0, 0, 0);
+    if (datas.obj->getMaterial()->isReflective()) {
+        RayTracer::Vector3D normal = datas.obj->getNormalAt(datas.intersection);
+        RayTracer::Vector3D reflected(datas.direction - normal *
+            2*(datas.direction.normalized().dot(normal)));
+        RayTracer::Ray r(datas.intersection, reflected);
+        c = checkHitAt(r);
+    } else {
+        c = datas.obj->getMaterial()->getColorAt(uv.x, uv.y);
+    }
+    return c;
+}
+
+static void hit(
+hitDatas &datas, sf::Color &color) {
     try {
         // Get base colors
-        sf::Color origin = image->getPixel(i, j);
+        sf::Color origin = color;
         RayTracer::Vector3D uv = datas.obj->getUV(datas.intersection);
-        sf::Color c = datas.obj->getMaterial()->getColorAt(uv.x, uv.y);
+        sf::Color c = getColorReflected(datas, uv);
         sf::Vector3f cLight = sf::Vector3f(0, 0, 0);
 
-        computeLuminescence(datas.intersection, datas.obj, cLight);
+        if (!datas.obj->getMaterial()->isReflective()) {
+            computeLuminescence(datas.intersection, datas.obj, cLight);
 
-        editColor(c, cLight, origin);
-        image->setPixel(i, j, c);
+            editColor(c, cLight, origin);
+        }
+        color = c;
     } catch (std::exception &e) {
-        image->setPixel(i, j,
-            sf::Color(234, 58, 247));  // error pink
+        color = sf::Color(234, 58, 247);
         return;
     }
 }
 
-static void checkHitsAtPixel(double i, double j, RayTracer::Ray r,
-std::unique_ptr<my_Image> &image, std::shared_ptr<Prim> &obj,
+static void checkHitsAtPixel(RayTracer::Ray r, std::shared_ptr<Prim> &obj,
 std::vector<hitDatas> &lst) {
     RayTracer::Point3D intersection;
     if (obj->hits(r, intersection)) {
         hitDatas h;
         h.intersection = intersection;
+        h.origin = r.origin;
+        h.direction = r.direction;
         h.len = r.origin.distance(intersection);
         h.obj = obj;
         lst.push_back(h);
     }
     for (std::shared_ptr<Prim> &o : obj->getChildrens())
-        checkHitsAtPixel(i, j, r, image, o, lst);
+        checkHitsAtPixel(r, o, lst);
 }
 
-static void checkHitAt(float i, float j, float iplus, float jplus,
-RayTracer::Camera cam, std::unique_ptr<my_Image> &image) {
-    RayTracer::Ray r = cam.ray((i + iplus) / WIDTH, (j + jplus) / HEIGHT);
+static sf::Color checkHitAt(RayTracer::Ray r) {
     std::vector<hitDatas> lst;
+    sf::Color c(0, 0, 0);
 
-    checkHitsAtPixel(i, j, r, image,
+    checkHitsAtPixel(r,
         RayTracer::Scene::i->ObjectHead, lst);
     // sort from the farthest to the closest
     std::sort(lst.begin(), lst.end(),
@@ -99,38 +116,45 @@ RayTracer::Camera cam, std::unique_ptr<my_Image> &image) {
             return a.len > b.len;
         });
     for (hitDatas &h : lst) {
-        hit(image, static_cast<int>(i), static_cast<int>(j), h);
+        hit(h, c);
     }
+    return c;
+}
+
+static sf::Color checkHitAtRay(float i, float j, float iplus, float jplus,
+    RayTracer::Camera cam) {
+    RayTracer::Ray r = cam.ray((i + iplus) / WIDTH, (j + jplus) / HEIGHT);
+    return checkHitAt(r);
 }
 
 static void generatePixelColumn(float i, RayTracer::Camera cam,
-my_Image &image, std::vector<std::unique_ptr<my_Image>> &images) {
+my_Image &image) {
+    std::vector<sf::Color> colors;
     for (float j = 0; j < HEIGHT; j++) {
-        checkHitAt(i, j, 0, 0, cam, images[0]);
-        checkHitAt(i, j, 0, -0.5f, cam, images[1]);
-        checkHitAt(i, j, 0, 0.5f, cam, images[2]);
-        checkHitAt(i, j, -0.5f, 0, cam, images[3]);
-        checkHitAt(i, j, -0.5f, -0.5f, cam, images[4]);
-        checkHitAt(i, j, -0.5f, 0.5f, cam, images[5]);
-        checkHitAt(i, j, 0.5f, 0, cam, images[6]);
-        checkHitAt(i, j, 0.5f, -0.5f, cam, images[7]);
-        checkHitAt(i, j, 0.5f, 0.5f, cam, images[8]);
-        averageAllImages(i, j, image, images);
+        colors.clear();
+        colors.push_back(checkHitAtRay(i, j, 0, 0, cam));
+        colors.push_back(checkHitAtRay(i, j, 0, -0.5f, cam));
+        colors.push_back(checkHitAtRay(i, j, 0, 0.5f, cam));
+        colors.push_back(checkHitAtRay(i, j, -0.5f, 0, cam));
+        colors.push_back(checkHitAtRay(i, j, -0.5f, -0.5f, cam));
+        colors.push_back(checkHitAtRay(i, j, -0.5f, 0.5f, cam));
+        colors.push_back(checkHitAtRay(i, j, 0.5f, 0, cam));
+        colors.push_back(checkHitAtRay(i, j, 0.5f, -0.5f, cam));
+        colors.push_back(checkHitAtRay(i, j, 0.5f, 0.5f, cam));
+        averageAllImages(i, j, image, colors);
     }
 }
 
 int generateImage(sf::RenderWindow &window, my_Image &image, std::string
     sceneFile) {
     std::vector<std::thread> threadVector;
-    std::vector<std::unique_ptr<my_Image>> images;
     int configChanged = 0;
 
     showImage(window, image);
-    createListImages(images, image);
     for (float i = 0; i < WIDTH; i++) {
         threadVector.emplace_back(generatePixelColumn, i,
             std::ref(RayTracer::Camera::i()),
-            std::ref(image), std::ref(images));
+            std::ref(image));
     }
 
     configChanged = displayImage(window, image, sceneFile);
