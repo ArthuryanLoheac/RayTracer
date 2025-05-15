@@ -124,14 +124,15 @@ static sf::Color checkHitAt(RayTracer::Ray r) {
 
 static sf::Color checkHitAtRay(float i, float j, float iplus, float jplus,
     RayTracer::Camera cam) {
-    RayTracer::Ray r = cam.ray((i + iplus) / WIDTH, (j + jplus) / HEIGHT);
+    RayTracer::Ray r = cam.ray((i + iplus) / cam.image_width,
+        (j + jplus) / cam.image_height);
     return checkHitAt(r);
 }
 
 static void generatePixelColumn(float i, RayTracer::Camera cam,
 my_Image &image) {
     std::vector<sf::Color> colors;
-    for (float j = 0; j < HEIGHT; j++) {
+    for (float j = 0; j < cam.image_height; j++) {
         colors.clear();
         colors.push_back(checkHitAtRay(i, j, 0, 0, cam));
         colors.push_back(checkHitAtRay(i, j, 0, -0.5f, cam));
@@ -148,11 +149,12 @@ my_Image &image) {
 
 int generateImage(sf::RenderWindow &window, my_Image &image, std::string
     sceneFile) {
+    RayTracer::Camera &cam = RayTracer::Camera::i();
     std::vector<std::thread> threadVector;
     int configChanged = 0;
 
     showImage(window, image);
-    for (float i = 0; i < WIDTH; i++) {
+    for (float i = 0; i < cam.image_width; i++) {
         threadVector.emplace_back(generatePixelColumn, i,
             std::ref(RayTracer::Camera::i()),
             std::ref(image));
@@ -169,8 +171,9 @@ int generateImage(sf::RenderWindow &window, my_Image &image, std::string
 
 int renderImage(my_Image &image) {
     std::vector<std::thread> threadVector;
+    RayTracer::Camera &cam = RayTracer::Camera::i();
 
-    for (float i = 0; i < WIDTH; i++) {
+    for (float i = 0; i < cam.image_width; i++) {
         threadVector.emplace_back(generatePixelColumn, i,
             std::ref(RayTracer::Camera::i()),
             std::ref(image));

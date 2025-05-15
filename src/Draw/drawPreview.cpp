@@ -127,19 +127,20 @@ static sf::Color checkHitAt(RayTracer::Ray r) {
 
 static sf::Color checkHitAtRay(float i, float j, float iplus, float jplus,
     RayTracer::Camera cam) {
-    RayTracer::Ray r = cam.ray((i + iplus) / WIDTH, (j + jplus) / HEIGHT);
+    RayTracer::Ray r = cam.ray((i + iplus) / cam.image_width,
+        (j + jplus) / cam.image_height);
     return checkHitAt(r);
 }
 
 static void generatePixelColumn(float i, RayTracer::Camera cam,
 my_Image &image) {
     std::vector<sf::Color> colors;
-    for (float j = 0; j < HEIGHT; j+= sizePixelPreview) {
+    for (float j = 0; j < cam.image_height; j+= sizePixelPreview) {
         colors.clear();
         colors.push_back(checkHitAtRay(i, j, 0, 0, cam));
         for (float x = 0; x < sizePixelPreview; x++) {
             for (float y = 0; y < sizePixelPreview; y++) {
-                if (x + i < WIDTH && y + j < HEIGHT)
+                if (x + i < cam.image_width && y + j < cam.image_height)
                     averageAllImages(i + x, j + y, image, colors, true);
             }
         }
@@ -158,11 +159,12 @@ int pixels) {
     std::mutex queueMutex;
     std::condition_variable cv;
     bool done = false;
+    RayTracer::Camera &cam = RayTracer::Camera::i();
 
     showImage(window, image);
-    image.image.create(WIDTH, HEIGHT, sf::Color::Black);
+    image.image.create(cam.image_width, cam.image_height, sf::Color::Black);
 
-    for (float i = 0; i < WIDTH; i += sizePixelPreview)
+    for (float i = 0; i < cam.image_width; i += sizePixelPreview)
         taskQueue.push(i);
     for (unsigned int t = 0; t < numThreads; ++t) {
         threadPool.emplace_back([&]() {
