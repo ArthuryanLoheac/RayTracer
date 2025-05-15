@@ -20,6 +20,9 @@ class Parsing {
         const std::string &type);
      std::shared_ptr<I_Material> parseMaterial(
         const libconfig::Setting &material);
+     void parseLights(const libconfig::Setting &lights);
+     void parseLight(const libconfig::Setting &light,
+        const std::string &type);
 
      class ParsingError : public std::exception {
       private:
