@@ -17,23 +17,25 @@ extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
 }
 
 PrimObj::PrimObj() {
-    Init();
 }
 
-void PrimObj::Init() {
-    position = RayTracer::Point3D(0, 0, 5);
-    rotation = RayTracer::Vector3D(0, M_PI, 0);
-    scale = RayTracer::Point3D(0.25, 0.25, 0.25);
-
-    filename = "tests/obj_file/shrek.obj";
-
-    try {
-        loadObjFile(filename);
-        material = dlLoader<Mat>::getLib("libs/mat_flat.so", "getMaterial");
-    } catch (std::exception &e) {
-        std::cerr << "Error initializing OBJ primitive: " << e.what()
-            << std::endl;
-        material = nullptr;
+void PrimObj::Init(std::unordered_map<std::string, std::any> &settings) {
+    filename = std::any_cast<std::string>(settings["filename"]);
+    if (!loadObjFile(filename)) {
+        throw PrimitiveError("Failed to load OBJ file: " + filename);
+    }
+    if (settings.find("position") != settings.end()) {
+        position = std::any_cast<RayTracer::Point3D>(settings["position"]);
+    }
+    if (settings.find("rotation") != settings.end()) {
+        rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
+    }
+    if (settings.find("scale") != settings.end()) {
+        scale = std::any_cast<RayTracer::Point3D>(settings["scale"]);
+    }
+    if (settings.find("material") != settings.end()) {
+        material = std::any_cast<std::shared_ptr<RayTracer::I_Material>>(
+            settings["material"]);
     }
 }
 

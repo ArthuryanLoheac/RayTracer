@@ -16,6 +16,8 @@
 #include "dlLoader/dlLoader.hpp"
 #include "Parsing/Parsing.hpp"
 #include "Scene/Scene.hpp"
+#include "Scene/Camera.hpp"
+#include "DesignPatterns/Factory.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -30,26 +32,11 @@ static void waitForFileModification(std::string sceneFile) {
     }
 }
 
-static int setupAndRun(sf::RenderWindow &window, my_Image &image, std::string
-    sceneFile) {
-    RayTracer::Scene::i->ObjectHead = dlLoader<Prim>::getLib(
-        "./libs/primitive_none.so", "getPrimitive");
-    RayTracer::Scene::i->ObjectHead->AddChildren(dlLoader<Prim>::getLib(
-       "./libs/light_ambient.so", "getLight"));
-
-    RayTracer::Scene::i->ObjectHead->AddChildren(
-        dlLoader<Prim>::getLib("./libs/primitive_plane.so", "getPrimitive"));
-
-    RayTracer::Scene::i->ObjectHead->AddChildren(
-        dlLoader<Prim>::getLib("./libs/light_spot.so", "getLight"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(
-        dlLoader<Prim>::getLib("./libs/light_spot.so", "getLight"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(
-        dlLoader<Prim>::getLib("./libs/primitive_obj.so", "getPrimitive"));
-    RayTracer::Scene::i->ObjectHead->AddChildren(
-        dlLoader<Prim>::getLib("./libs/light_spot.so", "getLight"));
-
+static int setupAndRun(sf::RenderWindow &window, my_Image &image,
+    std::string sceneFile) {
     computeTreeValues(RayTracer::Scene::i->ObjectHead);
+    for (int i = WIDTH /2; i >= 8; i /= 2)
+        generateImagePreview(window, image, i);
     return generateImage(window, image, sceneFile);
 }
 
@@ -68,12 +55,15 @@ int testMain(std::string sceneFile) {
 
 int main(int argc, char **argv) {
     RayTracer::Parsing parser;
+    RayTracer::Scene scene;
     int hasFileChanged = 2;
+    RayTracer::Camera cam;
+    srand(time(NULL));
 
     while (hasFileChanged != 0) {
         try {
             parser.parseArgs(argc, argv);
-            RayTracer::Scene scene = parser.parseSceneFile();
+            parser.parseSceneFile();
             hasFileChanged = testMain(argv[1]);
         }
         catch (const RayTracer::Parsing::ParsingError &e) {

@@ -1,4 +1,5 @@
 #include <memory>
+#include <string>
 
 #include "Lights/Ambient.hpp"
 
@@ -7,14 +8,13 @@ extern "C" std::unique_ptr<RayTracer::I_Light> getLight() {
 }
 
 Ambient::Ambient() {
-    Init();
 }
 
-void Ambient::Init() {
-    angle = 360;
-    intensity = 0.1f;
-    position = RayTracer::Point3D(-0.15f, 0.45f, -2.f);
-    color = sf::Color(255, 255, 255, 255);
+void Ambient::Init(std::unordered_map<std::string, std::any> &settings) {
+    angle = std::any_cast<float>(settings["angle"]);
+    intensity = std::any_cast<float>(settings["intensity"]);
+    position = std::any_cast<RayTracer::Point3D>(settings["position"]);
+    color = std::any_cast<sf::Color>(settings["color"]);
 }
 
 float Ambient::getLuminescence(RayTracer::Point3D intersection,

@@ -15,7 +15,9 @@ class TestLight : public RayTracer::A_Lights {
         (void)head;
         return intensity;
     }
-    void Init() override {}
+    void Init(std::unordered_map<std::string, std::any> &settings) override {
+        (void)settings;
+    }
 };
 
 Test(A_Light, SetAndGetPosition) {

@@ -6,14 +6,14 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
-class ChessboardMat : public RayTracer::I_Material {
+class ImageMat : public RayTracer::I_Material {
  private:
-    sf::Color col1;
-    sf::Color col2;
+    sf::Image img;
     RayTracer::Vector3D scale;
+    RayTracer::Vector3D rotation;
  public:
-    ChessboardMat();
-    ~ChessboardMat() override = default;
+    ImageMat();
+    ~ImageMat() override = default;
 
     void Init(std::unordered_map<std::string, std::any> &settings) override;
     sf::Color getColorAt(float u, float v) override;

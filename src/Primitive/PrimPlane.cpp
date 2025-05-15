@@ -1,16 +1,17 @@
 #include <memory>
 #include <cmath>
+#include <string>
 
 #include "Primitive/PrimPlane.hpp"
 #include "dlLoader/dlLoader.hpp"
 #include "Consts/const.hpp"
+#include "DesignPatterns/Factory.hpp"
 
 extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
     return std::make_unique<PrimPlane>();
 }
 
 PrimPlane::PrimPlane() {
-    Init();
 }
 
 bool PrimPlane::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
@@ -32,19 +33,14 @@ RayTracer::Vector3D PrimPlane::getNormalAt(RayTracer::Point3D point) {
 }
 
 RayTracer::Vector3D PrimPlane::getUV(RayTracer::Point3D point) {
-    float u = std::fmod(point.x, 1.0f);
-    float v = std::fmod(point.z, 1.0f);
+    float u = point.x;
+    float v = point.z;
     return RayTracer::Vector3D(u, v, 0);
 }
 
-void PrimPlane::Init() {
-    position = RayTracer::Point3D(0, -2, 5);
-    rotation = RayTracer::Vector3D(0, 1, 0);
-    radius = 10.f;
-
-    try {
-        material = dlLoader<Mat>::getLib("libs/mat_flat.so", "getMaterial");
-    } catch (std::exception &e) {
-        material = nullptr;
-    }
+void PrimPlane::Init(std::unordered_map<std::string, std::any> &settings) {
+    position = std::any_cast<RayTracer::Point3D>(settings["position"]);
+    rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
+    radius = std::any_cast<float>(settings["radius"]);
+    material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
 }

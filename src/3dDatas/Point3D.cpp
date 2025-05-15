@@ -6,6 +6,10 @@ RayTracer::Point3D::Point3D()
 RayTracer::Point3D::Point3D(double x, double y, double z)
     : x(x), y(y), z(z) {}
 
+double RayTracer::Point3D::length() {
+    return std::sqrt(std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2));
+}
+
 RayTracer::Point3D RayTracer::Point3D::operator+(const Vector3D &vec) {
     return Point3D(x + vec.x, y + vec.y, z + vec.z);
 }

@@ -13,6 +13,11 @@ RayTracer::Vector3D::Vector3D(double x, double y, double z) {
     this->y = y;
     this->z = z;
 }
+RayTracer::Vector3D::Vector3D(Point3D other) {
+    this->x = other.x;
+    this->y = other.y;
+    this->z = other.z;
+}
 
 #pragma endregion CONSTRUCTORS
 #pragma region TOOLS
@@ -40,19 +45,19 @@ RayTracer::Vector3D RayTracer::Vector3D::normalized() {
     return RayTracer::Vector3D(x / len, y / len, z / len);
 }
 
-RayTracer::Vector3D RayTracer::Vector3D::cross(const Vector3D &other) {
-    return RayTracer::Vector3D(
-        y * other.z - z * other.y,
-        z * other.x - x * other.z,
-        x * other.y - y * other.x);
+RayTracer::Vector3D RayTracer::Vector3D::cross(const Vector3D &v) {
+    return Vector3D(y * v.z - z * v.y,
+            z * v.x - x * v.z,
+            x * v.y - y * v.x);
 }
 
 #pragma endregion TOOLS
 #pragma region OPERATORS
 
-// Add Vector3D
-RayTracer::Vector3D RayTracer::Vector3D::operator+
-  (const RayTracer::Vector3D &other) {
+        // Add Vector3D
+        RayTracer::Vector3D RayTracer::Vector3D::
+        operator+
+    (const RayTracer::Vector3D &other) {
     return Vector3D(x + other.x, y + other.y, z +  other.z);
 }
 
@@ -66,6 +71,10 @@ RayTracer::Vector3D &RayTracer::Vector3D::operator+=
 
 // Substract Vector3D
 RayTracer::Vector3D RayTracer::Vector3D::operator-(const Vector3D& other) {
+    return Vector3D(x - other.x, y - other.y, z -  other.z);
+}
+
+RayTracer::Vector3D RayTracer::Vector3D::operator-(const Point3D& other) {
     return Vector3D(x - other.x, y - other.y, z -  other.z);
 }
 
@@ -134,9 +143,23 @@ RayTracer::Vector3D &RayTracer::Vector3D::operator=(Point3D other) {
     return *this;
 }
 
+RayTracer::Vector3D RayTracer::Vector3D::operator-() const {
+    return (RayTracer::Vector3D(-x, -y, -z));
+}
+
 std::ostream &operator<<(std::ostream &os, const RayTracer::Vector3D &vec) {
     os << "V(" << vec.x << ", " << vec.y << ", " << vec.z << ")";
     return os;
 }
 
 #pragma endregion OPERATORS
+
+float RayTracer::Vector3D::lengthSquared() {
+    return (x*x+y*y+z*z);
+}
+
+RayTracer::Vector3D RayTracer::Vector3D::orthogonal() {
+    return (std::abs(x) > std::abs(z)) ?
+        Vector3D(-y, x, 0) :
+        Vector3D(0, -z, y);
+}

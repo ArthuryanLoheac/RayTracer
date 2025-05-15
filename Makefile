@@ -40,7 +40,7 @@ FLAGS_LINTER =	\
 	--repository=. \
 	--quiet \
 	--output=vs7	\
-	--filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references\
+	--filter=-legal/copyright,-build/c++17,+build/c++20,-runtime/references \
 	--recursive \
 	--exclude=tests/ \
 
@@ -100,23 +100,28 @@ $(NAME_LIB): $(OBJ)
 	ar rc $(NAME_LIB) $(OBJ)
 
 sphere:
-	@mkdir -p libs
-	$(COMPILER) -olibs/primitive_sphere.so -shared -fPIC $(SRC_PRIMITIVE) \
+	@mkdir -p plugins
+	$(COMPILER) -o plugins/primitive_sphere.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimSphere.cpp $(FLAGS_SO)
 
 cone:
-	@mkdir -p libs
-	$(COMPILER) -olibs/primitive_cone.so -shared -fPIC $(SRC_PRIMITIVE) \
+	@mkdir -p plugins
+	$(COMPILER) -o plugins/primitive_cone.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimCone.cpp $(FLAGS_SO)
 
 cylinder:
-	@mkdir -p libs
-	$(COMPILER) -olibs/primitive_cylinder.so -shared -fPIC $(SRC_PRIMITIVE) \
-		src/Primitive/PrimCylinder.cpp $(FLAGS_SO)
+	@mkdir -p plugins
+	$(COMPILER) -o plugins/primitive_cylinder.so -shared -fPIC \
+		$(SRC_PRIMITIVE) src/Primitive/PrimCylinder.cpp $(FLAGS_SO)
+
+limcylinder:
+	@mkdir -p plugins
+	$(COMPILER) -o plugins/primitive_limcylinder.so -shared -fPIC \
+		$(SRC_PRIMITIVE) src/Primitive/PrimLimCylinder.cpp $(FLAGS_SO)
 
 plane:
-	@mkdir -p libs
-	$(COMPILER) -olibs/primitive_plane.so -shared -fPIC $(SRC_PRIMITIVE) \
+	@mkdir -p plugins
+	$(COMPILER) -o plugins/primitive_plane.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimPlane.cpp $(FLAGS_SO)
 
 obj_prim:
@@ -129,28 +134,43 @@ none:
 	$(COMPILER) -olibs/primitive_none.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimNone.cpp $(FLAGS_SO)
 
-primitive: sphere plane none cylinder cone obj_prim
+primitive: sphere plane none cylinder cone limcylinder obj_prim
 
 flat_mat:
-	@mkdir -p libs
-	$(COMPILER) -o libs/mat_flat.so -shared -fPIC $(SRC_MATERIAL) \
+	@mkdir -p plugins
+	$(COMPILER) -o plugins/mat_flat.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/FlatMat.cpp $(FLAGS_SO)
 
 chess_mat:
-	@mkdir -p libs
-	$(COMPILER) -o libs/mat_chess.so -shared -fPIC $(SRC_MATERIAL) \
+	@mkdir -p plugins
+	$(COMPILER) -o plugins/mat_chess.so -shared -fPIC $(SRC_MATERIAL) \
 		src/Material/ChessboardMat.cpp $(FLAGS_SO)
 
-material: flat_mat chess_mat
+trans_mat:
+	@mkdir -p libs
+	$(COMPILER) -o plugins/mat_trans.so -shared -fPIC $(SRC_MATERIAL) \
+		src/Material/TransMat.cpp $(FLAGS_SO)
+
+perlin_mat:
+	@mkdir -p plugins
+	$(COMPILER) -o plugins/mat_perlin.so -shared -fPIC $(SRC_MATERIAL) \
+		src/Material/PerlinMat.cpp $(FLAGS_SO)
+
+image_mat:
+	@mkdir -p plugins
+	$(COMPILER) -o plugins/mat_image.so -shared -fPIC $(SRC_MATERIAL) \
+		src/Material/ImageMat.cpp $(FLAGS_SO)
+
+material: flat_mat chess_mat perlin_mat image_mat trans_mat
 
 ambient_light:
-	@mkdir -p libs
-	$(COMPILER) -o libs/light_ambient.so -shared -fPIC $(SRC_LIGHT) \
+	@mkdir -p plugins
+	$(COMPILER) -o plugins/light_ambient.so -shared -fPIC $(SRC_LIGHT) \
 		src/Lights/Ambient.cpp $(FLAGS_SO)
 
 spot_light:
-	@mkdir -p libs
-	$(COMPILER) -o libs/light_spot.so -shared -fPIC $(SRC_LIGHT) \
+	@mkdir -p plugins
+	$(COMPILER) -o plugins/light_spot.so -shared -fPIC $(SRC_LIGHT) \
 		src/Lights/Spot.cpp $(FLAGS_SO)
 
 light: ambient_light spot_light
@@ -165,7 +185,7 @@ clean:
 	rm -f *.gcda *.gcno
 
 fclean: clean
-	rm -rf libs
+	rm -rf plugins
 	rm -f $(NAME) $(NAME_LIB) unit_tests
 
 screenshot:

@@ -29,6 +29,6 @@ class PrimObj : public RayTracer::A_Primitive {
     bool hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) override;
     RayTracer::Vector3D getNormalAt(RayTracer::Point3D point) override;
     RayTracer::Vector3D getUV(RayTracer::Point3D point) override;
-    void Init() override;
+    void Init(std::unordered_map<std::string, std::any> &settings) override;
     void setObjFile(const std::string& path);
 };

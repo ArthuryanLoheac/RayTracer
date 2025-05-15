@@ -1,16 +1,18 @@
 #include <memory>
 #include <algorithm>
+#include <string>
 
 #include "Primitive/PrimCone.hpp"
 #include "dlLoader/dlLoader.hpp"
 #include "Consts/const.hpp"
+#include "DesignPatterns/Factory.hpp"
+#include "Interfaces/Material/I_Material.hpp"
 
 extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
     return std::make_unique<PrimCone>();
 }
 
 PrimCone::PrimCone() {
-    Init();
 }
 
 bool PrimCone::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
@@ -46,25 +48,11 @@ RayTracer::Vector3D PrimCone::getNormalAt(RayTracer::Point3D point) {
     return normal;
 }
 
-void PrimCone::Init() {
-    static int i = 0;
-
-    rotation = RayTracer::Vector3D(0, -1, 0);
-    if (i == 0) {
-        position = RayTracer::Point3D(1, 1.5f, 5);
-        angle = 30;
-    } else {
-        position = RayTracer::Point3D(0, .1f, 5);
-        angle = 20;
-    }
-    angle = angle * (M_PI / 180);
-    i++;
-
-    try {
-        material = dlLoader<Mat>::getLib("libs/mat_chess.so", "getMaterial");
-    } catch (std::exception &e) {
-        material = nullptr;
-    }
+void PrimCone::Init(std::unordered_map<std::string, std::any> &settings) {
+    rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
+    position = std::any_cast<RayTracer::Point3D>(settings["position"]);
+    angle = std::any_cast<float>(settings["angle"]);
+    material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
 }
 
 RayTracer::Vector3D PrimCone::getUV(RayTracer::Point3D point) {
@@ -74,7 +62,7 @@ RayTracer::Vector3D PrimCone::getUV(RayTracer::Point3D point) {
     float u = (theta / (2 * M_PI)) + 0.5f;
 
     float height = pointToAxis.dot(rotation);
-    float v = std::fmod(height, 1.0f);
+    float v = height;
 
     return RayTracer::Vector3D(u, v, 0);
 }

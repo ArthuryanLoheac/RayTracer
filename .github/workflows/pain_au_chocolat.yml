@@ -55,7 +55,6 @@ jobs:
           fi
           rm "$tmpfile"
   check_program_compilation:
-    needs: [check_coding_style, check_coding_style_epitech]
     runs-on: ubuntu-latest
     container:
       image: epitechcontent/epitest-docker:latest
@@ -72,7 +71,7 @@ jobs:
           LIST=$(echo $EXECUTABLES | tr ',' ' ')
           find $LIST
   run_tests:
-    needs: check_program_compilation
+    needs: [check_coding_style, check_coding_style_epitech, check_program_compilation]
     runs-on: ubuntu-latest
     container:
       image: epitechcontent/epitest-docker:latest
