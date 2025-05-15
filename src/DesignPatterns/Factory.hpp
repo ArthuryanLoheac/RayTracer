@@ -35,6 +35,7 @@ Factory<T>::Factory() {
     std::string light = "getLight";
 
     _arg_list.insert({"sphere", {"plugins/primitive_sphere.so", prim}});
+    _arg_list.insert({"obj", {"plugins/primitive_obj.so", prim}});
     _arg_list.insert({"none", {"plugins/primitive_none.so", prim}});
     _arg_list.insert({"cylinder", {"plugins/primitive_cylinder.so", prim}});
     _arg_list.insert({"limcylinder",
