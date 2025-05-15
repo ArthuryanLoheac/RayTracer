@@ -41,6 +41,32 @@ void Parsing::parseSceneFile() {
         cfg.readFile(sceneFile.c_str());
         const libconfig::Setting &raytracer = cfg.lookup("raytracer");
             Scene::i->ObjectHead = Factory<Prim>::i().create("none");
+
+        // AMBIENT LIGHT
+        std::shared_ptr<Prim> ambient =
+            Factory<Prim>::i().create("ambient");
+        std::unordered_map<std::string, std::any> ambientSettings;
+        ambientSettings["intensity"] = std::make_any<float>(0.2);
+        ambientSettings["color"] = std::make_any<sf::Color>(
+            sf::Color(255, 255, 255));
+        ambientSettings["angle"] = std::make_any<float>(0.0);
+        ambientSettings["position"] = std::make_any<Point3D>(Point3D(0, 0, 0));
+        ambient->Init(ambientSettings);
+        Scene::i->ObjectHead->AddChildren(ambient);
+
+        // SPOT
+        std::shared_ptr<Prim> spot =
+            Factory<Prim>::i().create("spot");
+        std::unordered_map<std::string, std::any> spotSettings;
+        spotSettings["intensity"] = std::make_any<float>(3);
+        spotSettings["color"] = std::make_any<sf::Color>(sf::Color(
+            255, 255, 255));
+        spotSettings["angle"] = std::make_any<float>(180.0);
+        spotSettings["position"] = std::make_any<Point3D>(Point3D(0, 5, 2));
+        spotSettings["rotation"] = std::make_any<Vector3D>(Vector3D(0, 0, 0));
+        spot->Init(spotSettings);
+        Scene::i->ObjectHead->AddChildren(spot);
+
         // parseCamera(raytracer.lookup("camera"));
         parsePrimitives(raytracer.lookup("primitives"));
         // parseLights(raytracer.lookup("lights"));
