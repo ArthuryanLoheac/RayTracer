@@ -9,7 +9,7 @@
 #include <SFML/System.hpp>
 
 
-static void createPPMFile(const sf::Image& image,
+void createPPMFile(const sf::Image& image,
     const std::string& filename) {
     unsigned int width;
     unsigned int height;

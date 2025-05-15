@@ -165,3 +165,21 @@ int generateImage(sf::RenderWindow &window, my_Image &image, std::string
     }
     return configChanged;
 }
+
+int renderImage(my_Image &image) {
+    std::vector<std::thread> threadVector;
+
+    for (float i = 0; i < WIDTH; i++) {
+        threadVector.emplace_back(generatePixelColumn, i,
+            std::ref(RayTracer::Camera::i()),
+            std::ref(image));
+    }
+
+    for (auto &t : threadVector) {
+        if (t.joinable())
+            t.join();
+    }
+    createPPMFile(image.image, "renders/render-" +
+        getTimestampAsString() + ".ppm");
+    return 0;
+}
