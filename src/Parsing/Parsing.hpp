@@ -10,8 +10,9 @@ class Parsing {
      std::string sceneFile;
 
  public:
-     void parseArgs(int argc, char **argv);
-     void parseSceneFile();
+    bool noWindowMode = false;
+    void parseArgs(int argc, char **argv);
+    void parseSceneFile();
     //  void parseCamera(const libconfig::Setting &setting);
      void parsePrimitive(const libconfig::Setting &setting);
     //  void parseLights(const libconfig::Setting &setting);
