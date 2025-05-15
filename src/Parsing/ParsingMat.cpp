@@ -13,7 +13,7 @@
 namespace RayTracer {
 
 static sf::Color parseColor(const libconfig::Setting &color) {
-    float rgb[3] = {0.0f, 0.0f, 0.0f};
+    int rgb[3] = {0, 0, 0};
 
     color.lookupValue("r", rgb[0]);
     color.lookupValue("g", rgb[1]);
@@ -22,7 +22,7 @@ static sf::Color parseColor(const libconfig::Setting &color) {
 }
 
 static sf::Color parseTransparentColor(const libconfig::Setting &color) {
-    float rgb[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+    int rgb[4] = {0, 0, 0, 255};
 
     color.lookupValue("r", rgb[0]);
     color.lookupValue("g", rgb[1]);
@@ -54,9 +54,8 @@ static sf::Image parseImage(const libconfig::Setting &image) {
     sf::Image img;
 
     image.lookupValue("path", path);
-    if (!img.loadFromFile(path)) {
+    if (!img.loadFromFile(path))
         img.create(100, 100, sf::Color(234, 58, 247));
-    }
     return img;
 }
 
@@ -81,7 +80,7 @@ std::unordered_map<std::string, std::any> &settings) {
 
 void parseImage(const libconfig::Setting &image,
 std::unordered_map<std::string, std::any> &settings) {
-    settings["image"] = parseImage(image.lookup("image"));
+    settings["image"] = parseImage(image);
     settings["scale"] = parseScale(image.lookup("scale"));
     settings["rotation"] = parseRotation(image.lookup("rotation"));
 }
