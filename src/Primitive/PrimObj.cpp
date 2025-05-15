@@ -128,6 +128,18 @@ void PrimObj::setObjFile(const std::string& path) {
     loadObjFile(filename);
 }
 
+static void rotatePoint(RayTracer::Point3D& point, float angle) {
+    float cosY = cos(angle);
+    float sinY = sin(angle);
+    float newX = point.x * cosY + point.z * sinY;
+    float newZ = -point.x * sinY + point.z * cosY;
+    point.x = newX;
+    point.z = newZ;
+}
+
+// Base on the Möller–Trumbore algorithm
+// https://fr.wikipedia.org/wiki/Algorithme_d%27intersection_de_M%C3%B6ller-Trumbore
+// Based on the c++ code in the wikipedia page
 bool PrimObj::rayTriangleIntersect(const Triangle& triangle,
     const RayTracer::Ray& ray, RayTracer::Point3D& intersection, float& t) {
     const float EPSILON = 0.0000001;
@@ -136,20 +148,9 @@ bool PrimObj::rayTriangleIntersect(const Triangle& triangle,
     RayTracer::Point3D v2 = triangle.v2;
 
     if (rotation.y != 0) {
-        float cosY = cos(rotation.y);
-        float sinY = sin(rotation.y);
-        float newX0 = v0.x * cosY + v0.z * sinY;
-        float newZ0 = -v0.x * sinY + v0.z * cosY;
-        v0.x = newX0;
-        v0.z = newZ0;
-        float newX1 = v1.x * cosY + v1.z * sinY;
-        float newZ1 = -v1.x * sinY + v1.z * cosY;
-        v1.x = newX1;
-        v1.z = newZ1;
-        float newX2 = v2.x * cosY + v2.z * sinY;
-        float newZ2 = -v2.x * sinY + v2.z * cosY;
-        v2.x = newX2;
-        v2.z = newZ2;
+        rotatePoint(v0, rotation.y);
+        rotatePoint(v1, rotation.y);
+        rotatePoint(v2, rotation.y);
     }
     RayTracer::Vector3D scaleVec(scale.x, scale.y, scale.z);
     v0 = RayTracer::Point3D(v0.x * scaleVec.x, v0.y * scaleVec.y, v0.z *
@@ -229,20 +230,9 @@ RayTracer::Vector3D PrimObj::getNormalAt(RayTracer::Point3D point) {
         RayTracer::Point3D v2 = triangle.v2;
 
         if (rotation.y != 0) {
-            float cosY = cos(rotation.y);
-            float sinY = sin(rotation.y);
-            float newX0 = v0.x * cosY + v0.z * sinY;
-            float newZ0 = -v0.x * sinY + v0.z * cosY;
-            v0.x = newX0;
-            v0.z = newZ0;
-            float newX1 = v1.x * cosY + v1.z * sinY;
-            float newZ1 = -v1.x * sinY + v1.z * cosY;
-            v1.x = newX1;
-            v1.z = newZ1;
-            float newX2 = v2.x * cosY + v2.z * sinY;
-            float newZ2 = -v2.x * sinY + v2.z * cosY;
-            v2.x = newX2;
-            v2.z = newZ2;
+            rotatePoint(v0, rotation.y);
+            rotatePoint(v1, rotation.y);
+            rotatePoint(v2, rotation.y);
         }
 
         RayTracer::Vector3D scaleVec(scale.x, scale.y, scale.z);
