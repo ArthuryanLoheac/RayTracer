@@ -77,11 +77,31 @@ void Parsing::parseSceneFile() {
             Factory<Prim>::i().create("plane");
         std::unordered_map<std::string, std::any> planeSettings;
         planeSettings["position"] = std::make_any<Point3D>(Point3D(0, 0, 0));
-        planeSettings["rotation"] = std::make_any<Vector3D>(Vector3D(0, 1, 0));
+        planeSettings["rotation"] = std::make_any<Vector3D>(Vector3D(0, 0, 0));
         planeSettings["radius"] = std::make_any<float>(10.0);
         planeSettings["material"] = std::make_any<std::shared_ptr<Mat>>(mat);
         plane->Init(planeSettings);
         Scene::i->ObjectHead->AddChildren(plane);
+
+        std::shared_ptr<Mat> chess =
+            Factory<Mat>::i().create("chess");
+        std::unordered_map<std::string, std::any> chessSettings;
+        chessSettings["col1"] = std::make_any<sf::Color>(sf::Color(
+            255, 255, 255));
+        chessSettings["col2"] = std::make_any<sf::Color>(sf::Color(0, 0, 0));
+        chessSettings["scale"] = std::make_any<RayTracer::Vector3D>(
+            RayTracer::Vector3D(1, 1, 0));
+        chess->Init(chessSettings);
+
+        std::shared_ptr<Prim> plane2 =
+            Factory<Prim>::i().create("plane");
+        std::unordered_map<std::string, std::any> plane2Settings;
+        plane2Settings["position"] = std::make_any<Point3D>(Point3D(1, 2, 10));
+        plane2Settings["rotation"] = std::make_any<Vector3D>(Vector3D(0, 0, 90));
+        plane2Settings["radius"] = std::make_any<float>(10.0);
+        plane2Settings["material"] = std::make_any<std::shared_ptr<Mat>>(chess);
+        plane2->Init(plane2Settings);
+        Scene::i->ObjectHead->AddChildren(plane2);
 
         // parseCamera(raytracer);
         parsePrimitive(raytracer);
