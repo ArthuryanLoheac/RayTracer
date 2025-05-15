@@ -8,13 +8,13 @@ extern "C" std::unique_ptr<RayTracer::I_Material> getMaterial() {
 }
 
 void TransMat::Init(std::unordered_map<std::string, std::any> &settings) {
-    (void)settings;
+    col = std::any_cast<sf::Color>(settings["color"]);
 }
 
 sf::Color TransMat::getColorAt(float x, float y) {
     (void)x;
     (void)y;
-    return sf::Color(255, 255, 255, 125);
+    return col;
 }
 
 bool TransMat::isReflective() const {

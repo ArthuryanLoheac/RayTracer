@@ -12,8 +12,6 @@ extern "C" std::unique_ptr<RayTracer::I_Primitive> getPrimitive() {
 }
 
 PrimNone::PrimNone() {
-    std::unordered_map<std::string, std::any> settings;
-    Init(settings);
 }
 
 bool PrimNone::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {

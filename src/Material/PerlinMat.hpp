@@ -14,7 +14,7 @@ class PerlinMat : public RayTracer::I_Material {
     RayTracer::Vector3D rotation;
     sf::Color c1, c2;
     std::vector<float> Permutation;
-    int repeatX, repeatY;
+    int octave;
 
     float Noise2D(float x, float y);
     float Fade(float t);
