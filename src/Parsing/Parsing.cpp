@@ -1,6 +1,8 @@
-
 #include <iostream>
 #include <string>
+#include <unordered_map>
+#include <memory>
+
 #include <libconfig.h++>
 
 #include "Parsing/Parsing.hpp"
@@ -29,6 +31,58 @@ void Parsing::parseSceneFile() {
         cfg.readFile(sceneFile.c_str());
         const libconfig::Setting &raytracer = cfg.lookup("raytracer");
             Scene::i->ObjectHead = Factory<Prim>::i().create("none");
+
+        // AMBIENT LIGHT
+        std::shared_ptr<Prim> ambient =
+            Factory<Prim>::i().create("ambient");
+        std::unordered_map<std::string, std::any> ambientSettings;
+        ambientSettings["intensity"] = std::make_any<float>(0.2);
+        ambientSettings["color"] = std::make_any<sf::Color>(
+            sf::Color(255, 255, 255));
+        ambientSettings["angle"] = std::make_any<float>(0.0);
+        ambientSettings["position"] = std::make_any<Point3D>(Point3D(0, 0, 0));
+        ambient->Init(ambientSettings);
+        Scene::i->ObjectHead->AddChildren(ambient);
+
+        // SPOT
+        std::shared_ptr<Prim> spot =
+            Factory<Prim>::i().create("spot");
+        std::unordered_map<std::string, std::any> spotSettings;
+        spotSettings["intensity"] = std::make_any<float>(6);
+        spotSettings["color"] = std::make_any<sf::Color>(sf::Color(
+            255, 0, 0));
+        spotSettings["angle"] = std::make_any<float>(180.0);
+        spotSettings["position"] = std::make_any<Point3D>(Point3D(0, 2, 2));
+        spotSettings["rotation"] = std::make_any<Vector3D>(Vector3D(0, 0, 0));
+        spot->Init(spotSettings);
+        Scene::i->ObjectHead->AddChildren(spot);
+
+
+        std::shared_ptr<Mat> mat =
+            Factory<Mat>::i().create("perlin");
+        std::unordered_map<std::string, std::any> matSettings;
+        matSettings["color1"] = std::make_any<sf::Color>(sf::Color(
+            255, 255, 255));
+        matSettings["color2"] = std::make_any<sf::Color>(sf::Color(0, 0, 255));
+        matSettings["repeatX"] = std::make_any<int>(64);
+        matSettings["repeatY"] = std::make_any<int>(64);
+        matSettings["scale"] = std::make_any<RayTracer::Vector3D>(
+            RayTracer::Vector3D(1, 1, 0));
+        matSettings["rotation"] = std::make_any<RayTracer::Vector3D>(
+            RayTracer::Vector3D(0, 0, 0));
+        mat->Init(matSettings);
+
+        // PLANE
+        std::shared_ptr<Prim> plane =
+            Factory<Prim>::i().create("plane");
+        std::unordered_map<std::string, std::any> planeSettings;
+        planeSettings["position"] = std::make_any<Point3D>(Point3D(0, 0, 0));
+        planeSettings["rotation"] = std::make_any<Vector3D>(Vector3D(0, 1, 0));
+        planeSettings["radius"] = std::make_any<float>(10.0);
+        planeSettings["material"] = std::make_any<std::shared_ptr<Mat>>(mat);
+        plane->Init(planeSettings);
+        Scene::i->ObjectHead->AddChildren(plane);
+
         // parseCamera(raytracer);
         parsePrimitive(raytracer);
         // parseLights(raytracer);
