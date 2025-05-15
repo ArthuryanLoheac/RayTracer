@@ -19,6 +19,8 @@ int generateImagePreview(sf::RenderWindow &window, my_Image &image, int pixels);
 int displayImage(sf::RenderWindow &window, my_Image &image, std::string
     sceneFile);
 void showImage(sf::RenderWindow &window, my_Image &image);
+void createPPMFile(const sf::Image& image,
+    const std::string& filename);
 
 // Compute values of the tree
 void computeTreeValues(std::shared_ptr<Prim> head,
@@ -32,7 +34,8 @@ std::string getTimestampAsString();
 void createListImages(std::vector<std::unique_ptr<my_Image>> &images,
     my_Image &image);
 void averageAllImages(float i, float j, my_Image &image,
-    std::vector<sf::Color> &images);
+    std::vector<sf::Color> &images, bool isPreview = false);
 
 // Random tools
 bool hasFileChanged(std::string sceneFile);
+int renderImage(my_Image &image);

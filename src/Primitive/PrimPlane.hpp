@@ -21,4 +21,6 @@ class PrimPlane : public RayTracer::A_Primitive {
     RayTracer::Vector3D getNormalAt(RayTracer::Point3D point) override;
     RayTracer::Vector3D getUV(RayTracer::Point3D point) override;
     void Init(std::unordered_map<std::string, std::any> &settings) override;
+    RayTracer::Vector3D getRotatedNormal() const;
+    RayTracer::Vector3D getRotatedVector(RayTracer::Vector3D vector) const;
 };

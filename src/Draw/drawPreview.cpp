@@ -23,9 +23,11 @@
 #include "Consts/const.hpp"
 #include "Generation/tools.hpp"
 #include "Draw/my_Image.hpp"
+#include "Draw/skybox.hpp"
 #include "Draw/hit.hpp"
 
 int sizePixelPreview = 16;
+static sf::Color checkHitAt(RayTracer::Ray r);
 
 static void editColor(sf::Color &c, sf::Vector3f &cLight,
     sf::Color &origin) {
@@ -41,7 +43,7 @@ static void editColor(sf::Color &c, sf::Vector3f &cLight,
     float percentA = c.a / 255.f;
     c = sf::Color(r * percentA + (origin.r * (1 - percentA)),
         g * percentA + (origin.g * (1 - percentA)),
-        b * percentA + (origin.b * (1 - percentA)), 100);
+        b * percentA + (origin.b * (1 - percentA)));
 }
 
 static void computeLuminescence(RayTracer::Point3D &intersection,
@@ -55,57 +57,62 @@ std::shared_ptr<Prim> &s, sf::Vector3f &cLight) {
     }
 }
 
-static void setPixels(my_Image &image, int i, int j, sf::Color c) {
-    for (int x = 0; x < sizePixelPreview; ++x) {
-        for (int y = 0; y < sizePixelPreview; ++y) {
-            if (i + x >= WIDTH || j + y >= HEIGHT)
-                continue;
-            image.setPixel(i + x, j + y, c);
-        }
+static sf::Color getColorReflected(hitDatas &datas, RayTracer::Vector3D uv) {
+    sf::Color c(0, 0, 0);
+    if (datas.obj->getMaterial()->isReflective()) {
+        RayTracer::Vector3D normal = datas.obj->getNormalAt(datas.intersection);
+        RayTracer::Vector3D reflected(datas.direction - normal *
+            2*(datas.direction.normalized().dot(normal)));
+        RayTracer::Ray r(datas.intersection, reflected);
+        c = checkHitAt(r);
+    } else {
+        c = datas.obj->getMaterial()->getColorAt(uv.x, uv.y);
     }
+    return c;
 }
 
-static void hit(my_Image &image, int i, int j,
-hitDatas &datas) {
+static void hit(
+hitDatas &datas, sf::Color &color) {
     try {
         // Get base colors
-        sf::Color origin = image.getPixel(i, j);
+        sf::Color origin = color;
         RayTracer::Vector3D uv = datas.obj->getUV(datas.intersection);
-        sf::Color c = datas.obj->getMaterial()->getColorAt(uv.x, uv.y);
+        sf::Color c = getColorReflected(datas, uv);
         sf::Vector3f cLight = sf::Vector3f(0, 0, 0);
 
-        computeLuminescence(datas.intersection, datas.obj, cLight);
+        if (!datas.obj->getMaterial()->isReflective()) {
+            computeLuminescence(datas.intersection, datas.obj, cLight);
 
-        editColor(c, cLight, origin);
-        setPixels(image, i, j, c);
+            editColor(c, cLight, origin);
+        }
+        color = c;
     } catch (std::exception &e) {
-        setPixels(image, i, j,
-            sf::Color(234, 58, 247));  // error pink
+        color = sf::Color(234, 58, 247);
         return;
     }
 }
 
-static void checkHitsAtPixel(double i, double j, RayTracer::Ray r,
-my_Image &image, std::shared_ptr<Prim> &obj,
+static void checkHitsAtPixel(RayTracer::Ray r, std::shared_ptr<Prim> &obj,
 std::vector<hitDatas> &lst) {
     RayTracer::Point3D intersection;
     if (obj->hits(r, intersection)) {
         hitDatas h;
         h.intersection = intersection;
+        h.origin = r.origin;
+        h.direction = r.direction;
         h.len = r.origin.distance(intersection);
         h.obj = obj;
         lst.push_back(h);
     }
     for (std::shared_ptr<Prim> &o : obj->getChildrens())
-        checkHitsAtPixel(i, j, r, image, o, lst);
+        checkHitsAtPixel(r, o, lst);
 }
 
-static void checkHitAt(float i, float j, float iplus, float jplus,
-RayTracer::Camera cam, my_Image &image) {
-    RayTracer::Ray r = cam.ray((i + iplus) / WIDTH, (j + jplus) / HEIGHT);
+static sf::Color checkHitAt(RayTracer::Ray r) {
     std::vector<hitDatas> lst;
+    sf::Color c = skybox::i().getColorAt(skybox::i().getAngle(r));
 
-    checkHitsAtPixel(i, j, r, image,
+    checkHitsAtPixel(r,
         RayTracer::Scene::i->ObjectHead, lst);
     // sort from the farthest to the closest
     std::sort(lst.begin(), lst.end(),
@@ -113,14 +120,29 @@ RayTracer::Camera cam, my_Image &image) {
             return a.len > b.len;
         });
     for (hitDatas &h : lst) {
-        hit(image, static_cast<int>(i), static_cast<int>(j), h);
+        hit(h, c);
     }
+    return c;
+}
+
+static sf::Color checkHitAtRay(float i, float j, float iplus, float jplus,
+    RayTracer::Camera cam) {
+    RayTracer::Ray r = cam.ray((i + iplus) / WIDTH, (j + jplus) / HEIGHT);
+    return checkHitAt(r);
 }
 
 static void generatePixelColumn(float i, RayTracer::Camera cam,
 my_Image &image) {
-    for (float j = 0; j < HEIGHT; j += sizePixelPreview) {
-        checkHitAt(i, j, 0, 0, cam, image);
+    std::vector<sf::Color> colors;
+    for (float j = 0; j < HEIGHT; j+= sizePixelPreview) {
+        colors.clear();
+        colors.push_back(checkHitAtRay(i, j, 0, 0, cam));
+        for (float x = 0; x < sizePixelPreview; x++) {
+            for (float y = 0; y < sizePixelPreview; y++) {
+                if (x + i < WIDTH && y + j < HEIGHT)
+                    averageAllImages(i + x, j + y, image, colors, true);
+            }
+        }
     }
 }
 

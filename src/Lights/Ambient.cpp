@@ -15,6 +15,8 @@ void Ambient::Init(std::unordered_map<std::string, std::any> &settings) {
     intensity = std::any_cast<float>(settings["intensity"]);
     position = std::any_cast<RayTracer::Point3D>(settings["position"]);
     color = std::any_cast<sf::Color>(settings["color"]);
+    rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
+    scale = std::any_cast<RayTracer::Point3D>(settings["scale"]);
 }
 
 float Ambient::getLuminescence(RayTracer::Point3D intersection,

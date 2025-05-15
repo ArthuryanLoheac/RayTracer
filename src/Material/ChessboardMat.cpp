@@ -12,8 +12,8 @@ ChessboardMat::ChessboardMat() {
 
 void ChessboardMat::Init(std::unordered_map<std::string, std::any> &settings) {
     scale = std::any_cast<RayTracer::Vector3D>(settings["scale"]);
-    col1 = std::any_cast<sf::Color>(settings["col1"]);
-    col2 = std::any_cast<sf::Color>(settings["col2"]);
+    col1 = std::any_cast<sf::Color>(settings["color1"]);
+    col2 = std::any_cast<sf::Color>(settings["color2"]);
 }
 
 sf::Color ChessboardMat::getColorAt(float u, float v) {

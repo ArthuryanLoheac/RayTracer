@@ -53,6 +53,7 @@ void PrimCone::Init(std::unordered_map<std::string, std::any> &settings) {
     position = std::any_cast<RayTracer::Point3D>(settings["position"]);
     angle = std::any_cast<float>(settings["angle"]);
     material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
+    angle = angle * M_PI / 180.0f;
 }
 
 RayTracer::Vector3D PrimCone::getUV(RayTracer::Point3D point) {
