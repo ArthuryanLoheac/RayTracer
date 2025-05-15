@@ -2,6 +2,7 @@
 #include <string>
 
 #include "Draw/skybox.hpp"
+#include "Consts/const.hpp"
 
 void skybox::setColor(sf::Color color) {
     isImage = false;
@@ -9,12 +10,15 @@ void skybox::setColor(sf::Color color) {
 }
 
 void skybox::setImage(std::string path) {
-    if (!img.loadFromFile(path)) {
+    try {
+        if (!img.loadFromFile(path)) {
+            throw skyboxException("Failed to load skybox image");
+        }
+        isImage = true;
+    } catch (std::exception &e) {
         isImage = false;
-        cl = sf::Color(0, 0, 0);
-        throw skyboxException("Failed to load skybox image");
+        cl = PINK_ERROR;
     }
-    isImage = true;
 }
 
 skybox::skybox() {

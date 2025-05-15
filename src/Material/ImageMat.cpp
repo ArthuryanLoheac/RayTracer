@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Material/ImageMat.hpp"
+#include "Consts/const.hpp"
 
 extern "C" std::unique_ptr<RayTracer::I_Material> getMaterial() {
     return std::make_unique<ImageMat>();
@@ -19,7 +20,7 @@ void ImageMat::Init(std::unordered_map<std::string, std::any> &settings) {
 
 sf::Color ImageMat::getColorAt(float u, float v) {
     if (scale.x == 0 || scale.y == 0)
-        return sf::Color(234, 58, 247);  // error pink
+        return PINK_ERROR;  // error pink
     u /= scale.x;
     v /= -scale.y;
     if (u < 0) u = 1 + u;
