@@ -14,7 +14,7 @@ class Parsing {
      bool noWindowMode = false;
      void parseArgs(int argc, char **argv);
      void parseSceneFile();
-    //  void parseCamera(const libconfig::Setting &camera);
+     void parseCamera(const libconfig::Setting &camera);
      void parsePrimitives(const libconfig::Setting &primitives);
      void parsePrimitive(const libconfig::Setting &primitive,
         const std::string &type);
