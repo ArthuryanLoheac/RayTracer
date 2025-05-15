@@ -1,6 +1,7 @@
-#include "Draw/skybox.hpp"
 #include <cmath>
-#include "skybox.hpp"
+#include <string>
+
+#include "Draw/skybox.hpp"
 
 void skybox::setColor(sf::Color color) {
     isImage = false;
@@ -39,5 +40,7 @@ sf::Color skybox::getColorAt(RayTracer::Vector3D vec) {
 
 RayTracer::Vector3D skybox::getAngle(RayTracer::Ray r) {
     RayTracer::Vector3D dir = r.direction.normalized();
+    dir.x = (dir.x + 1.f) /2.f;
+    dir.y = (dir.y + 1.f) /2.f;
     return RayTracer::Vector3D(dir.x, -dir.y, 0);
 }

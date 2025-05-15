@@ -12,6 +12,7 @@ class skybox {
     bool isImage;
     sf::Image img;
     sf::Color cl;
+
  public:
     static skybox &i() {
         static skybox instance;
@@ -26,7 +27,7 @@ class skybox {
 
     class skyboxException : public std::exception {
      public:
-        skyboxException(const std::string &msg) : msg(msg) {}
+        explicit skyboxException(const std::string &msg) : msg(msg) {}
         const char *what() const noexcept override {
             return msg.c_str();
         }
