@@ -97,7 +97,8 @@ void Parsing::parseSceneFile() {
             Factory<Prim>::i().create("plane");
         std::unordered_map<std::string, std::any> plane2Settings;
         plane2Settings["position"] = std::make_any<Point3D>(Point3D(1, 2, 10));
-        plane2Settings["rotation"] = std::make_any<Vector3D>(Vector3D(0, 0, 90));
+        plane2Settings["rotation"] =
+            std::make_any<Vector3D>(Vector3D(0, 0, 90));
         plane2Settings["radius"] = std::make_any<float>(10.0);
         plane2Settings["material"] = std::make_any<std::shared_ptr<Mat>>(chess);
         plane2->Init(plane2Settings);

@@ -1,6 +1,9 @@
-#include "Primitive/PrimPlane.hpp"
 #include <cmath>
+#include <string>
 #include <iostream>
+#include <memory>
+
+#include "Primitive/PrimPlane.hpp"
 #include "dlLoader/dlLoader.hpp"
 #include "Consts/const.hpp"
 #include "DesignPatterns/Factory.hpp"
@@ -34,69 +37,49 @@ RayTracer::Vector3D PrimPlane::getNormalAt(RayTracer::Point3D point) {
 RayTracer::Vector3D PrimPlane::getUV(RayTracer::Point3D point) {
     RayTracer::Vector3D local = point - position;
 
-    float rx = -rotation.x * M_PI / 180.0f;
-    float ry = -rotation.y * M_PI / 180.0f;
-    float rz = -rotation.z * M_PI / 180.0f;
+    local = getRotatedVector(local);
 
-    // Rotation Z
-    local = RayTracer::Vector3D(
-        local.x * cos(rz) - local.y * sin(rz),
-        local.x * sin(rz) + local.y * cos(rz),
-        local.z
-    );
-
-    // Rotation Y
-    local = RayTracer::Vector3D(
-        local.x * cos(ry) + local.z * sin(ry),
-        local.y,
-        -local.x * sin(ry) + local.z * cos(ry)
-    );
-
-    // Rotation X
-    local = RayTracer::Vector3D(
-        local.x,
-        local.y * cos(rx) - local.z * sin(rx),
-        local.y * sin(rx) + local.z * cos(rx)
-    );
-
-    return RayTracer::Vector3D(local.x, local.y, 0);
+    return RayTracer::Vector3D(local.x, local.z, 0);
 }
 
 void PrimPlane::Init(std::unordered_map<std::string, std::any> &settings) {
     position = std::any_cast<RayTracer::Point3D>(settings["position"]);
     rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
     radius = std::any_cast<float>(settings["radius"]);
-    material = std::any_cast<std::shared_ptr<RayTracer::I_Material>>(settings["material"]);
+    material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
 }
 
-/// Fonction utilitaire : retourne la normale après rotation
 RayTracer::Vector3D PrimPlane::getRotatedNormal() const {
     RayTracer::Vector3D normal(0, 1, 0);
 
+    normal = getRotatedVector(normal);
+
+    return normal.normalize();
+}
+
+RayTracer::Vector3D PrimPlane::getRotatedVector(RayTracer::Vector3D vector)
+const {
+    RayTracer::Vector3D vec(vector.x, vector.y, vector.z);
     float rx = rotation.x * M_PI / 180.0f;
     float ry = rotation.y * M_PI / 180.0f;
     float rz = rotation.z * M_PI / 180.0f;
 
     // Axe X
-    normal = RayTracer::Vector3D(
-        normal.x,
-        normal.y * cos(rx) - normal.z * sin(rx),
-        normal.y * sin(rx) + normal.z * cos(rx)
-    );
+    vec = RayTracer::Vector3D(
+        vec.x,
+        vec.y * cos(rx) - vec.z * sin(rx),
+        vec.y * sin(rx) + vec.z * cos(rx));
 
     // Axe Y
-    normal = RayTracer::Vector3D(
-        normal.x * cos(ry) + normal.z * sin(ry),
-        normal.y,
-        -normal.x * sin(ry) + normal.z * cos(ry)
-    );
+    vec = RayTracer::Vector3D(
+        vec.x * cos(ry) + vec.z * sin(ry),
+        vec.y,
+        -vec.x * sin(ry) + vec.z * cos(ry));
 
     // Axe Z
-    normal = RayTracer::Vector3D(
-        normal.x * cos(rz) - normal.y * sin(rz),
-        normal.x * sin(rz) + normal.y * cos(rz),
-        normal.z
-    );
-
-    return normal.normalize();
+    vec = RayTracer::Vector3D(
+        vec.x * cos(rz) - vec.y * sin(rz),
+        vec.x * sin(rz) + vec.y * cos(rz),
+        vec.z);
+    return vec;
 }
