@@ -10,57 +10,51 @@ raytracer : {
     primitives : {
         spheres = (
             {
-                position = {
+                position : {
+                    x = 0.0;
+                    y = 0.0;
+                    z = 5.0;
+                };
+                rotation : {
+                    x = 0.0;
+                    y = 0.0;
+                    z = 0.0;
+                };
+                scale : {
                     x = 1.0;
                     y = 1.0;
-                    z = 4.0;
+                    z = 1.0;
                 };
-                rotation = {
-                    x = 0.0;
-                    y = 0.0;
-                    z = 0.0;
-                };
-                radius = 1.5;
-                material = {
+                material : {
                     name = "reflect";
-                    color = {
+                    color : {
                         r = 255;
-                        g = 255;
-                        b = 255;
+                        g = 0;
+                        b = 0;
                     };
                 }
-            },
-            {
-                position = {
-                    x = -3.0;
-                    y = 2.0;
-                    z = 3.0;
-                };
-                rotation = {
-                    x = 0.0;
-                    y = 0.0;
-                    z = 0.0;
-                };
                 radius = 1.5;
-                material = {
-                    name = "reflect";
-                    color = {
-                        r = 255;
-                        g = 255;
-                        b = 255;
-                    };
-                }
             }
         );
 
-        # planes = (
-        # );
+        planes = (
+        );
 
-        # none = (
-        # );
+        cylinders = (
+        );
+
+        limcylinders = (
+        );
+
+        cones = (
+        );
+
+        none = (
+        );
     };
 
     # Configuration of the light sources
     lights : {
+
     };
 };

@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
     RayTracer::Scene scene;
     int hasFileChanged = 2;
     RayTracer::Camera cam;
-    skybox::i().setImage("assets/skybox.jpg");
+    skybox::i().setImage("assets/water.jpg");
     srand(time(NULL));
 
     while (hasFileChanged != 0) {
