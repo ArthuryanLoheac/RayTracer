@@ -41,6 +41,7 @@ Factory<T>::Factory() {
     _arg_list.insert({"limcylinder",
         {"plugins/primitive_limcylinder.so", prim}});
     _arg_list.insert({"cone", {"plugins/primitive_cone.so", prim}});
+    _arg_list.insert({"limcone", {"plugins/primitive_limcone.so", prim}});
     _arg_list.insert({"plane", {"plugins/primitive_plane.so", prim}});
     _arg_list.insert({"ambient", {"plugins/light_ambient.so", light}});
     _arg_list.insert({"spot", {"plugins/light_spot.so", light}});
