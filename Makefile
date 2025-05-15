@@ -126,12 +126,12 @@ plane:
 
 obj_prim:
 	@mkdir -p libs
-	$(COMPILER) -olibs/primitive_obj.so -shared -fPIC $(SRC_PRIMITIVE) \
+	$(COMPILER) -o plugins/primitive_obj.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimObj.cpp $(FLAGS_SO)
 
 none:
 	@mkdir -p libs
-	$(COMPILER) -olibs/primitive_none.so -shared -fPIC $(SRC_PRIMITIVE) \
+	$(COMPILER) -o plugins/primitive_none.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimNone.cpp $(FLAGS_SO)
 
 primitive: sphere plane none cylinder cone limcylinder obj_prim
