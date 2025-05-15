@@ -43,7 +43,7 @@ void Parsing::parseSceneFile() {
             Scene::i->ObjectHead = Factory<Prim>::i().create("none");
         // parseCamera(raytracer.lookup("camera"));
         parsePrimitives(raytracer.lookup("primitives"));
-        // parseLights(raytracer.lookup("lights"));
+        parseLights(raytracer.lookup("lights"));
     } catch (const libconfig::FileIOException &fioex) {
         throw ParsingError("I/O error while reading file.");
     } catch (const libconfig::ConfigException &ex) {
