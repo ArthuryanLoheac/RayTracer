@@ -18,6 +18,7 @@ void Spot::Init(std::unordered_map<std::string, std::any> &settings) {
     color = std::any_cast<sf::Color>(settings["color"]);
     intensity = std::any_cast<float>(settings["intensity"]);
     rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
+    scale = std::any_cast<RayTracer::Point3D>(settings["scale"]);
 }
 
 bool Spot::checkBlockingLight(std::shared_ptr<I_Primitive> &obj,

@@ -39,6 +39,16 @@ static Point3D parseScale(const libconfig::Setting &scale) {
     return Point3D(sc[0], sc[1], sc[2]);
 }
 
+static sf::Image parseImage(const libconfig::Setting &image) {
+    std::string path;
+    sf::Image img;
+
+    image.lookupValue("path", path);
+    if (!img.loadFromFile(path))
+        img.create(100, 100, sf::Color(234, 58, 247));
+    return img;
+}
+
 void Parsing::parsePrimitive(const libconfig::Setting &primitive,
 const std::string &type) {
     std::shared_ptr<I_Primitive> primObj =
@@ -65,6 +75,8 @@ const std::string &type) {
         primitive.lookupValue("height", height);
         settings["height"] = height;
     }
+    if (type == "obj")
+        settings["filename"] = parseImage(primitive.lookup("path"));
     primObj->Init(settings);
     Scene::i->ObjectHead->AddChildren(primObj);
 }
@@ -97,10 +109,15 @@ void Parsing::parsePrimitives(const libconfig::Setting &primitives) {
             const libconfig::Setting &cone = cones[i];
             parsePrimitive(cone, "cone");
         }
-        const libconfig::Setting &lights = primitives.lookup("none");
-        for (int i = 0; i < lights.getLength(); i++) {
-            const libconfig::Setting &light = lights[i];
-            parsePrimitive(light, "none");
+        const libconfig::Setting &objects = primitives.lookup("objects");
+        for (int i = 0; i < objects.getLength(); i++) {
+            const libconfig::Setting &object = objects[i];
+            parsePrimitive(object, "obj");
+        }
+        const libconfig::Setting &nones = primitives.lookup("none");
+        for (int i = 0; i < nones.getLength(); i++) {
+            const libconfig::Setting &none = nones[i];
+            parsePrimitive(none, "none");
         }
     } catch (const libconfig::SettingNotFoundException &nfex) {
         throw ParsingError("Missing primitives in configuration file.");
