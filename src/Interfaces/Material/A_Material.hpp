@@ -12,6 +12,9 @@ class A_Material : public I_Material
     virtual RayTracer::Vector3D getNormalAt(float u, float v) override;
     virtual void setNormal(std::string path) override;
 
+    Vector3D rotatedNormal(const Vector3D &normal, Vector3D &normalMap, const Vector3D &tangent,
+      const Vector3D &bitangent) const override;
+
     class MaterialError : public std::exception
     {
      public:

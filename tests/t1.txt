@@ -62,6 +62,7 @@ raytracer : {
                         g = 255;
                         b = 255;
                     };
+                    normal = "assets/exmple_normal.png";
                 }
                 radius = 1.5;
             }
@@ -88,7 +89,7 @@ raytracer : {
         ambient = (
             {
                 angle = 0.0;
-                intensity = 0.0;
+                intensity = 0.1;
                 color : {
                     r = 255;
                     g = 255;
@@ -115,16 +116,16 @@ raytracer : {
         spot = (
             {
                 angle = 180.0;
-                intensity = 16.0;
+                intensity = 3.0;
                 color : {
                     r = 255;
                     g = 255;
                     b = 255;
                 };
                 position : {
-                    x = 0.0;
-                    y = 5.0;
-                    z = 5.0;
+                    x = 3.0;
+                    y = 2.0;
+                    z = 4.0;
                 };
                 rotation : {
                     x = 0.0;

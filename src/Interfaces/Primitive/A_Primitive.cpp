@@ -70,42 +70,16 @@ Point3D &intersection, Ray &ray) {
 
 Vector3D A_Primitive::rotatedNormal(Vector3D normal, RayTracer::Vector3D uv) {
     try {
-        Vector3D toRotate = normal;
-        Vector3D rotationToDo = material->getNormalAt(uv.x, uv.y);
-        rotationToDo = Vector3D(
-            rotationToDo.x * 180,
-            rotationToDo.y * 180,
-            rotationToDo.z * 180);
-        return getRotatedVector(toRotate, rotationToDo);
+        if (!material) {
+            throw PrimitiveError("Material not set");
+        }
+        Vector3D tangent(1, 0, 0);  // Example tangent vector
+        Vector3D bitangent(0, 1, 0);  // Example bitangent vector
+        Vector3D normalMap = material->getNormalAt(uv.x, uv.y);
+        return material->rotatedNormal(normal, normalMap, tangent, bitangent);
     } catch (std::exception &e) {
         return normal;
     }
-}
-
-Vector3D A_Primitive::getRotatedVector(Vector3D vector, Vector3D rotationToDo) {
-    Vector3D vec(vector.x, vector.y, vector.z);
-    float rx = rotationToDo.x * M_PI / 180.0f;
-    float ry = rotationToDo.y * M_PI / 180.0f;
-    float rz = rotationToDo.z * M_PI / 180.0f;
-
-    // Axe X
-    vec = RayTracer::Vector3D(
-        vec.x,
-        vec.y * cos(rx) - vec.z * sin(rx),
-        vec.y * sin(rx) + vec.z * cos(rx));
-
-    // Axe Y
-    vec = RayTracer::Vector3D(
-        vec.x * cos(ry) + vec.z * sin(ry),
-        vec.y,
-        -vec.x * sin(ry) + vec.z * cos(ry));
-
-    // Axe Z
-    vec = RayTracer::Vector3D(
-        vec.x * cos(rz) - vec.y * sin(rz),
-        vec.x * sin(rz) + vec.y * cos(rz),
-        vec.z);
-    return vec;
 }
 
 A_Primitive::PrimitiveError::PrimitiveError(const std::string &message)

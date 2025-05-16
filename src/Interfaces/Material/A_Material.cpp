@@ -22,19 +22,39 @@ Vector3D A_Material::getNormalAt(float u, float v) {
     if (!hasNormal) {
         return Vector3D(0, 0, 0);
     } else {
-        float u2 = fmod(u, 1.0f);
-        float v2 = fmod(v, 1.0f);
-        int pixelX = static_cast<int>(u2 * img.getSize().x);
-        if (pixelX < 0) pixelX += img.getSize().x;
-        int pixelY = static_cast<int>(v2* img.getSize().y);
-        if (pixelY < 0) pixelY += img.getSize().y;
+        if (u < 0) u = 1 + u;
+        if (v < 0) v = 1 + v;
+        u = fmod(u, 1);
+        v = fmod(v, 1);
+        if (u < 0) u = 1 + u;
+        if (v < 0) v = 1 + v;
+        int pixX = static_cast<int>(u * img.getSize().x);
+        int pixY = static_cast<int>(v * img.getSize().y);
 
-        sf::Color c = img.getPixel(pixelX, pixelY);
+        sf::Color c = img.getPixel(pixX, pixY);
         return Vector3D(
-            std::round((c.r / 255.f) * 2.f) - 1.f,
-            0,
-            std::round((c.g / 255.f) * 2.f) - 1.f);
+            ((c.r / 255.f) * 2) - 1.f, // Adjust X component
+            ((c.b / 255.f) * 2) - 1.f, // Add Y component
+            ((c.g / 255.f) * 2) - 1.f  // Adjust Z component
+        );
     }
+}
+
+Vector3D A_Material::rotatedNormal(const Vector3D &normal, Vector3D &normalMap, const Vector3D &tangent, const Vector3D &bitangent) const {
+    // Normalize the input vectors
+    Vector3D T = tangent.normalized();
+    Vector3D B = bitangent.normalized();
+    Vector3D N = normal.normalized();
+    
+    // Manually compute the transformation from tangent space to world space
+    // This is equivalent to multiplying by the TBN matrix
+    Vector3D rotated(
+        normalMap.x * T.x + normalMap.y * B.x + normalMap.z * N.x,
+        normalMap.x * T.y + normalMap.y * B.y + normalMap.z * N.y,
+        normalMap.x * T.z + normalMap.y * B.z + normalMap.z * N.z
+    );
+    
+    return rotated.normalize(); // Return the normalized rotated normal
 }
 
 }

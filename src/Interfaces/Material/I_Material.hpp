@@ -16,6 +16,8 @@ class I_Material {
     virtual bool isReflective() const = 0;
     virtual RayTracer::Vector3D getNormalAt(float u, float v) = 0;
     virtual void setNormal(std::string path) = 0;
+    virtual Vector3D rotatedNormal(
+        const Vector3D &normal, Vector3D &normalMap, const Vector3D &tangent, const Vector3D &bitangent) const = 0;
 };
 }  // namespace RayTracer
 

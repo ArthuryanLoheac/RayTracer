@@ -14,11 +14,11 @@ class Vector3D {
     explicit Vector3D(Point3D point);
     Vector3D(double x, double y, double z);
 
-    double length();
+    double length() const;
     double dot(const Vector3D& other);
     Vector3D &normalize();
-    Vector3D normalized();
-    Vector3D cross(const Vector3D& u);
+    Vector3D normalized() const;
+    Vector3D cross(const Vector3D& u) const;
 
     // Vector3D
     Vector3D operator+(const Vector3D& other);

@@ -22,7 +22,7 @@ RayTracer::Vector3D::Vector3D(Point3D other) {
 #pragma endregion CONSTRUCTORS
 #pragma region TOOLS
 
-double RayTracer::Vector3D::length() {
+double RayTracer::Vector3D::length() const {
     return std::sqrt(std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2));
 }
 
@@ -40,15 +40,15 @@ RayTracer::Vector3D &RayTracer::Vector3D::normalize() {
     return *this;
 }
 
-RayTracer::Vector3D RayTracer::Vector3D::normalized() {
+RayTracer::Vector3D RayTracer::Vector3D::normalized() const {
     double len = length();
     return RayTracer::Vector3D(x / len, y / len, z / len);
 }
 
-RayTracer::Vector3D RayTracer::Vector3D::cross(const Vector3D &v) {
+RayTracer::Vector3D RayTracer::Vector3D::cross(const Vector3D &v) const {
     return Vector3D(y * v.z - z * v.y,
-            z * v.x - x * v.z,
-            x * v.y - y * v.x);
+                    z * v.x - x * v.z,
+                    x * v.y - y * v.x);
 }
 
 #pragma endregion TOOLS

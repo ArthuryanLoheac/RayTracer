@@ -15,7 +15,7 @@ Camera::Camera() {
     aspect_ratio = 1;
     image_width = 800;
     vfov = 90;
-    origin = Point3D(0, 3, -1);
+    origin = Point3D(0, 3, -3);
     lookingAt = origin + Point3D(0, 0, 1);
 
     image_height = static_cast<int>(image_width / aspect_ratio);
