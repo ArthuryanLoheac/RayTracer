@@ -2,7 +2,6 @@
 #include <string>
 
 #include "Material/TransMat.hpp"
-#include "TransMat.hpp"
 
 extern "C" std::unique_ptr<RayTracer::I_Material> getMaterial() {
     return std::make_unique<TransMat>();

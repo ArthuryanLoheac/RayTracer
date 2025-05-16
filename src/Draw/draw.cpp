@@ -57,7 +57,8 @@ static void editColor(sf::Color &c, sf::Vector3f &cLight,
         std::min(255, b_tt));
 }
 
-static void computeLuminescence(hitDatas &datas, sf::Vector3f &cLight, sf::Vector3f &cLightPhong) {
+static void computeLuminescence(hitDatas &datas, sf::Vector3f &cLight,
+sf::Vector3f &cLightPhong) {
     for (std::shared_ptr<Light> Light : RayTracer::Scene::i->Lights) {
         // Light
         double lum = Light->getLuminescence(datas, Light,

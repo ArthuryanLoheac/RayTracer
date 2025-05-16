@@ -57,7 +57,7 @@ raytracer : {
                         y = 0.0;
                         z = 0.0;
                     };
-                    specular = 0.1;
+                    specular = 0.3;
                     shininess = 125.0;
                 }
                 radius = 1.5;

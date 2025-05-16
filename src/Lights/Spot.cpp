@@ -1,11 +1,12 @@
 #include <memory>
 #include <vector>
 #include <string>
+#include <iostream>
+#include <algorithm>
 
 #include "Lights/Spot.hpp"
 #include "Scene/Scene.hpp"
 #include "Draw/hit.hpp"
-#include <iostream>
 
 extern "C" std::unique_ptr<RayTracer::I_Light> getLight() {
     return std::make_unique<Spot>();
@@ -80,7 +81,8 @@ std::shared_ptr<I_Light> Light, std::shared_ptr<I_Primitive> head) {
     return lum * transmittance / (distanceToLight * distanceToLight);
 }
 
-float Spot::getLuminescencePhong(hitDatas &datas, std::shared_ptr<I_Light> Light) {
+float Spot::getLuminescencePhong(hitDatas &datas,
+std::shared_ptr<I_Light> Light) {
     float k = datas.obj->getMaterial()->getSpecular();
     float L = intensity;
     RayTracer::Vector3D normal = datas.obj->getNormalAt(datas.intersection);
