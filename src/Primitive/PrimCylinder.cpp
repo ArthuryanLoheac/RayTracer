@@ -35,13 +35,11 @@ RayTracer::Vector3D PrimCylinder::getNormalAt(RayTracer::Point3D point) {
 }
 
 void PrimCylinder::Init(std::unordered_map<std::string, std::any> &settings) {
-    rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
-    position = std::any_cast<RayTracer::Point3D>(settings["position"]);
-    radius = std::any_cast<float>(settings["radius"]);
     try {
-        try {
+        rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
+        position = std::any_cast<RayTracer::Point3D>(settings["position"]);
+        radius = std::any_cast<float>(settings["radius"]);
         material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
-    } catch (const std::exception &e) {};
     } catch (const std::exception &e) {};
 }
 
