@@ -17,6 +17,8 @@ class Spot : public RayTracer::A_Lights {
     bool checkBlockingLight(std::shared_ptr<RayTracer::I_Primitive> &obj,
         std::shared_ptr<RayTracer::I_Primitive> &head, RayTracer::Ray &r,
         float distLight);
+    float getLuminescencePhong(hitDatas &datas,
+        std::shared_ptr<I_Light> Light) override;
  private:
     float specular(hitDatas &datas, std::shared_ptr<I_Light> Light);
 };

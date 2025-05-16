@@ -11,6 +11,8 @@ class I_Light : public I_Primitive {
     virtual float getLuminescence(hitDatas &datas,
         std::shared_ptr<I_Light> Light,
         std::shared_ptr<I_Primitive> head) = 0;
+    virtual float getLuminescencePhong(hitDatas &datas,
+        std::shared_ptr<I_Light> Light) = 0;
     virtual float getIntensity() = 0;
     virtual float getAngle() = 0;
     virtual sf::Color getColor() = 0;

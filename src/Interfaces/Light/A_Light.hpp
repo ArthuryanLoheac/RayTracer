@@ -35,6 +35,8 @@ class A_Lights : public I_Light {
     float getLuminescence(hitDatas &datas,
         std::shared_ptr<I_Light> Light,
         std::shared_ptr<I_Primitive> head) override;
+    float getLuminescencePhong(hitDatas &datas,
+        std::shared_ptr<I_Light> Light) override;
     float getIntensity() override;
     float getAngle() override;
     Vector3D getNormalAt(Point3D point) override;

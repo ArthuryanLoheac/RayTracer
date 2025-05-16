@@ -56,6 +56,13 @@ float RayTracer::A_Lights::getLuminescence(hitDatas &datas,
     return intensity;
 }
 
+float RayTracer::A_Lights::getLuminescencePhong(hitDatas &datas,
+    std::shared_ptr<I_Light> Light) {
+    (void) Light;
+    (void) datas;
+    return 0;
+}
+
 RayTracer::Vector3D RayTracer::A_Lights::getNormalAt(RayTracer::Point3D point) {
     (void) point;
     return RayTracer::Vector3D(0, 0, 0);

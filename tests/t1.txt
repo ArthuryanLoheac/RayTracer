@@ -45,6 +45,7 @@ raytracer : {
                         r = 255;
                         g = 50;
                         b = 50;
+                        a = 50;
                     };
                     scale : {
                         x = 10.0;
@@ -112,7 +113,7 @@ raytracer : {
         spot = (
             {
                 angle = 180.0;
-                intensity = 4.0;
+                intensity = 5.0;
                 color : {
                     r = 255;
                     g = 255;

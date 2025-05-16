@@ -77,11 +77,10 @@ std::shared_ptr<I_Light> Light, std::shared_ptr<I_Primitive> head) {
         for (auto &ch : current->getChildrens())
             stack.push_back(ch);
     }
-    float rawSpecular = specular(datas, Light);
-    return (lum + rawSpecular) * transmittance / (distanceToLight * distanceToLight);
+    return lum * transmittance / (distanceToLight * distanceToLight);
 }
 
-float Spot::specular(hitDatas &datas, std::shared_ptr<I_Light> Light) {
+float Spot::getLuminescencePhong(hitDatas &datas, std::shared_ptr<I_Light> Light) {
     float k = datas.obj->getMaterial()->getSpecular();
     float L = intensity;
     RayTracer::Vector3D normal = datas.obj->getNormalAt(datas.intersection);

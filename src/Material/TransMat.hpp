@@ -10,7 +10,7 @@ class TransMat : public RayTracer::I_Material {
  private:
     sf::Color col;
     float shininess = 50;
-    float specular = 0.7;
+    float specular = 0.2;
  public:
     TransMat() = default;
     ~TransMat() override = default;
