@@ -4,6 +4,7 @@
 
 #include "Interfaces/Primitive/A_Primitive.hpp"
 #include "A_Primitive.hpp"
+#include <iostream>
 
 namespace RayTracer {
 

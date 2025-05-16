@@ -30,10 +30,10 @@ Vector3D A_Material::getNormalAt(float u, float v) {
         if (pixelY < 0) pixelY += img.getSize().y;
 
         sf::Color c = img.getPixel(pixelX, pixelY);
-        return  Vector3D(
-            ((c.r / 255.f) * 2.f) - 1.f,
-            ((c.g / 255.f) * 2.f) - 1.f,
-            ((c.b / 255.f) * 2.f) - 1.f);
+        return Vector3D(
+            std::round((c.r / 255.f) * 2.f) - 1.f,
+            0,
+            std::round((c.g / 255.f) * 2.f) - 1.f);
     }
 }
 

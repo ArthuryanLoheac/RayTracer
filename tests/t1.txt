@@ -32,6 +32,7 @@ raytracer : {
                         g = 0;
                         b = 0;
                     };
+                    normal = "assets/normal_bricks.png";
                 }
                 radius = 1.5;
             }
@@ -55,23 +56,12 @@ raytracer : {
                     z = 1.0;
                 };
                 material : {
-                    name = "chess";
-                    color1 : {
+                    name = "flat";
+                    color : {
                         r = 255;
                         g = 255;
                         b = 255;
                     };
-                    color2 : {
-                        r = 0;
-                        g = 0;
-                        b = 0;
-                    };
-                    scale : {
-                        x = 10.0;
-                        y = 10.0;
-                        z = 1.0;
-                    };
-                    normal = "assets/normal.jpg";
                 }
                 radius = 1.5;
             }
@@ -125,7 +115,7 @@ raytracer : {
         spot = (
             {
                 angle = 180.0;
-                intensity = 6.0;
+                intensity = 16.0;
                 color : {
                     r = 255;
                     g = 255;

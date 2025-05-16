@@ -45,7 +45,7 @@ RayTracer::Vector3D PrimCone::getNormalAt(RayTracer::Point3D point) {
     normal *= (r / tanTheta);
     normal.normalize();
 
-    return normal;
+    return rotatedNormal(normal, getUV(point));
 }
 
 void PrimCone::Init(std::unordered_map<std::string, std::any> &settings) {

@@ -31,7 +31,7 @@ bool PrimCylinder::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
 RayTracer::Vector3D PrimCylinder::getNormalAt(RayTracer::Point3D point) {
     RayTracer::Point3D posUpdated = position;
     posUpdated.y = point.y;
-    return (point - posUpdated).normalize();
+    return rotatedNormal((point - posUpdated).normalize(), getUV(point));
 }
 
 void PrimCylinder::Init(std::unordered_map<std::string, std::any> &settings) {
