@@ -71,6 +71,8 @@ int main(int argc, char **argv) {
 
     while (hasFileChanged != 0) {
         try {
+            RayTracer::Scene::i->ObjectHead = Factory<Prim>::i().create("none");
+            RayTracer::Scene::i->Lights.clear();
             parser.parseArgs(argc, argv);
             parser.parseSceneFile();
             hasFileChanged = testMain(argv[1], parser.noWindowMode);
