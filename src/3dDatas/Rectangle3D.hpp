@@ -1,4 +1,5 @@
-#pragma once
+#ifndef RECTANGLE3D_HPP
+#define RECTANGLE3D_HPP
 #include "3dDatas/Point3D.hpp"
 #include "3dDatas/Vector3D.hpp"
 
@@ -14,3 +15,4 @@ class Rectangle3D {
     Point3D pointAt(double u, double v);
 };
 }  // namespace RayTracer
+#endif // RECTANGLE3D_HPP
