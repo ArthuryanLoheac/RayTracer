@@ -35,7 +35,7 @@ void PrimObj::Init(std::unordered_map<std::string, std::any> &settings) {
     }
     try {
         material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
-    } catch (const std::exception &e) {};
+    } catch (const std::exception &e) {}
 }
 
 void PrimObj::faceCreation(std::istringstream &iss) {

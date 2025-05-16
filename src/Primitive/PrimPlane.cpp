@@ -48,7 +48,7 @@ void PrimPlane::Init(std::unordered_map<std::string, std::any> &settings) {
         rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
         radius = std::any_cast<float>(settings["radius"]);
         material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
-    } catch (const std::exception &e) {};
+    } catch (const std::exception &e) {}
 }
 
 RayTracer::Vector3D PrimPlane::getRotatedNormal() const {
