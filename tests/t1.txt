@@ -10,57 +10,142 @@ raytracer : {
     primitives : {
         spheres = (
             {
-                position = {
+                position : {
+                    x = 0.0;
+                    y = 0.0;
+                    z = 5.0;
+                };
+                rotation : {
+                    x = 0.0;
+                    y = 0.0;
+                    z = 0.0;
+                };
+                scale : {
                     x = 1.0;
                     y = 1.0;
-                    z = 4.0;
+                    z = 1.0;
                 };
-                rotation = {
-                    x = 0.0;
-                    y = 0.0;
-                    z = 0.0;
-                };
-                radius = 1.5;
-                material = {
-                    name = "reflect";
-                    color = {
+                material : {
+                    name = "flat";
+                    color : {
                         r = 255;
-                        g = 255;
-                        b = 255;
+                        g = 0;
+                        b = 0;
                     };
                 }
-            },
-            {
-                position = {
-                    x = -3.0;
-                    y = 2.0;
-                    z = 3.0;
-                };
-                rotation = {
-                    x = 0.0;
-                    y = 0.0;
-                    z = 0.0;
-                };
                 radius = 1.5;
-                material = {
-                    name = "reflect";
-                    color = {
-                        r = 255;
-                        g = 255;
-                        b = 255;
-                    };
-                }
             }
         );
 
-        # planes = (
-        # );
+        planes = (
+            {
+                position : {
+                    x = 0.0;
+                    y = 0.0;
+                    z = 5.0;
+                };
+                rotation : {
+                    x = 0.0;
+                    y = 0.0;
+                    z = 0.0;
+                };
+                scale : {
+                    x = 1.0;
+                    y = 1.0;
+                    z = 1.0;
+                };
+                material : {
+                    name = "chess";
+                    color1 : {
+                        r = 255;
+                        g = 255;
+                        b = 255;
+                    };
+                    color2 : {
+                        r = 0;
+                        g = 0;
+                        b = 0;
+                    };
+                    scale : {
+                        x = 10.0;
+                        y = 10.0;
+                        z = 1.0;
+                    };
+                }
+                radius = 1.5;
+            }
+        );
 
-        # none = (
-        # );
+        cylinders = (
+        );
+
+        limcylinders = (
+        );
+
+        cones = (
+        );
+
+        objects = (
+        );
+
+        none = (
+        );
     };
 
     # Configuration of the light sources
     lights : {
+        ambient = (
+            {
+                angle = 0.0;
+                intensity = 0.0;
+                color : {
+                    r = 255;
+                    g = 255;
+                    b = 255;
+                };
+                position : {
+                    x = 0.0;
+                    y = 0.0;
+                    z = 0.0;
+                };
+                rotation : {
+                    x = 0.0;
+                    y = 0.0;
+                    z = 0.0;
+                };
+                scale : {
+                    x = 1.0;
+                    y = 1.0;
+                    z = 1.0;
+                };
+            }
+        );
+
+        spot = (
+            {
+                angle = 180.0;
+                intensity = 6.0;
+                color : {
+                    r = 255;
+                    g = 255;
+                    b = 255;
+                };
+                position : {
+                    x = 0.0;
+                    y = 5.0;
+                    z = 5.0;
+                };
+                rotation : {
+                    x = 0.0;
+                    y = 0.0;
+                    z = 0.0;
+                };
+                scale : {
+                    x = 1.0;
+                    y = 1.0;
+                    z = 1.0;
+                };
+            }
+        )
     };
 };
