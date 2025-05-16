@@ -5,7 +5,9 @@
 #include <string>
 
 #include "Scene/Camera.hpp"
+#include "Scene/Scene.hpp"
 #include "Consts/const.hpp"
+#include "Draw/skybox.hpp"
 
 // ATENTION Camera position depends on  orientation
 
@@ -32,6 +34,7 @@ void Camera::Init(std::unordered_map<std::string, std::any> &settings) {
     vfov = std::any_cast<double>(settings["fov"]);
     origin = std::any_cast<Point3D>(settings["position"]);
     rotation = std::any_cast<Vector3D>(settings["rotation"]);
+    skybox::i().setImage(std::any_cast<std::string>(settings["skybox"]));
     aspect_ratio = static_cast<double>(image_width) /
         static_cast<double>(image_height);
     lookingAt = origin + Point3D(0, 0, 1);

@@ -66,7 +66,6 @@ int main(int argc, char **argv) {
     RayTracer::Scene scene;
     int hasFileChanged = 2;
     RayTracer::Camera cam;
-    skybox::i().setImage("assets/shrek-5.jpg");
     srand(time(NULL));
 
     while (hasFileChanged != 0) {
