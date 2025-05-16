@@ -22,7 +22,7 @@ static sf::Color parseColor(const libconfig::Setting &color) {
 }
 
 static sf::Color parseTransparentColor(const libconfig::Setting &color) {
-    int rgb[4] = {0, 0, 0, 255};
+    int rgb[4] = {0, 0, 0, 120};
 
     color.lookupValue("r", rgb[0]);
     color.lookupValue("g", rgb[1]);
@@ -50,7 +50,7 @@ static Vector3D parseScale(const libconfig::Setting &scale) {
 }
 
 static sf::Image parseImage(const libconfig::Setting &image) {
-    std::string path;
+    std::string path = "assets/shrek-5.jpg";
     sf::Image img;
 
     image.lookupValue("path", path);
@@ -61,28 +61,73 @@ static sf::Image parseImage(const libconfig::Setting &image) {
 
 void parseChess(const libconfig::Setting &chess,
 std::unordered_map<std::string, std::any> &settings) {
-    settings["color1"] = parseColor(chess.lookup("color1"));
-    settings["color2"] = parseColor(chess.lookup("color2"));
-    settings["scale"] = parseScale(chess.lookup("scale"));
+    try {
+        settings["color1"] = parseColor(chess.lookup("color1"));
+    }
+    catch(const libconfig::SettingNotFoundException &e) {
+        settings["color1"] = sf::Color(0, 0, 0);
+    }
+    try {
+        settings["color2"] = parseColor(chess.lookup("color2"));
+    }
+    catch(const libconfig::SettingNotFoundException &e) {
+        settings["color2"] = sf::Color(255, 255, 255);
+    }
+    try {
+        settings["scale"] = parseScale(chess.lookup("scale"));
+    }
+    catch(const libconfig::SettingNotFoundException &e) {
+        settings["scale"] = Vector3D(10.0f, 10.0f, 10.0f);
+    }
 }
 
 void parsePerlin(const libconfig::Setting &perlin,
 std::unordered_map<std::string, std::any> &settings) {
-    int octave = 0;
+    int octave = 50;
 
     perlin.lookupValue("octave", octave);
-    settings["scale"] = parseScale(perlin.lookup("scale"));
-    settings["rotation"] = parseRotation(perlin.lookup("rotation"));
-    settings["color1"] = parseColor(perlin.lookup("color1"));
-    settings["color2"] = parseColor(perlin.lookup("color2"));
+    try {
+        settings["scale"] = parseScale(perlin.lookup("scale"));
+    }
+    catch(const libconfig::SettingNotFoundException &e) {
+        settings["scale"] = Vector3D(1.0f, 1.0f, 0.0f);
+    }
+    try {
+        settings["rotation"] = parseRotation(perlin.lookup("rotation"));
+    }
+    catch(const libconfig::SettingNotFoundException &e) {
+        settings["rotation"] = Vector3D(50.f, 50.f, 0.f);
+    }
+    try {
+        settings["color1"] = parseColor(perlin.lookup("color1"));
+    }
+    catch(const libconfig::SettingNotFoundException &e) {
+        settings["color1"] = sf::Color(255, 255, 255);
+    }
+    try {
+        settings["color2"] = parseColor(perlin.lookup("color2"));
+    }
+    catch(const libconfig::SettingNotFoundException &e) {
+        settings["color2"] = sf::Color(0, 0, 0);
+    }
     settings["octave"] = octave;
 }
 
 void parseImage(const libconfig::Setting &image,
 std::unordered_map<std::string, std::any> &settings) {
     settings["image"] = parseImage(image);
-    settings["scale"] = parseScale(image.lookup("scale"));
-    settings["rotation"] = parseRotation(image.lookup("rotation"));
+    try {
+        settings["scale"] = parseScale(image.lookup("scale"));
+    }
+    catch(const libconfig::SettingNotFoundException &e) {
+        settings["scale"] = Vector3D(1.0f, 1.0f, 0.0f);
+    }
+    try {
+        settings["rotation"] = parseRotation(image.lookup("rotation"));
+    }
+    catch(const libconfig::SettingNotFoundException &e) {
+        settings["rotation"] = Vector3D(50.f, 50.f, 0.f);
+    }
 }
 
 std::shared_ptr<I_Material> Parsing::parseMaterial(
@@ -91,10 +136,22 @@ const libconfig::Setting &material) {
     std::string materialName;
 
     material.lookupValue("name", materialName);
-    if (materialName == "flat")
-        settings["color"] = parseColor(material.lookup("color"));
-    if (materialName == "trans")
-        settings["color"] = parseTransparentColor(material.lookup("color"));
+    if (materialName == "flat") {
+        try {
+            settings["color"] = parseColor(material.lookup("color"));
+        }
+        catch(const libconfig::SettingNotFoundException &e) {
+            settings["color"] = sf::Color(255, 0, 0);
+        }
+    }
+    if (materialName == "trans") {
+        try {
+            settings["color"] = parseTransparentColor(material.lookup("color"));
+        }
+        catch(const libconfig::SettingNotFoundException &e) {
+            settings["color"] = sf::Color(255, 0, 0, 120);
+        }
+    }
     if (materialName == "chess")
         parseChess(material, settings);
     if (materialName == "perlin")

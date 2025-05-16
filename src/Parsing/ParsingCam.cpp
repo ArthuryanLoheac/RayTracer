@@ -32,17 +32,27 @@ static Vector3D parseRotation(const libconfig::Setting &rotation) {
 void parseCam(const libconfig::Setting &camera) {
     const libconfig::Setting &resolution = camera.lookup("resolution");
     std::unordered_map<std::string, std::any> settings;
-    int width = 0;
-    int height = 0;
-    double fov = 0;
+    int width = 800;
+    int height = 800;
+    double fov = 90.0;
 
     resolution.lookupValue("width", width);
     resolution.lookupValue("height", height);
     camera.lookupValue("fov", fov);
     settings["width"] = width;
     settings["height"] = height;
-    settings["position"] = parsePosition(camera.lookup("position"));
-    settings["rotation"] = parseRotation(camera.lookup("rotation"));
+    try {
+        settings["position"] = parsePosition(camera.lookup("position"));
+    }
+    catch(const libconfig::SettingNotFoundException &e) {
+        settings["position"] = Point3D(0.0f, 0.0f, 0.0f);
+    }
+    try {
+        settings["rotation"] = parseRotation(camera.lookup("rotation"));
+    }
+    catch(const libconfig::SettingNotFoundException &e) {
+        settings["rotation"] = Vector3D(0.0f, 0.0f, 0.0f);
+    }
     settings["fov"] = fov;
     Camera::i().Init(settings);
 }
