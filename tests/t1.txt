@@ -13,7 +13,7 @@ raytracer : {
             z = -1.0;
         };
         rotation : {
-            x = 30.0;
+            x = 0.0;
             y = 0.0;
             z = 0.0;
         };
@@ -40,7 +40,7 @@ raytracer : {
                     z = 1.0;
                 };
                 material : {
-                    name = "reflect";
+                    name = "flat";
                     color : {
                         r = 255;
                         g = 50;
@@ -67,7 +67,7 @@ raytracer : {
             {
                 position : {
                     x = 0.0;
-                    y = 0.0;
+                    y = -1.0;
                     z = 5.0;
                 };
                 rotation : {
@@ -81,7 +81,7 @@ raytracer : {
                     z = 1.0;
                 };
                 material : {
-                    name = "flat";
+                    name = "reflect";
                     color : {
                         r = 255;
                         g = 255;
