@@ -13,7 +13,7 @@ raytracer : {
             z = -1.0;
         };
         rotation : {
-            x = 0.0;
+            x = 30.0;
             y = 0.0;
             z = 0.0;
         };
@@ -28,6 +28,43 @@ raytracer : {
                     x = 0.0;
                     y = 0.0;
                     z = 5.0;
+                };
+                rotation : {
+                    x = 0.0;
+                    y = 0.0;
+                    z = 0.0;
+                };
+                scale : {
+                    x = 1.0;
+                    y = 1.0;
+                    z = 1.0;
+                };
+                material : {
+                    name = "reflect";
+                    color : {
+                        r = 255;
+                        g = 50;
+                        b = 50;
+                    };
+                    scale : {
+                        x = 10.0;
+                        y = 10.0;
+                        z = 1.0;
+                    };
+                    rotation : {
+                        x = 0.0;
+                        y = 0.0;
+                        z = 0.0;
+                    };
+                    specular = 0.3;
+                    shininess = 125.0;
+                }
+                radius = 1.5;
+            },{
+                position : {
+                    x = 2.0;
+                    y = 0.0;
+                    z = 2.0;
                 };
                 rotation : {
                     x = 0.0;

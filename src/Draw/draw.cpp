@@ -24,7 +24,7 @@
 #include "Draw/hit.hpp"
 #include "Draw/skybox.hpp"
 
-static sf::Color checkHitAt(RayTracer::Ray r, int &maxBounce);
+static sf::Color checkHitAt(RayTracer::Ray r, int &maxBounce, std::shared_ptr<Prim> exclude);
 
 static void editColor(sf::Color &c, sf::Vector3f &cLight,
     sf::Color &origin, sf::Vector3f cLightPhong) {
@@ -104,7 +104,7 @@ static sf::Color getColorReflected(hitDatas &datas, RayTracer::Vector3D uv, int 
             2*(datas.direction.normalized().dot(normal)));
         RayTracer::Ray r(datas.intersection, reflected);
         maxBounce-= 1;
-        c = checkHitAt(r, maxBounce);
+        c = checkHitAt(r, maxBounce, datas.obj);
     } else {
         c = datas.obj->getMaterial()->getColorAt(uv.x, uv.y);
     }
@@ -135,9 +135,10 @@ hitDatas &datas, sf::Color &color, int &maxBounce) {
 }
 
 static void checkHitsAtPixel(RayTracer::Ray r, std::shared_ptr<Prim> &obj,
-std::vector<hitDatas> &lst) {
+std::vector<hitDatas> &lst, std::shared_ptr<Prim> exclude) {
     RayTracer::Point3D intersection;
-    if (obj->hits(r, intersection)) {
+    if ((exclude == nullptr || (exclude != nullptr && obj != exclude))
+        && obj->hits(r, intersection)) {
         hitDatas h;
         h.intersection = intersection;
         h.origin = r.origin;
@@ -147,15 +148,15 @@ std::vector<hitDatas> &lst) {
         lst.push_back(h);
     }
     for (std::shared_ptr<Prim> &o : obj->getChildrens())
-        checkHitsAtPixel(r, o, lst);
+        checkHitsAtPixel(r, o, lst, exclude);
 }
 
-static sf::Color checkHitAt(RayTracer::Ray r, int &maxBounce) {
+static sf::Color checkHitAt(RayTracer::Ray r, int &maxBounce, std::shared_ptr<Prim> exclude) {
     std::vector<hitDatas> lst;
     sf::Color c = skybox::i().getColorAt(skybox::i().getAngle(r));
 
     checkHitsAtPixel(r,
-        RayTracer::Scene::i->ObjectHead, lst);
+        RayTracer::Scene::i->ObjectHead, lst, exclude);
     // sort from the farthest to the closest
     std::sort(lst.begin(), lst.end(),
         [](const hitDatas &a, const hitDatas &b) {
@@ -172,7 +173,7 @@ static sf::Color checkHitAtRay(float i, float j, float iplus, float jplus,
     int maxBounce = 5;
     RayTracer::Ray r = cam.ray((i + iplus) / cam.image_width,
         (j + jplus) / cam.image_height);
-    return checkHitAt(r, maxBounce);
+    return checkHitAt(r, maxBounce, nullptr);
 }
 
 static void generatePixelColumn(float i, RayTracer::Camera cam,
