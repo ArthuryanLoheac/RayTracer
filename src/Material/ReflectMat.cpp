@@ -8,7 +8,8 @@ extern "C" std::unique_ptr<RayTracer::I_Material> getMaterial() {
 }
 
 void ReflectMat::Init(std::unordered_map<std::string, std::any> &settings) {
-    (void)settings;
+    shininess = std::any_cast<float>(settings["shininess"]);
+    specular = std::any_cast<float>(settings["specular"]);
 }
 
 sf::Color ReflectMat::getColorAt(float x, float y) {

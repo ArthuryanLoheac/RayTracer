@@ -67,8 +67,6 @@ static void computeLuminescence(hitDatas &datas, sf::Vector3f &cLight, sf::Vecto
         cLight.z += (Light->getColor().b/255) * lum;
         // Phong
         double lum2 = Light->getLuminescencePhong(datas, Light);
-        if (!(lum2 == 0))
-            printf("lum2: %f\n", lum2);
         cLightPhong.x += (Light->getColor().r/255) * lum2;
         cLightPhong.y += (Light->getColor().g/255) * lum2;
         cLightPhong.z += (Light->getColor().b/255) * lum2;
