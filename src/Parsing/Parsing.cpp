@@ -20,7 +20,6 @@ void Parsing::parseArgs(int argc, char **argv) {
         std::cout << "USAGE: ./rayTracer <SCENE_FILE> [-r]" << std::endl;
         std::cout << "  SCENE_FILE: scene configuration" << std::endl;
         std::cout << "  -r: run in no window mode" << std::endl;
-
         exit(0);
     }
     for (int i = 1; i < argc; ++i) {
@@ -41,7 +40,7 @@ void Parsing::parseSceneFile() {
         cfg.readFile(sceneFile.c_str());
         const libconfig::Setting &raytracer = cfg.lookup("raytracer");
             Scene::i->ObjectHead = Factory<Prim>::i().create("none");
-        // parseCamera(raytracer.lookup("camera"));
+        parseCamera(raytracer.lookup("camera"));
         parsePrimitives(raytracer.lookup("primitives"));
         parseLights(raytracer.lookup("lights"));
     } catch (const libconfig::FileIOException &fioex) {

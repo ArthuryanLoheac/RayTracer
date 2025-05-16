@@ -35,19 +35,23 @@ static void waitForFileModification(std::string sceneFile) {
 
 static int setupAndRun(my_Image &image,
     std::string sceneFile, bool noWindowMode) {
+    RayTracer::Camera &cam = RayTracer::Camera::i();
+
     computeTreeValues(RayTracer::Scene::i->ObjectHead);
     if (noWindowMode) {
         return renderImage(image);
     }
-    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Ray Tracer");
-    for (int i = WIDTH /2; i >= 8; i /= 2)
+    sf::RenderWindow window(sf::VideoMode(cam.image_width, cam.image_height),
+        "Ray Tracer");
+    for (int i = cam.image_width /2; i >= 8; i /= 2)
         generateImagePreview(window, image, i);
     return generateImage(window, image, sceneFile);
 }
 
 int testMain(std::string sceneFile, bool noWindowMode) {
+    RayTracer::Camera &cam = RayTracer::Camera::i();
     my_Image image;
-    image.image.create(WIDTH, HEIGHT, sf::Color::Black);
+    image.image.create(cam.image_width, cam.image_height, sf::Color::Black);
 
     try {
          return setupAndRun(image, sceneFile, noWindowMode);
