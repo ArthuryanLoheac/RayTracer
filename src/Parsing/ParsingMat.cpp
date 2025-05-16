@@ -93,8 +93,6 @@ std::unordered_map<std::string, std::any> &settings) {
     mat.lookupValue("specular", specular);
     settings["shininess"] = shininess;
     settings["specular"] = specular;
-    printf("shininess: %f\n", shininess);
-    printf("specular: %f\n", specular);
 }
 
 
