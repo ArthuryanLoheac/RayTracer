@@ -19,12 +19,11 @@ void Ambient::Init(std::unordered_map<std::string, std::any> &settings) {
     scale = std::any_cast<RayTracer::Point3D>(settings["scale"]);
 }
 
-float Ambient::getLuminescence(RayTracer::Point3D intersection,
-std::shared_ptr<I_Light> Light, std::shared_ptr<I_Primitive> obj,
-std::shared_ptr<I_Primitive> head) {
-    (void) intersection;
+float Ambient::getLuminescence(hitDatas &datas,
+    std::shared_ptr<I_Light> Light,
+    std::shared_ptr<I_Primitive> head) {
     (void) Light;
-    (void) obj;
+    (void) datas;
     (void) head;
     return intensity;
 }

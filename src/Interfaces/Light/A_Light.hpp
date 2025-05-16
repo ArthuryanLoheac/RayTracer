@@ -4,7 +4,7 @@
 #include <string>
 
 #include "Interfaces/Light/I_Light.hpp"
-
+#include "Draw/hit.hpp"
 namespace RayTracer {
 class A_Lights : public I_Light {
  protected:
@@ -32,9 +32,11 @@ class A_Lights : public I_Light {
     Point3D getScale() override;
     void setScale(Point3D scale) override;
 
-    float getLuminescence(RayTracer::Point3D intersection,
-        std::shared_ptr<I_Light> Light, std::shared_ptr<I_Primitive> obj,
-         std::shared_ptr<I_Primitive> head) = 0;
+    float getLuminescence(hitDatas &datas,
+        std::shared_ptr<I_Light> Light,
+        std::shared_ptr<I_Primitive> head) override;
+    float getLuminescencePhong(hitDatas &datas,
+        std::shared_ptr<I_Light> Light) override;
     float getIntensity() override;
     float getAngle() override;
     Vector3D getNormalAt(Point3D point) override;

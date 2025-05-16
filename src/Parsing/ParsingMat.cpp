@@ -130,6 +130,17 @@ std::unordered_map<std::string, std::any> &settings) {
     }
 }
 
+void parsePhong(const libconfig::Setting &mat,
+std::unordered_map<std::string, std::any> &settings) {
+    float shininess = 0.f;
+    mat.lookupValue("shininess", shininess);
+    float specular = 0.f;
+    mat.lookupValue("specular", specular);
+    settings["shininess"] = shininess;
+    settings["specular"] = specular;
+}
+
+
 std::shared_ptr<I_Material> Parsing::parseMaterial(
 const libconfig::Setting &material) {
     std::unordered_map<std::string, std::any> settings;
@@ -158,6 +169,7 @@ const libconfig::Setting &material) {
         parsePerlin(material, settings);
     if (materialName == "image")
         parseImage(material, settings);
+    parsePhong(material, settings);
     std::shared_ptr<I_Material> mat = Factory<Mat>::i().create(materialName);
     mat->Init(settings);
     return mat;

@@ -46,10 +46,9 @@ static void editColor(sf::Color &c, sf::Vector3f &cLight,
         b * percentA + (origin.b * (1 - percentA)));
 }
 
-static void computeLuminescence(RayTracer::Point3D &intersection,
-std::shared_ptr<Prim> &s, sf::Vector3f &cLight) {
+static void computeLuminescence(hitDatas &datas, sf::Vector3f &cLight) {
     for (std::shared_ptr<Light> Light : RayTracer::Scene::i->Lights) {
-        double lum = Light->getLuminescence(intersection, Light, s,
+        double lum = Light->getLuminescence(datas, Light,
             RayTracer::Scene::i->ObjectHead);
         cLight.x += (Light->getColor().r/255) * lum;
         cLight.y += (Light->getColor().g/255) * lum;
@@ -81,7 +80,7 @@ hitDatas &datas, sf::Color &color) {
         sf::Vector3f cLight = sf::Vector3f(0, 0, 0);
 
         if (!datas.obj->getMaterial()->isReflective()) {
-            computeLuminescence(datas.intersection, datas.obj, cLight);
+            computeLuminescence(datas, cLight);
 
             editColor(c, cLight, origin);
         }

@@ -27,7 +27,7 @@
 static sf::Color checkHitAt(RayTracer::Ray r);
 
 static void editColor(sf::Color &c, sf::Vector3f &cLight,
-    sf::Color &origin) {
+    sf::Color &origin, sf::Vector3f cLightPhong) {
     // Edit color with luminescence values
     int r = std::min(255, static_cast<int>(
         (c.r * cLight.x)));
@@ -36,21 +36,63 @@ static void editColor(sf::Color &c, sf::Vector3f &cLight,
     int b = std::min(255, static_cast<int>(
         (c.b * cLight.z)));
 
+    int phong_r = 255 * cLightPhong.x;
+    int phong_g = 255 * cLightPhong.y;
+    int phong_b = 255 * cLightPhong.z;
+    phong_r = std::min(255, phong_r);
+    phong_g = std::min(255, phong_g);
+    phong_b = std::min(255, phong_b);
+
     // Edit color with transparency values
     float percentA = c.a / 255.f;
-    c = sf::Color(r * percentA + (origin.r * (1 - percentA)),
-        g * percentA + (origin.g * (1 - percentA)),
-        b * percentA + (origin.b * (1 - percentA)));
+    int r_tt = static_cast<int>(
+        (r * percentA + (origin.r * (1 - percentA)) + phong_r));
+    int g_tt = static_cast<int>(
+        (g * percentA + (origin.g * (1 - percentA)) + phong_g));
+    int b_tt = static_cast<int>(
+        (b * percentA + (origin.b * (1 - percentA)) + phong_b));
+
+    c = sf::Color(std::min(255, r_tt),
+        std::min(255, g_tt),
+        std::min(255, b_tt));
 }
 
-static void computeLuminescence(RayTracer::Point3D &intersection,
-std::shared_ptr<Prim> &s, sf::Vector3f &cLight) {
+static void editColorReflect(sf::Color &c,
+    sf::Color &origin, sf::Vector3f cLightPhong) {
+
+    int phong_r = 255 * cLightPhong.x;
+    int phong_g = 255 * cLightPhong.y;
+    int phong_b = 255 * cLightPhong.z;
+    phong_r = std::min(255, phong_r);
+    phong_g = std::min(255, phong_g);
+    phong_b = std::min(255, phong_b);
+
+    int r_tt = static_cast<int>(
+        (origin.r + phong_r));
+    int g_tt = static_cast<int>(
+        (origin.g + phong_g));
+    int b_tt = static_cast<int>(
+        (origin.b + phong_b));
+
+    c = sf::Color(std::min(255, r_tt),
+        std::min(255, g_tt),
+        std::min(255, b_tt));
+}
+
+static void computeLuminescence(hitDatas &datas, sf::Vector3f &cLight,
+sf::Vector3f &cLightPhong) {
     for (std::shared_ptr<Light> Light : RayTracer::Scene::i->Lights) {
-        double lum = Light->getLuminescence(intersection, Light, s,
+        // Light
+        double lum = Light->getLuminescence(datas, Light,
             RayTracer::Scene::i->ObjectHead);
         cLight.x += (Light->getColor().r/255) * lum;
         cLight.y += (Light->getColor().g/255) * lum;
         cLight.z += (Light->getColor().b/255) * lum;
+        // Phong
+        double lum2 = Light->getLuminescencePhong(datas, Light);
+        cLightPhong.x += (Light->getColor().r/255) * lum2;
+        cLightPhong.y += (Light->getColor().g/255) * lum2;
+        cLightPhong.z += (Light->getColor().b/255) * lum2;
     }
 }
 
@@ -76,11 +118,13 @@ hitDatas &datas, sf::Color &color) {
         RayTracer::Vector3D uv = datas.obj->getUV(datas.intersection);
         sf::Color c = getColorReflected(datas, uv);
         sf::Vector3f cLight = sf::Vector3f(0, 0, 0);
+        sf::Vector3f cLightPhong = sf::Vector3f(0, 0, 0);
 
+        computeLuminescence(datas, cLight, cLightPhong);
         if (!datas.obj->getMaterial()->isReflective()) {
-            computeLuminescence(datas.intersection, datas.obj, cLight);
-
-            editColor(c, cLight, origin);
+            editColor(c, cLight, origin, cLightPhong);
+        } else {
+            editColorReflect(c, c, cLightPhong);
         }
         color = c;
     } catch (std::exception &e) {
