@@ -33,10 +33,9 @@ void PrimObj::Init(std::unordered_map<std::string, std::any> &settings) {
     if (settings.find("scale") != settings.end()) {
         scale = std::any_cast<RayTracer::Point3D>(settings["scale"]);
     }
-    if (settings.find("material") != settings.end()) {
-        material = std::any_cast<std::shared_ptr<RayTracer::I_Material>>(
-            settings["material"]);
-    }
+    try {
+        material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
+    } catch (const std::exception &e) {};
 }
 
 void PrimObj::faceCreation(std::istringstream &iss) {

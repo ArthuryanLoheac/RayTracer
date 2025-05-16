@@ -108,7 +108,9 @@ void PrimLimCone::Init(std::unordered_map<std::string, std::any> &settings) {
     position = std::any_cast<RayTracer::Point3D>(settings["position"]);
     angle = std::any_cast<float>(settings["angle"]);
     height = std::any_cast<float>(settings["height"]);
-    material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
+    try {
+        material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
+    } catch (const std::exception &e) {};
 }
 
 RayTracer::Vector3D PrimLimCone::getUV(RayTracer::Point3D point) {
