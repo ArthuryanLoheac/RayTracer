@@ -37,3 +37,12 @@ sf::Color ImageMat::getColorAt(float u, float v) {
 bool ImageMat::isReflective() const {
     return false;
 }
+
+float ImageMat::getSpecular() const {
+    return specular;
+}
+
+float ImageMat::getShininess() const {
+    return shininess;
+}
+

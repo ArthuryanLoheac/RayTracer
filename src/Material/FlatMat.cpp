@@ -23,3 +23,12 @@ sf::Color FlatMat::getColorAt(float u, float v) {
 bool FlatMat::isReflective() const {
     return false;
 }
+
+float FlatMat::getSpecular() const {
+    return specular;
+}
+
+float FlatMat::getShininess() const {
+    return shininess;
+}
+

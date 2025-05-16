@@ -9,6 +9,8 @@
 class TransMat : public RayTracer::I_Material {
  private:
     sf::Color col;
+    float shininess = 50;
+    float specular = 0.7;
  public:
     TransMat() = default;
     ~TransMat() override = default;
@@ -16,4 +18,6 @@ class TransMat : public RayTracer::I_Material {
     void Init(std::unordered_map<std::string, std::any> &settings) override;
     sf::Color getColorAt(float x, float y) override;
     bool isReflective() const override;
+    float getSpecular() const override;
+    float getShininess() const override;
 };

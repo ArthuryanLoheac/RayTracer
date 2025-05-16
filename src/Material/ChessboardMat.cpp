@@ -29,3 +29,11 @@ sf::Color ChessboardMat::getColorAt(float u, float v) {
 bool ChessboardMat::isReflective() const {
     return false;
 }
+
+float ChessboardMat::getSpecular() const {
+    return specular;
+}
+
+float ChessboardMat::getShininess() const {
+    return shininess;
+}

@@ -20,3 +20,12 @@ sf::Color ReflectMat::getColorAt(float x, float y) {
 bool ReflectMat::isReflective() const {
     return true;
 }
+
+float ReflectMat::getSpecular() const {
+    return specular;
+}
+
+float ReflectMat::getShininess() const {
+    return shininess;
+}
+

@@ -134,3 +134,12 @@ sf::Color PerlinMat::getColorAt(float u, float v) {
 bool PerlinMat::isReflective() const {
     return false;
 }
+
+float PerlinMat::getSpecular() const {
+    return specular;
+}
+
+float PerlinMat::getShininess() const {
+    return shininess;
+}
+

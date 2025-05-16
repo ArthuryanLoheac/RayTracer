@@ -8,6 +8,8 @@
 
 class ImageMat : public RayTracer::I_Material {
  private:
+    float shininess = 2;
+    float specular = 0.1;
     sf::Image img;
     RayTracer::Vector3D scale;
     RayTracer::Vector3D rotation;
@@ -18,4 +20,6 @@ class ImageMat : public RayTracer::I_Material {
     void Init(std::unordered_map<std::string, std::any> &settings) override;
     sf::Color getColorAt(float u, float v) override;
     bool isReflective() const override;
+    float getSpecular() const override;
+    float getShininess() const override;
 };

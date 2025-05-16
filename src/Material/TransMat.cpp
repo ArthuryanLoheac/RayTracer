@@ -2,6 +2,7 @@
 #include <string>
 
 #include "Material/TransMat.hpp"
+#include "TransMat.hpp"
 
 extern "C" std::unique_ptr<RayTracer::I_Material> getMaterial() {
     return std::make_unique<TransMat>();
@@ -19,4 +20,12 @@ sf::Color TransMat::getColorAt(float x, float y) {
 
 bool TransMat::isReflective() const {
     return false;
+}
+
+float TransMat::getSpecular() const {
+    return specular;
+}
+
+float TransMat::getShininess() const {
+    return shininess;
 }
