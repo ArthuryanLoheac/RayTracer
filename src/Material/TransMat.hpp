@@ -1,12 +1,12 @@
 #pragma once
 #include <string>
 
-#include "Interfaces/Material/I_Material.hpp"
+#include "Interfaces/Material/A_Material.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
-class TransMat : public RayTracer::I_Material {
+class TransMat : public RayTracer::A_Material {
  private:
     sf::Color col;
  public:
@@ -15,5 +15,4 @@ class TransMat : public RayTracer::I_Material {
 
     void Init(std::unordered_map<std::string, std::any> &settings) override;
     sf::Color getColorAt(float x, float y) override;
-    bool isReflective() const override;
 };

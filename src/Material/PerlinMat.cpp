@@ -130,7 +130,3 @@ sf::Color PerlinMat::getColorAt(float u, float v) {
         (c1.b * n) + (c2.b * (1-n)));
     return c;
 }
-
-bool PerlinMat::isReflective() const {
-    return false;
-}

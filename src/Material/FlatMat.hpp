@@ -1,12 +1,12 @@
 #pragma once
 #include <string>
-#include "Interfaces/Material/I_Material.hpp"
+#include "Interfaces/Material/A_Material.hpp"
 #include "3dDatas/Point3D.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
-class FlatMat : public RayTracer::I_Material {
+class FlatMat : public RayTracer::A_Material {
  private:
     sf::Color col;
  public:
@@ -15,5 +15,4 @@ class FlatMat : public RayTracer::I_Material {
 
     void Init(std::unordered_map<std::string, std::any> &settings) override;
     sf::Color getColorAt(float u, float v) override;
-    bool isReflective() const override;
 };

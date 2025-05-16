@@ -14,6 +14,8 @@ class I_Material {
     virtual void Init(std::unordered_map<std::string, std::any> &settings) = 0;
     virtual sf::Color getColorAt(float u, float v) = 0;
     virtual bool isReflective() const = 0;
+    virtual RayTracer::Vector3D getNormalAt(float u, float v) = 0;
+    virtual void setNormal(std::string path) = 0;
 };
 }  // namespace RayTracer
 

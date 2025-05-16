@@ -16,7 +16,3 @@ sf::Color TransMat::getColorAt(float x, float y) {
     (void)y;
     return col;
 }
-
-bool TransMat::isReflective() const {
-    return false;
-}

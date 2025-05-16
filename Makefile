@@ -86,7 +86,8 @@ SRC_PRIMITIVE = $(COMMON_SRC) \
 SRC_LIGHT = $(COMMON_SRC) \
 			src/Interfaces/Light/A_Light.cpp \
 
-SRC_MATERIAL = $(COMMON_SRC)
+SRC_MATERIAL = $(COMMON_SRC) \
+			src/Interfaces/Material/A_Material.cpp \
 
 # ============= RULES ============= #
 
