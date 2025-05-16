@@ -27,7 +27,8 @@
 #include "Draw/hit.hpp"
 
 int sizePixelPreview = 16;
-static sf::Color checkHitAt(RayTracer::Ray r, int &maxBounce, std::shared_ptr<Prim> exclude);
+static sf::Color checkHitAt(RayTracer::Ray r, int &maxBounce,
+std::shared_ptr<Prim> exclude);
 
 static void editColor(sf::Color &c, sf::Vector3f &cLight,
     sf::Color &origin) {
@@ -56,7 +57,8 @@ static void computeLuminescence(hitDatas &datas, sf::Vector3f &cLight) {
     }
 }
 
-static sf::Color getColorReflected(hitDatas &datas, RayTracer::Vector3D uv, int &maxBounce) {
+static sf::Color getColorReflected(hitDatas &datas, RayTracer::Vector3D uv,
+int &maxBounce) {
     sf::Color c(0, 0, 0);
     if (datas.obj->getMaterial()->isReflective() && maxBounce > 0) {
         RayTracer::Vector3D normal = datas.obj->getNormalAt(datas.intersection);
@@ -109,7 +111,8 @@ std::vector<hitDatas> &lst, std::shared_ptr<Prim> exclude) {
         checkHitsAtPixel(r, o, lst, exclude);
 }
 
-static sf::Color checkHitAt(RayTracer::Ray r, int &maxBounce, std::shared_ptr<Prim> exclude) {
+static sf::Color checkHitAt(RayTracer::Ray r, int &maxBounce,
+std::shared_ptr<Prim> exclude) {
     std::vector<hitDatas> lst;
     sf::Color c = skybox::i().getColorAt(skybox::i().getAngle(r));
 
