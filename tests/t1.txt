@@ -40,12 +40,11 @@ raytracer : {
                     z = 1.0;
                 };
                 material : {
-                    name = "trans";
+                    name = "reflect";
                     color : {
                         r = 255;
                         g = 50;
                         b = 50;
-                        a = 50;
                     };
                     scale : {
                         x = 10.0;

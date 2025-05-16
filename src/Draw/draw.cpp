@@ -57,6 +57,28 @@ static void editColor(sf::Color &c, sf::Vector3f &cLight,
         std::min(255, b_tt));
 }
 
+static void editColorReflect(sf::Color &c,
+    sf::Color &origin, sf::Vector3f cLightPhong) {
+
+    int phong_r = 255 * cLightPhong.x;
+    int phong_g = 255 * cLightPhong.y;
+    int phong_b = 255 * cLightPhong.z;
+    phong_r = std::min(255, phong_r);
+    phong_g = std::min(255, phong_g);
+    phong_b = std::min(255, phong_b);
+
+    int r_tt = static_cast<int>(
+        (origin.r + phong_r));
+    int g_tt = static_cast<int>(
+        (origin.g + phong_g));
+    int b_tt = static_cast<int>(
+        (origin.b + phong_b));
+
+    c = sf::Color(std::min(255, r_tt),
+        std::min(255, g_tt),
+        std::min(255, b_tt));
+}
+
 static void computeLuminescence(hitDatas &datas, sf::Vector3f &cLight,
 sf::Vector3f &cLightPhong) {
     for (std::shared_ptr<Light> Light : RayTracer::Scene::i->Lights) {
@@ -98,10 +120,11 @@ hitDatas &datas, sf::Color &color) {
         sf::Vector3f cLight = sf::Vector3f(0, 0, 0);
         sf::Vector3f cLightPhong = sf::Vector3f(0, 0, 0);
 
+        computeLuminescence(datas, cLight, cLightPhong);
         if (!datas.obj->getMaterial()->isReflective()) {
-            computeLuminescence(datas, cLight, cLightPhong);
-
             editColor(c, cLight, origin, cLightPhong);
+        } else {
+            editColorReflect(c, c, cLightPhong);
         }
         color = c;
     } catch (std::exception &e) {
