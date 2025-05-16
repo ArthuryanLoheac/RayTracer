@@ -16,6 +16,7 @@ class I_Primitive {
 
     virtual std::vector<std::shared_ptr<I_Primitive>> &getChildrens() = 0;
     virtual Vector3D getNormalAt(Point3D point) = 0;
+    virtual Vector3D getRawNormalAt(Point3D point) = 0;
     virtual std::shared_ptr<I_Primitive> &AddChildren(
         std::shared_ptr<I_Primitive> child) = 0;
 

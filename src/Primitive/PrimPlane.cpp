@@ -29,7 +29,7 @@ bool PrimPlane::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     return false;
 }
 
-RayTracer::Vector3D PrimPlane::getNormalAt(RayTracer::Point3D point) {
+RayTracer::Vector3D PrimPlane::getRawNormalAt(RayTracer::Point3D point) {
     (void)point;
     RayTracer::Vector3D rotated = getRotatedNormal();
     RayTracer::Vector3D tt = rotatedNormal(rotated, getUV(point));

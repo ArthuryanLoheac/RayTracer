@@ -33,7 +33,7 @@ bool PrimCone::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     return returnCollision(A, B, C, intersection, ray);
 }
 
-RayTracer::Vector3D PrimCone::getNormalAt(RayTracer::Point3D point) {
+RayTracer::Vector3D PrimCone::getRawNormalAt(RayTracer::Point3D point) {
     RayTracer::Vector3D pointToBase = point - position;
     float tanTheta = tan(angle);
     float r = std::sqrt(pointToBase.x * pointToBase.x +
@@ -45,7 +45,7 @@ RayTracer::Vector3D PrimCone::getNormalAt(RayTracer::Point3D point) {
     normal *= (r / tanTheta);
     normal.normalize();
 
-    return rotatedNormal(normal, getUV(point));
+    return normal;
 }
 
 void PrimCone::Init(std::unordered_map<std::string, std::any> &settings) {

@@ -11,7 +11,7 @@ class PrimNone : public RayTracer::A_Primitive {
     double radius;
     PrimNone();
     bool hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) override;
-    RayTracer::Vector3D getNormalAt(RayTracer::Point3D point) override;
+    RayTracer::Vector3D getRawNormalAt(RayTracer::Point3D point) override;
     RayTracer::Vector3D getUV(RayTracer::Point3D point) override;
     void Init(std::unordered_map<std::string, std::any> &settings) override;
 };

@@ -27,6 +27,7 @@ class A_Primitive : public I_Primitive {
     void setRotation(Vector3D rot) override;
     Point3D getScale() override;
     void setScale(Point3D scale) override;
+    virtual Vector3D getNormalAt(Point3D point);
 
     bool returnCollision(float A, float B, float C,
         Point3D &intersection, Ray &ray);

@@ -25,8 +25,8 @@ bool PrimSphere::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     return returnCollision(a, b, c, intersection, ray);
 }
 
-RayTracer::Vector3D PrimSphere::getNormalAt(RayTracer::Point3D point) {
-    return rotatedNormal((point - position).normalize(), getUV(point));
+RayTracer::Vector3D PrimSphere::getRawNormalAt(RayTracer::Point3D point) {
+    return (point - position).normalize();
 }
 
 RayTracer::Vector3D PrimSphere::getUV(RayTracer::Point3D point) {

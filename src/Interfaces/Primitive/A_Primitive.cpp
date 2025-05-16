@@ -82,6 +82,10 @@ Vector3D A_Primitive::rotatedNormal(Vector3D normal, RayTracer::Vector3D uv) {
     }
 }
 
+Vector3D A_Primitive::getNormalAt(Point3D point) {
+    return rotatedNormal(getRawNormalAt(point), getUV(point));
+}
+
 A_Primitive::PrimitiveError::PrimitiveError(const std::string &message)
     : message("PrimitiveError: " + message) {}
 }  // namespace RayTracer

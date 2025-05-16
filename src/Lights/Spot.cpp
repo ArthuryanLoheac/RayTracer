@@ -43,10 +43,14 @@ std::shared_ptr<I_Primitive> head) {
 
     RayTracer::Vector3D N = obj->getNormalAt(intersection);
     float angleToSurface = std::acos(N.dot(toLight));
+    RayTracer::Vector3D NRaw = obj->getRawNormalAt(intersection);
+    float RawAngleToSurface = std::acos(NRaw.dot(toLight));
 
     float lum = 0.f;
     if (angleToSurface < M_PI/2
-        && angleToSurface < this->angle * (M_PI/180.0f)) {
+        && angleToSurface < this->angle * (M_PI/180.0f) &&
+        RawAngleToSurface < M_PI/2
+        && RawAngleToSurface < this->angle * (M_PI/180.0f) ) {
         lum = intensity * (1.f - (angleToSurface / (M_PI/2)));
     } else {
         return 0.f;
@@ -55,6 +59,7 @@ std::shared_ptr<I_Primitive> head) {
     RayTracer::Ray shadowRay(origin, toLight);
     float transmittance = 1.f;
     std::vector<std::shared_ptr<I_Primitive>> stack = { head };
+
     while (!stack.empty() && transmittance > 1e-3f) {
         auto current = stack.back();
         stack.pop_back();

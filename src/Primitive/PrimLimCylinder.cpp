@@ -92,7 +92,7 @@ bool PrimLimCylinder::hits
     return false;
 }
 
-RayTracer::Vector3D PrimLimCylinder::getNormalAt(RayTracer::Point3D point) {
+RayTracer::Vector3D PrimLimCylinder::getRawNormalAt(RayTracer::Point3D point) {
     RayTracer::Vector3D baseToPoint = point - position;
 
     float proj = baseToPoint.dot(rotation);

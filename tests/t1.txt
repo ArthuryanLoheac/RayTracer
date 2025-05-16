@@ -89,7 +89,7 @@ raytracer : {
         ambient = (
             {
                 angle = 0.0;
-                intensity = 0.1;
+                intensity = 0.0;
                 color : {
                     r = 255;
                     g = 255;
@@ -116,7 +116,7 @@ raytracer : {
         spot = (
             {
                 angle = 180.0;
-                intensity = 3.0;
+                intensity = 5.0;
                 color : {
                     r = 255;
                     g = 255;

@@ -222,7 +222,7 @@ bool PrimObj::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     return hit;
 }
 
-RayTracer::Vector3D PrimObj::getNormalAt(RayTracer::Point3D point) {
+RayTracer::Vector3D PrimObj::getRawNormalAt(RayTracer::Point3D point) {
     float minDist = std::numeric_limits<float>::max();
     RayTracer::Vector3D normal;
 

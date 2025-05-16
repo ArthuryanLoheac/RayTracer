@@ -83,7 +83,7 @@ bool PrimLimCone::hits(RayTracer::Ray ray, RayTracer::Point3D &intersection) {
     return found;
 }
 
-RayTracer::Vector3D PrimLimCone::getNormalAt(RayTracer::Point3D point) {
+RayTracer::Vector3D PrimLimCone::getRawNormalAt(RayTracer::Point3D point) {
     RayTracer::Vector3D va = rotation.normalized();
     RayTracer::Point3D baseCenter = position + va * height;
     float radius = height * std::tan(angle);
