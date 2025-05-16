@@ -79,6 +79,8 @@ SRC_TESTS	= 	\
 COMMON_SRC = src/3dDatas/Point3D.cpp \
 			src/3dDatas/Vector3D.cpp \
 			src/3dDatas/Ray.cpp \
+			src/3dDatas/Rectangle3D.hpp \
+			src/Scene/Camera.cpp \
 
 SRC_PRIMITIVE = $(COMMON_SRC) \
 				src/Interfaces/Primitive/A_Primitive.cpp \

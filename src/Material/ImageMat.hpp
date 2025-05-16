@@ -9,7 +9,7 @@
 class ImageMat : public RayTracer::I_Material {
  private:
     float shininess = 2;
-    float specular = 0.1;
+    float specular = 0.1f;
     sf::Image img;
     RayTracer::Vector3D scale;
     RayTracer::Vector3D rotation;

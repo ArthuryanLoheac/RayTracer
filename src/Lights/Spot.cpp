@@ -4,6 +4,8 @@
 
 #include "Lights/Spot.hpp"
 #include "Scene/Scene.hpp"
+#include "Draw/hit.hpp"
+#include <iostream>
 
 extern "C" std::unique_ptr<RayTracer::I_Light> getLight() {
     return std::make_unique<Spot>();
@@ -34,14 +36,13 @@ bool Spot::checkBlockingLight(std::shared_ptr<I_Primitive> &obj,
     return false;
 }
 
-float Spot::getLuminescence(RayTracer::Point3D intersection,
-std::shared_ptr<I_Light> Light, std::shared_ptr<I_Primitive> obj,
-std::shared_ptr<I_Primitive> head) {
-    RayTracer::Vector3D toLight = Light->getPosition() - intersection;
+float Spot::getLuminescence(hitDatas &datas,
+std::shared_ptr<I_Light> Light, std::shared_ptr<I_Primitive> head) {
+    RayTracer::Vector3D toLight = Light->getPosition() - datas.intersection;
     float distanceToLight = toLight.length();
     toLight = toLight.normalize();
 
-    RayTracer::Vector3D N = obj->getNormalAt(intersection);
+    RayTracer::Vector3D N = datas.obj->getNormalAt(datas.intersection);
     float angleToSurface = std::acos(N.dot(toLight));
 
     float lum = 0.f;
@@ -51,17 +52,17 @@ std::shared_ptr<I_Primitive> head) {
     } else {
         return 0.f;
     }
-    RayTracer::Point3D origin = intersection + toLight * 1e-4f;
+    RayTracer::Point3D origin = datas.intersection + toLight * 1e-4f;
     RayTracer::Ray shadowRay(origin, toLight);
     float transmittance = 1.f;
     std::vector<std::shared_ptr<I_Primitive>> stack = { head };
     while (!stack.empty() && transmittance > 1e-3f) {
         auto current = stack.back();
         stack.pop_back();
-        if (current != obj) {
+        if (current != datas.obj) {
             RayTracer::Point3D hitP;
             if (current->hits(shadowRay, hitP)) {
-                float d = (hitP - intersection).length();
+                float d = (hitP - datas.intersection).length();
                 if (d < distanceToLight) {
                     RayTracer::Vector3D uv = current->getUV(hitP);
                     float alpha = current->getMaterial()
@@ -76,5 +77,21 @@ std::shared_ptr<I_Primitive> head) {
         for (auto &ch : current->getChildrens())
             stack.push_back(ch);
     }
-    return lum * transmittance / (distanceToLight * distanceToLight);
+    float rawSpecular = specular(datas, Light);
+    return (lum + rawSpecular) * transmittance / (distanceToLight * distanceToLight);
+}
+
+float Spot::specular(hitDatas &datas, std::shared_ptr<I_Light> Light) {
+    float k = datas.obj->getMaterial()->getSpecular();
+    float L = intensity;
+    RayTracer::Vector3D normal = datas.obj->getNormalAt(datas.intersection);
+    RayTracer::Vector3D R(datas.direction - normal *
+            2*(datas.direction.normalized().dot(normal)));
+    RayTracer::Vector3D V = Light->getPosition() - datas.intersection;
+    float n = datas.obj->getMaterial()->getShininess();
+    R = R.normalize();
+    V = V.normalize();
+
+    float lum2 = k*L*std::pow(std::max(static_cast<double>(0.f), R.dot(V)), n);
+    return lum2;
 }

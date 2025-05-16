@@ -3,15 +3,15 @@
 #include "Interfaces/Light/A_Light.hpp"
 #include "3dDatas/Point3D.hpp"
 #include "3dDatas/Vector3D.hpp"
+#include "Draw/hit.hpp"
 
 class TestLight : public RayTracer::A_Lights {
  public:
-    float getLuminescence(RayTracer::Point3D intersection,
-        std::shared_ptr<I_Light> Light, std::shared_ptr<I_Primitive> obj,
+    float getLuminescence(hitDatas datas,
+        std::shared_ptr<I_Light> Light,
         std::shared_ptr<I_Primitive> head) override {
-        (void)intersection;
+        (void)datas;
         (void)Light;
-        (void)obj;
         (void)head;
         return intensity;
     }
