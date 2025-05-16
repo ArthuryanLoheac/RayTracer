@@ -16,6 +16,7 @@ void ImageMat::Init(std::unordered_map<std::string, std::any> &settings) {
     scale = std::any_cast<RayTracer::Vector3D>(settings["scale"]);
     rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
     img = std::any_cast<sf::Image>(settings["image"]);
+    setNormal(std::any_cast<std::string>(settings["normal"]));
 }
 
 sf::Color ImageMat::getColorAt(float u, float v) {

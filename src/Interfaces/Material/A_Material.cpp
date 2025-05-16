@@ -7,6 +7,8 @@ bool A_Material::isReflective() const {
 
 void A_Material::setNormal(std::string path) {
     try {
+        if (path == "")
+            throw MaterialError("No normal map");
         if (!img.loadFromFile(path)) {
             throw MaterialError("Failed to load normal map from file: " + path);
         }

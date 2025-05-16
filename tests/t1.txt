@@ -71,6 +71,7 @@ raytracer : {
                         y = 10.0;
                         z = 1.0;
                     };
+                    normal = "assets/normal.jpg";
                 }
                 radius = 1.5;
             }

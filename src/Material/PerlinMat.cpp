@@ -94,6 +94,7 @@ void PerlinMat::Init(std::unordered_map<std::string, std::any> &settings) {
     c1 = std::any_cast<sf::Color>(settings["color1"]);
     c2 = std::any_cast<sf::Color>(settings["color2"]);
     octave = std::any_cast<int>(settings["octave"]);
+    setNormal(std::any_cast<std::string>(settings["normal"]));
     Permutation = MakePermutation();
 }
 

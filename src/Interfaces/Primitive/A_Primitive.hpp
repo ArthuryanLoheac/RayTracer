@@ -31,6 +31,9 @@ class A_Primitive : public I_Primitive {
     bool returnCollision(float A, float B, float C,
         Point3D &intersection, Ray &ray);
 
+    Vector3D rotatedNormal(Vector3D normal, RayTracer::Vector3D uv);
+    Vector3D getRotatedVector(Vector3D vec,  Vector3D rotationToDo);
+
     class PrimitiveError : public std::exception {
      private:
         std::string message;

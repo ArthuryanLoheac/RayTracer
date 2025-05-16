@@ -12,6 +12,7 @@ FlatMat::FlatMat() {
 
 void FlatMat::Init(std::unordered_map<std::string, std::any> &settings) {
     col = std::any_cast<sf::Color>(settings["color"]);
+    setNormal(std::any_cast<std::string>(settings["normal"]));
 }
 
 sf::Color FlatMat::getColorAt(float u, float v) {

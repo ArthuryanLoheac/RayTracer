@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Interfaces/Primitive/A_Primitive.hpp"
+#include "A_Primitive.hpp"
 
 namespace RayTracer {
 
@@ -66,6 +67,46 @@ Point3D &intersection, Ray &ray) {
     return true;
 }
 
+Vector3D A_Primitive::rotatedNormal(Vector3D normal, RayTracer::Vector3D uv) {
+    try {
+        Vector3D toRotate = normal;
+        Vector3D rotationToDo = material->getNormalAt(uv.x, uv.y);
+        rotationToDo = Vector3D(
+            rotationToDo.x * 180,
+            rotationToDo.y * 180,
+            rotationToDo.z * 180);
+        return getRotatedVector(toRotate, rotationToDo);
+    } catch (std::exception &e) {
+        return normal;
+    }
+}
+
+Vector3D A_Primitive::getRotatedVector(Vector3D vector, Vector3D rotationToDo) {
+    Vector3D vec(vector.x, vector.y, vector.z);
+    float rx = rotationToDo.x * M_PI / 180.0f;
+    float ry = rotationToDo.y * M_PI / 180.0f;
+    float rz = rotationToDo.z * M_PI / 180.0f;
+
+    // Axe X
+    vec = RayTracer::Vector3D(
+        vec.x,
+        vec.y * cos(rx) - vec.z * sin(rx),
+        vec.y * sin(rx) + vec.z * cos(rx));
+
+    // Axe Y
+    vec = RayTracer::Vector3D(
+        vec.x * cos(ry) + vec.z * sin(ry),
+        vec.y,
+        -vec.x * sin(ry) + vec.z * cos(ry));
+
+    // Axe Z
+    vec = RayTracer::Vector3D(
+        vec.x * cos(rz) - vec.y * sin(rz),
+        vec.x * sin(rz) + vec.y * cos(rz),
+        vec.z);
+    return vec;
+}
+
 A_Primitive::PrimitiveError::PrimitiveError(const std::string &message)
-: message("PrimitiveError: " + message) {}
+    : message("PrimitiveError: " + message) {}
 }  // namespace RayTracer

@@ -59,6 +59,13 @@ static sf::Image parseImage(const libconfig::Setting &image) {
     return img;
 }
 
+static std::string parseNormal(const libconfig::Setting &image) {
+    std::string path;
+
+    image.lookupValue("normal", path);
+    return path;
+}
+
 void parseChess(const libconfig::Setting &chess,
 std::unordered_map<std::string, std::any> &settings) {
     settings["color1"] = parseColor(chess.lookup("color1"));
@@ -78,12 +85,13 @@ std::unordered_map<std::string, std::any> &settings) {
     settings["octave"] = octave;
 }
 
-void parseImage(const libconfig::Setting &image,
+void parseImageSettings(const libconfig::Setting &image,
 std::unordered_map<std::string, std::any> &settings) {
     settings["image"] = parseImage(image);
     settings["scale"] = parseScale(image.lookup("scale"));
     settings["rotation"] = parseRotation(image.lookup("rotation"));
 }
+
 
 std::shared_ptr<I_Material> Parsing::parseMaterial(
 const libconfig::Setting &material) {
@@ -100,7 +108,8 @@ const libconfig::Setting &material) {
     if (materialName == "perlin")
         parsePerlin(material, settings);
     if (materialName == "image")
-        parseImage(material, settings);
+        parseImageSettings(material, settings);
+    settings["normal"] = parseNormal(material);
     std::shared_ptr<I_Material> mat = Factory<Mat>::i().create(materialName);
     mat->Init(settings);
     return mat;
