@@ -53,15 +53,36 @@ const std::string &type) {
     std::shared_ptr<I_Primitive> lightObj =
         Factory<Prim>::i().create(type);
     std::unordered_map<std::string, std::any> settings;
-    float angle = 0.0f;
-    float intensity = 0.0f;
+    float angle = 180.0f;
+    float intensity = 0.2f;
 
     light.lookupValue("angle", angle);
     light.lookupValue("intensity", intensity);
-    settings["position"] = parsePosition(light.lookup("position"));
-    settings["rotation"] = parseRotation(light.lookup("rotation"));
-    settings["scale"] = parseScale(light.lookup("scale"));
-    settings["color"] = parseColor(light.lookup("color"));
+
+    try {
+        settings["position"] = parsePosition(light.lookup("position"));
+    }
+    catch(const libconfig::SettingNotFoundException &e) {
+        settings["position"] = Point3D(0.0f, 0.0f, 0.0f);
+    }
+    try {
+        settings["rotation"] = parseRotation(light.lookup("rotation"));
+    }
+    catch(const libconfig::SettingNotFoundException &e) {
+        settings["rotation"] = Vector3D(0.0f, 1.0f, 0.0f);
+    }
+    try {
+        settings["scale"] = parseScale(light.lookup("scale"));
+    }
+    catch(const libconfig::SettingNotFoundException &e) {
+        settings["scale"] = Point3D(1.0f, 1.0f, 1.0f);
+    }
+    try {
+        settings["color"] = parseColor(light.lookup("color"));
+    }
+    catch(const libconfig::SettingNotFoundException &e) {
+        settings["color"] = sf::Color(255, 0, 0);
+    }
     settings["angle"] = angle;
     settings["intensity"] = intensity;
     lightObj->Init(settings);
@@ -70,15 +91,23 @@ const std::string &type) {
 
 void Parsing::parseLights(const libconfig::Setting &lights) {
     try {
-        const libconfig::Setting &ambient = lights.lookup("ambient");
-        for (int i = 0; i < ambient.getLength(); i++) {
-            const libconfig::Setting &light = ambient[i];
-            parseLight(light, "ambient");
+        try {
+            const libconfig::Setting &ambient = lights.lookup("ambient");
+            for (int i = 0; i < ambient.getLength(); i++) {
+                const libconfig::Setting &light = ambient[i];
+                parseLight(light, "ambient");
+            }
         }
-        const libconfig::Setting &spot = lights.lookup("spot");
-        for (int i = 0; i < spot.getLength(); i++) {
-            const libconfig::Setting &light = spot[i];
-            parseLight(light, "spot");
+        catch(const libconfig::SettingNotFoundException &e) {
+        }
+        try {
+            const libconfig::Setting &spot = lights.lookup("spot");
+            for (int i = 0; i < spot.getLength(); i++) {
+                const libconfig::Setting &light = spot[i];
+                parseLight(light, "spot");
+            }
+        }
+        catch(const libconfig::SettingNotFoundException &e) {
         }
     } catch (const libconfig::SettingNotFoundException &nfex) {
         throw ParsingError("Missing primitives in configuration file.");
