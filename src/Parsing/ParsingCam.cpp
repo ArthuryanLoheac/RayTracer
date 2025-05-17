@@ -35,11 +35,14 @@ void parseCam(const libconfig::Setting &camera) {
     int width = 800;
     int height = 800;
     double fov = 90.0;
+    std::string path = "";
 
     resolution.lookupValue("width", width);
     resolution.lookupValue("height", height);
+    camera.lookupValue("skybox", path);
     camera.lookupValue("fov", fov);
     settings["width"] = width;
+    settings["skybox"] = path;
     settings["height"] = height;
     try {
         settings["position"] = parsePosition(camera.lookup("position"));

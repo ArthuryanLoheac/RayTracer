@@ -66,11 +66,12 @@ int main(int argc, char **argv) {
     RayTracer::Scene scene;
     int hasFileChanged = 2;
     RayTracer::Camera cam;
-    skybox::i().setImage("assets/skybox.jpg");
     srand(time(NULL));
 
     while (hasFileChanged != 0) {
         try {
+            RayTracer::Scene::i->ObjectHead = Factory<Prim>::i().create("none");
+            RayTracer::Scene::i->Lights.clear();
             parser.parseArgs(argc, argv);
             parser.parseSceneFile();
             hasFileChanged = testMain(argv[1], parser.noWindowMode);

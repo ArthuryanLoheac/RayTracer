@@ -104,11 +104,13 @@ RayTracer::Vector3D PrimLimCone::getNormalAt(RayTracer::Point3D point) {
 
 
 void PrimLimCone::Init(std::unordered_map<std::string, std::any> &settings) {
-    rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
-    position = std::any_cast<RayTracer::Point3D>(settings["position"]);
-    angle = std::any_cast<float>(settings["angle"]);
-    height = std::any_cast<float>(settings["height"]);
-    material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
+    try {
+        rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
+        position = std::any_cast<RayTracer::Point3D>(settings["position"]);
+        angle = std::any_cast<float>(settings["angle"]);
+        height = std::any_cast<float>(settings["height"]);
+        material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
+    } catch (const std::exception &e) {}
 }
 
 RayTracer::Vector3D PrimLimCone::getUV(RayTracer::Point3D point) {
