@@ -8,10 +8,11 @@
 namespace RayTracer {
 class Parsing {
  private:
-     std::string sceneFile;
+     std::string sceneFile = "";
 
  public:
      bool noWindowMode = false;
+
      void parseArgs(int argc, char **argv);
      void parseSceneFile();
      void parseCamera(const libconfig::Setting &camera);
