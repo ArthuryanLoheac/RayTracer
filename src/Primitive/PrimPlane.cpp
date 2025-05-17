@@ -43,10 +43,12 @@ RayTracer::Vector3D PrimPlane::getUV(RayTracer::Point3D point) {
 }
 
 void PrimPlane::Init(std::unordered_map<std::string, std::any> &settings) {
-    position = std::any_cast<RayTracer::Point3D>(settings["position"]);
-    rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
-    radius = std::any_cast<float>(settings["radius"]);
-    material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
+    try {
+        position = std::any_cast<RayTracer::Point3D>(settings["position"]);
+        rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
+        radius = std::any_cast<float>(settings["radius"]);
+        material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
+    } catch (const std::exception &e) {}
 }
 
 RayTracer::Vector3D PrimPlane::getRotatedNormal() const {

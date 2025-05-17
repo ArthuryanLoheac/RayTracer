@@ -74,11 +74,12 @@ SRC_TESTS	= 	\
 	tests/test_computeTreeValues.cpp \
 	tests/test_LoadSo.cpp \
 	tests/test_A_Primitive.cpp \
-	tests/test_A_Light.cpp \
 
 COMMON_SRC = src/3dDatas/Point3D.cpp \
 			src/3dDatas/Vector3D.cpp \
 			src/3dDatas/Ray.cpp \
+			src/3dDatas/Rectangle3D.hpp \
+			src/Scene/Camera.cpp \
 
 SRC_PRIMITIVE = $(COMMON_SRC) \
 				src/Interfaces/Primitive/A_Primitive.cpp \
@@ -108,6 +109,12 @@ cone:
 	$(COMPILER) -o plugins/primitive_cone.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimCone.cpp $(FLAGS_SO)
 
+limcone:
+	@mkdir -p plugins
+	$(COMPILER) -o plugins/primitive_limcone.so \
+		-shared -fPIC $(SRC_PRIMITIVE) \
+		src/Primitive/PrimLimCone.cpp $(FLAGS_SO)
+
 cylinder:
 	@mkdir -p plugins
 	$(COMPILER) -o plugins/primitive_cylinder.so -shared -fPIC \
@@ -133,7 +140,7 @@ none:
 	$(COMPILER) -o plugins/primitive_none.so -shared -fPIC $(SRC_PRIMITIVE) \
 		src/Primitive/PrimNone.cpp $(FLAGS_SO)
 
-primitive: sphere plane none cylinder cone limcylinder obj_prim
+primitive: sphere plane none cylinder cone limcylinder obj_prim limcone
 
 flat_mat:
 	@mkdir -p plugins

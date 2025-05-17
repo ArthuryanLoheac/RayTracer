@@ -16,6 +16,8 @@ void ImageMat::Init(std::unordered_map<std::string, std::any> &settings) {
     scale = std::any_cast<RayTracer::Vector3D>(settings["scale"]);
     rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
     img = std::any_cast<sf::Image>(settings["image"]);
+    shininess = std::any_cast<float>(settings["shininess"]);
+    specular = std::any_cast<float>(settings["specular"]);
 }
 
 sf::Color ImageMat::getColorAt(float u, float v) {
@@ -37,3 +39,12 @@ sf::Color ImageMat::getColorAt(float u, float v) {
 bool ImageMat::isReflective() const {
     return false;
 }
+
+float ImageMat::getSpecular() const {
+    return specular;
+}
+
+float ImageMat::getShininess() const {
+    return shininess;
+}
+

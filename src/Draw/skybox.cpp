@@ -11,6 +11,11 @@ void skybox::setColor(sf::Color color) {
 
 void skybox::setImage(std::string path) {
     try {
+        if (path == "") {
+            isImage = false;
+            cl = sf::Color(0, 0, 0);
+            return;
+        }
         if (!img.loadFromFile(path)) {
             throw skyboxException("Failed to load skybox image");
         }

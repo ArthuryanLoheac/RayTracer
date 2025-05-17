@@ -12,6 +12,8 @@ FlatMat::FlatMat() {
 
 void FlatMat::Init(std::unordered_map<std::string, std::any> &settings) {
     col = std::any_cast<sf::Color>(settings["color"]);
+    shininess = std::any_cast<float>(settings["shininess"]);
+    specular = std::any_cast<float>(settings["specular"]);
 }
 
 sf::Color FlatMat::getColorAt(float u, float v) {
@@ -23,3 +25,12 @@ sf::Color FlatMat::getColorAt(float u, float v) {
 bool FlatMat::isReflective() const {
     return false;
 }
+
+float FlatMat::getSpecular() const {
+    return specular;
+}
+
+float FlatMat::getShininess() const {
+    return shininess;
+}
+
