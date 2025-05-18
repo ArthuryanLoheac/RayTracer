@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
             parser.parseSceneFile();
             hasFileChanged = testMain(argv[1], parser.noWindowMode);
         }
-        catch (const RayTracer::Parsing::ParsingError &e) {
+        catch (const std::exception &e) {
             std::cerr << e.what() << std::endl;
             if (hasFileChanged == 2)
                 return 84;
