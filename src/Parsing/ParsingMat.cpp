@@ -38,6 +38,11 @@ static sf::Color parseColor2(const libconfig::Setting &setting) {
     return sf::Color(rgb[0], rgb[1], rgb[2], rgb[3]);
 }
 
+static bool isMaterial(const std::string &type) {
+    return type == "flat" || type == "chess" || type == "perlin"
+        || type == "image" || type == "trans" || type == "reflect";
+}
+
 std::shared_ptr<I_Material> Parsing::parseMaterial(
 const libconfig::Setting &setting) {
     std::unordered_map<std::string, std::any> settings;
@@ -50,6 +55,8 @@ const libconfig::Setting &setting) {
         throw ParsingError("Missing material section.");
     const libconfig::Setting &material = setting.lookup("material");
     material.lookupValue("type", type);
+    if (!isMaterial(type))
+        throw ParsingError("Invalid material type: " + type);
     material.lookupValue("octave", octave);
     material.lookupValue("shininess", shininess);
     material.lookupValue("specular", specular);
