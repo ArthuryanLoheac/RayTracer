@@ -20,6 +20,12 @@ std::shared_ptr<I_Primitive> &primObj) {
     }
 }
 
+static bool isPrimitive(const std::string &type) {
+    return type == "sphere" || type == "plane" || type == "cylinder"
+        || type == "limcylinder" || type == "cone" || type == "limcone"
+        || type == "obj" || type == "none";
+}
+
 void Parsing::parsePrimitive(const libconfig::Setting &primitive,
 std::shared_ptr<I_Primitive> &parent) {
     std::unordered_map<std::string, std::any> settings;
@@ -30,6 +36,8 @@ std::shared_ptr<I_Primitive> &parent) {
     float height = 0.0f;
 
     primitive.lookupValue("type", type);
+    if (!isPrimitive(type))
+        throw ParsingError("Invalid primitive type: " + type);
     primitive.lookupValue("radius", radius);
     primitive.lookupValue("angle", angle);
     primitive.lookupValue("height", height);
