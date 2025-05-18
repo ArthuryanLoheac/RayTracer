@@ -35,7 +35,8 @@ void PrimObj::Init(std::unordered_map<std::string, std::any> &settings) {
             scale = std::any_cast<RayTracer::Point3D>(settings["scale"]);
         }
         try {
-            material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
+            material = std::any_cast<std::shared_ptr<Mat>>(
+                settings["material"]);
         } catch (const std::exception &e) {}
     } catch (std::exception &e) {}
 }
