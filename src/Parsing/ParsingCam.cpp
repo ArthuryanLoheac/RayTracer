@@ -25,6 +25,9 @@ void Parsing::parseCamera(const libconfig::Setting &camera) {
     }
     camera.lookupValue("fov", fov);
     camera.lookupValue("skybox", path);
+    if (width <= 0 || height <= 0 ||
+        width > 8000 || height > 8000)
+        throw ParsingError("Invalid resolution values");
     settings["width"] = width;
     settings["height"] = height;
     settings["position"] = parsePosition(camera);
