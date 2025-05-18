@@ -19,7 +19,9 @@ class Parsing {
 
      void parsePrimitives(const libconfig::Setting &primitives);
      void parsePrimitive(const libconfig::Setting &primitive,
-        const std::string &type);
+        std::shared_ptr<I_Primitive> &parent);
+     void checkChildren(const libconfig::Setting &children,
+        std::shared_ptr<I_Primitive> &primObj);
      void parseSphere(const libconfig::Setting &sphere);
      void parsePlane(const libconfig::Setting &plane);
      void parseCylinder(const libconfig::Setting &cylinder);
@@ -29,7 +31,7 @@ class Parsing {
      void parseObject(const libconfig::Setting &object);
      void parseNone(const libconfig::Setting &none);
      std::shared_ptr<I_Material> parseMaterial(
-        const libconfig::Setting &material);
+        const libconfig::Setting &setting);
 
      void parseLights(const libconfig::Setting &lights);
      void parseLight(const libconfig::Setting &light,
