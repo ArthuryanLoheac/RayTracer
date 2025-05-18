@@ -1,63 +1,11 @@
 # This is the configuration file for the raytracer program.
 raytracer : {
-
     # Configuration of the camera
-    camera : {
-        resolution : {
-            width = 800;
-            height = 600;
-        };
-        position : {
-            x = 0.0;
-            y = 3.0;
-            z = -1.0;
-        };
-        rotation : {
-            x = 30.0;
-            y = 0.0;
-            z = 0.0;
-        };
-        fov = 90.0;
-    };
+    @include "tests/camera.cfg"
 
     # Configuration of the primitives
-    primitives : {
-        spheres = (
-        );
-
-        planes = (
-        );
-
-        cylinders = (
-            {
-                position : {
-                    x = 0.0;
-                    y = 1.0;
-                    z = 5.0;
-                };
-                radius = 1.0;
-            }
-        );
-
-        limcylinders = (
-        );
-
-        cones = (
-        );
-
-        objects = (
-        );
-
-        none = (
-        );
-    };
+    @include "tests/primitives.cfg"
 
     # Configuration of the light sources
-    lights : {
-        ambient = (
-        );
-
-        spot = (
-        )
-    };
+    @include "tests/lights.cfg"
 };

@@ -65,7 +65,11 @@ std::shared_ptr<T> Factory<T>::create
         return (dlLoader<T>::getLib(args.first, args.second));
     } catch(const std::exception& e) {
         std::cerr << "Primitive not found: " << primitive << std::endl;
-        return (dlLoader<T>::getLib
-            ("plugins/primitive_none.so", "getPrimitive"));
+        try {
+            return (dlLoader<T>::getLib
+                ("plugins/primitive_none.so", "getPrimitive"));
+        } catch (std::exception &e) {
+            exit(84);
+        }
     }
 }

@@ -11,63 +11,30 @@
 
 namespace RayTracer {
 
-static Point3D parsePosition(const libconfig::Setting &position) {
-    float pos[3] = {0.0f, 0.0f, 0.0f};
-
-    position.lookupValue("x", pos[0]);
-    position.lookupValue("y", pos[1]);
-    position.lookupValue("z", pos[2]);
-    return Point3D(pos[0], pos[1], pos[2]);
-}
-
-static Vector3D parseRotation(const libconfig::Setting &rotation) {
-    float rot[3] = {0.0f, 0.0f, 0.0f};
-
-    rotation.lookupValue("x", rot[0]);
-    rotation.lookupValue("y", rot[1]);
-    rotation.lookupValue("z", rot[2]);
-    return Vector3D(rot[0], rot[1], rot[2]);
-}
-
-void parseCam(const libconfig::Setting &camera) {
-    const libconfig::Setting &resolution = camera.lookup("resolution");
+void Parsing::parseCamera(const libconfig::Setting &camera) {
     std::unordered_map<std::string, std::any> settings;
     int width = 800;
-    int height = 800;
+    int height = 600;
     double fov = 90.0;
-    std::string path = "";
+    std::string path = "assets/skybox.jpg";
 
-    resolution.lookupValue("width", width);
-    resolution.lookupValue("height", height);
-    camera.lookupValue("skybox", path);
+    if (camera.exists("resolution")) {
+        const libconfig::Setting &resolution = camera.lookup("resolution");
+        resolution.lookupValue("width", width);
+        resolution.lookupValue("height", height);
+    }
     camera.lookupValue("fov", fov);
+    camera.lookupValue("skybox", path);
+    if (width <= 0 || height <= 0 ||
+        width > 8000 || height > 8000)
+        throw ParsingError("Invalid resolution values");
     settings["width"] = width;
-    settings["skybox"] = path;
     settings["height"] = height;
-    try {
-        settings["position"] = parsePosition(camera.lookup("position"));
-    }
-    catch(const libconfig::SettingNotFoundException &e) {
-        settings["position"] = Point3D(0.0f, 0.0f, 0.0f);
-    }
-    try {
-        settings["rotation"] = parseRotation(camera.lookup("rotation"));
-    }
-    catch(const libconfig::SettingNotFoundException &e) {
-        settings["rotation"] = Vector3D(0.0f, 0.0f, 0.0f);
-    }
+    settings["position"] = parsePosition(camera);
+    settings["rotation"] = parseRotation(camera);
     settings["fov"] = fov;
+    settings["skybox"] = path;
     Camera::i().Init(settings);
-}
-
-void Parsing::parseCamera(const libconfig::Setting &camera) {
-    try {
-        parseCam(camera);
-    } catch (const libconfig::SettingNotFoundException &nfex) {
-        throw ParsingError("Missing primitives in configuration file.");
-    } catch (const libconfig::SettingTypeException &tex) {
-        throw ParsingError("Invalid primitives type in configuration file.");
-    }
 }
 
 }  // namespace RayTracer

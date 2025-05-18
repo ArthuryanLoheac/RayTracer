@@ -12,34 +12,45 @@
 
 namespace RayTracer {
 
+static void printHelp() {
+    std::cout << "USAGE: ./rayTracer <SCENE_FILE> [-r]" << std::endl;
+    std::cout << "  SCENE_FILE: scene configuration" << std::endl;
+    std::cout << "  -r: run in no window mode" << std::endl;
+}
+
 void Parsing::parseArgs(int argc, char **argv) {
-    if (argc < 2)
+    if (argc == 1)
         throw ParsingError("Missing arguments.");
-    if (std::string(argv[1]) == "--help" ||
-        std::string(argv[1]) == "-h") {
-        std::cout << "USAGE: ./rayTracer <SCENE_FILE> [-r]" << std::endl;
-        std::cout << "  SCENE_FILE: scene configuration" << std::endl;
-        std::cout << "  -r: run in no window mode" << std::endl;
+    if (argc >= 4)
+        throw ParsingError("Too many arguments.");
+    if (argc == 2 && std::string(argv[1]) == "-h") {
+        printHelp();
         exit(0);
     }
-    for (int i = 1; i < argc; ++i) {
-        if (std::string(argv[i]) == "-r")  {
-            noWindowMode = true;
-        } else if (std::filesystem::exists(argv[i])) {
-            sceneFile = argv[i];
-        } else {
-            throw ParsingError("Invalid argument: " + std::string(argv[i]));
-        }
-    }
+    if (std::filesystem::exists(argv[1]) == false)
+        throw ParsingError("File does not exist.");
+    sceneFile = argv[1];
+    if (argc == 3 && std::string(argv[2]) == "-r")
+        noWindowMode = true;
+    else if (argc == 3)
+        throw ParsingError("Invalid argument.");
 }
 
 void Parsing::parseSceneFile() {
+    Scene::i->ObjectHead = Factory<Prim>::i().create("none");
     libconfig::Config cfg;
 
     try {
         cfg.readFile(sceneFile.c_str());
+        if (!cfg.exists("raytracer"))
+            throw ParsingError("Missing raytracer section.");
         const libconfig::Setting &raytracer = cfg.lookup("raytracer");
-            Scene::i->ObjectHead = Factory<Prim>::i().create("none");
+        if (!raytracer.exists("camera"))
+            throw ParsingError("Missing camera section.");
+        if (!raytracer.exists("primitives"))
+            throw ParsingError("Missing primitives section.");
+        if (!raytracer.exists("lights"))
+            throw ParsingError("Missing lights section.");
         parseCamera(raytracer.lookup("camera"));
         parsePrimitives(raytracer.lookup("primitives"));
         parseLights(raytracer.lookup("lights"));
