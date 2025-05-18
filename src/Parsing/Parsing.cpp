@@ -37,12 +37,20 @@ void Parsing::parseArgs(int argc, char **argv) {
 }
 
 void Parsing::parseSceneFile() {
+    Scene::i->ObjectHead = Factory<Prim>::i().create("none");
     libconfig::Config cfg;
 
     try {
         cfg.readFile(sceneFile.c_str());
+        if (!cfg.exists("raytracer"))
+            throw ParsingError("Missing raytracer section.");
         const libconfig::Setting &raytracer = cfg.lookup("raytracer");
-            Scene::i->ObjectHead = Factory<Prim>::i().create("none");
+        if (!raytracer.exists("camera"))
+            throw ParsingError("Missing camera section.");
+        if (!raytracer.exists("primitives"))
+            throw ParsingError("Missing primitives section.");
+        if (!raytracer.exists("lights"))
+            throw ParsingError("Missing lights section.");
         parseCamera(raytracer.lookup("camera"));
         parsePrimitives(raytracer.lookup("primitives"));
         parseLights(raytracer.lookup("lights"));
