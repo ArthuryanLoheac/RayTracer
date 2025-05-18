@@ -23,18 +23,17 @@ std::shared_ptr<I_Primitive> &primObj) {
 void Parsing::parsePrimitive(const libconfig::Setting &primitive,
 std::shared_ptr<I_Primitive> &parent) {
     std::unordered_map<std::string, std::any> settings;
-    std::string type;
+    std::string type = "none";
+    std::string filename = "tests/obj_file/shrek.obj";
     float radius = 0.0f;
     float angle = 0.0f;
     float height = 0.0f;
 
-    if (!primitive.exists("type"))
-        type = "none";
-    else
-        primitive.lookupValue("type", type);
+    primitive.lookupValue("type", type);
     primitive.lookupValue("radius", radius);
     primitive.lookupValue("angle", angle);
     primitive.lookupValue("height", height);
+    primitive.lookupValue("filename", filename);
     settings["position"] = parsePosition(primitive);
     settings["rotation"] = parseRotation(primitive);
     settings["scale"] = parseScalePoint(primitive);
@@ -42,7 +41,7 @@ std::shared_ptr<I_Primitive> &parent) {
     settings["radius"] = radius;
     settings["angle"] = angle;
     settings["height"] = height;
-    settings["filename"] = parseImage(primitive);
+    settings["filename"] = filename;
     std::shared_ptr<I_Primitive> primObj = Factory<Prim>::i().create(type);
     primObj->Init(settings);
     if (primitive.exists("children"))

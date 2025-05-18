@@ -41,18 +41,15 @@ static sf::Color parseColor2(const libconfig::Setting &setting) {
 std::shared_ptr<I_Material> Parsing::parseMaterial(
 const libconfig::Setting &setting) {
     std::unordered_map<std::string, std::any> settings;
-    std::string type;
+    std::string type = "flat";
     int octave = 0;
     float shininess = 0.0f;
     float specular = 0.0f;
+
     if (!setting.exists("material"))
         throw ParsingError("Missing material section.");
     const libconfig::Setting &material = setting.lookup("material");
-
-    if (!material.exists("type"))
-        type = "flat";
-    else
-        material.lookupValue("type", type);
+    material.lookupValue("type", type);
     material.lookupValue("octave", octave);
     material.lookupValue("shininess", shininess);
     material.lookupValue("specular", specular);
