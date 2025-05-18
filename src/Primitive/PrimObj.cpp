@@ -20,22 +20,24 @@ PrimObj::PrimObj() {
 }
 
 void PrimObj::Init(std::unordered_map<std::string, std::any> &settings) {
-    filename = std::any_cast<std::string>(settings["filename"]);
-    if (!loadObjFile(filename)) {
-        throw PrimitiveError("Failed to load OBJ file: " + filename);
-    }
-    if (settings.find("position") != settings.end()) {
-        position = std::any_cast<RayTracer::Point3D>(settings["position"]);
-    }
-    if (settings.find("rotation") != settings.end()) {
-        rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
-    }
-    if (settings.find("scale") != settings.end()) {
-        scale = std::any_cast<RayTracer::Point3D>(settings["scale"]);
-    }
     try {
-        material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
-    } catch (const std::exception &e) {}
+        filename = std::any_cast<std::string>(settings["filename"]);
+        if (!loadObjFile(filename)) {
+            throw PrimitiveError("Failed to load OBJ file: " + filename);
+        }
+        if (settings.find("position") != settings.end()) {
+            position = std::any_cast<RayTracer::Point3D>(settings["position"]);
+        }
+        if (settings.find("rotation") != settings.end()) {
+            rotation = std::any_cast<RayTracer::Vector3D>(settings["rotation"]);
+        }
+        if (settings.find("scale") != settings.end()) {
+            scale = std::any_cast<RayTracer::Point3D>(settings["scale"]);
+        }
+        try {
+            material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
+        } catch (const std::exception &e) {}
+    } catch (std::exception &e) {}
 }
 
 void PrimObj::faceCreation(std::istringstream &iss) {

@@ -116,8 +116,8 @@ void PrimLimCylinder::Init
         position = std::any_cast<RayTracer::Point3D>(settings["position"]);
         radius = std::any_cast<float>(settings["radius"]);
         material = std::any_cast<std::shared_ptr<Mat>>(settings["material"]);
+        height = std::any_cast<float>(settings["height"]);
     } catch (const std::exception &e) {}
-    height = std::any_cast<float>(settings["height"]);
 }
 
 RayTracer::Vector3D PrimLimCylinder::getUV(RayTracer::Point3D point) {
